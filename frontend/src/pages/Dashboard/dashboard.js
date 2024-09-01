@@ -1,6 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../Styling/Dashboard.css";
 
 // Import role-specific dashboard components
 import AdminDashboard from "../AdminPages/AdminDashboard";
@@ -8,16 +6,15 @@ import PatientDashboard from "../PatientPages/PatientDashboard";
 import ProfessionalDashboard from "../ProfessionalPages/ProfessionalDashboard";
 
 const Dashboard = () => {
-    const navigate = useNavigate();
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/login");
-    };
+    // const handleLogout = () => {
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("user");
+    //     navigate("/login");
+    // };
 
     React.useEffect(() => {
         const fetchUserData = async () => {
@@ -73,7 +70,6 @@ const Dashboard = () => {
     return (
         <div>
             {renderDashboard()}
-            {/* <button className="dashboard-button" onClick={handleLogout}>Logout</button> */}
         </div>
     );
 };
