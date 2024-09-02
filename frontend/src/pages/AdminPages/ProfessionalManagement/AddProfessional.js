@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../Styling/AdminPageStyles/AddProfessional.css';
+import '../../Styling/AdminPageStyles/ProfessionalManagementStyles/AddProfessional.css';
 import axios from 'axios';
 
 function AddProfessional() {

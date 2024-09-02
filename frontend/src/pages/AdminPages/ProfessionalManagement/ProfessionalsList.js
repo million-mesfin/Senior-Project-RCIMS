@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../Styling/AdminPageStyles/ProfessionalsList.css";
+import "../../Styling/AdminPageStyles/ProfessionalManagementStyles/ProfessionalsList.css";
 
 const ProfessionalsList = () => {
     const [professionals, setProfessionals] = useState([]);
