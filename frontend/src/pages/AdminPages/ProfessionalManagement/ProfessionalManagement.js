@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../Styling/AdminPageStyles/ProfessionalManagement.css";
+import "../../Styling/AdminPageStyles/ProfessionalManagementStyles/ProfessionalManagement.css";
 import ProfessionalsList from "./ProfessionalsList";
 import AddProfessional from "./AddProfessional";
 const ProfessionalManagement = () => {
