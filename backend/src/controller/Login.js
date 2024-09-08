@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const Professional = require("../models/Professional");
 
 const {
     generateToken,
@@ -9,7 +10,7 @@ const {
 
 async function login(req, res) {
     try {
-        const { phoneNumber, password } = req.body;
+        const { phoneNumber, password} = req.body;
         const user = await User.findOne({ phoneNumber });
         if (!user) {
             return res.status(401).json({ message: "User not found" });
@@ -17,6 +18,15 @@ async function login(req, res) {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid password" });
+        }
+        if (user.role === 'professional') {
+            const professional = await Professional.findOne({ user: user._id });
+            if (!professional) {
+                return res.status(401).json({ message: "Account not found" });
+            }
+            if (professional.status !== 'active') {
+                return res.status(401).json({ message: "Account is not active" });
+            }
         }
         const token = generateToken(user);
         res.status(200).json({ user, token });

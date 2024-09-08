@@ -1,0 +1,71 @@
+.professionals-list-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.professionals-list-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.professionals-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.professional-item {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.professional-info h2 {
+  font-size: 18px;
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.professional-info p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.professional-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-details {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.btn-edit {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.btn-remove {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}

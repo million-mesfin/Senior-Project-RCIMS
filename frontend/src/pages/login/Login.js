@@ -36,7 +36,8 @@ const Login = () => {
             
             if (response.ok) {
                 // Login successful
-                navigate("/dashboard");
+                navigate("/dashboard", {replace: true});
+                
                 localStorage.setItem("user", JSON.stringify(result.user));
                 localStorage.setItem("token", result.token);
             } else {
