@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const Professional = require("../models/Professional");
+const Patient = require("../models/Patient");
 
 const {
     generateToken,
@@ -28,6 +29,17 @@ async function login(req, res) {
                 return res.status(401).json({ message: "Account is not active" });
             }
         }
+
+        if (user.role === 'patient') {
+            const patient = await Patient.findOne({ user: user._id });
+            if (!patient) {
+                return res.status(401).json({ message: "Account not found" });
+            }
+            if (patient.status !== 'Active') {
+                return res.status(401).json({ message: "Account is not active" });
+            }
+        }
+
         const token = generateToken(user);
         res.status(200).json({ user, token });
     } catch (error) {
