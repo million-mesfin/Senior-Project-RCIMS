@@ -1,5 +1,17 @@
 const express = require("express");
-const { addProfessional, getProfessionals, updateProfessional, deleteProfessional, getProfessionalById, checkPhoneNumber } = require("../../controller/AdminController/ProfessionalController");
+const {
+    addProfessional,
+    getProfessionals,
+    updateProfessional,
+    deleteProfessional,
+    getProfessionalById,
+    checkPhoneNumber,
+    attachPatient,
+    removePatientFromProfessional,
+    getProfessionalsByStatus,
+    getProfessionalsOfPatient,
+    getProfessionalsByDepartment
+} = require("../../controller/ProfessionalController");
 
 const router = express.Router();
 
@@ -9,5 +21,10 @@ router.put("/update-professional/:id", updateProfessional);
 router.delete("/delete-professional/:id", deleteProfessional);
 router.get("/professional-details/:id", getProfessionalById);
 router.get("/check-phone/:phoneNumber", checkPhoneNumber);
+router.post("/attach-patient", attachPatient);
+router.post("/detach-patient-from-professional", removePatientFromProfessional);
+router.get("/get-professionals-by-status/:status", getProfessionalsByStatus);
+router.get("/get-professionals-of-patient/:patientId", getProfessionalsOfPatient);
+router.get("/get-professionals-by-department/:department", getProfessionalsByDepartment);
 
 module.exports = router;
