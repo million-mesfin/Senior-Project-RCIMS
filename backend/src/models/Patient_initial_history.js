@@ -8,15 +8,15 @@ const patientInitialHistorySchema = new mongoose.Schema({
     },
     currentMedicalConditions: {
         type: [String],
-        required: true,
+        default: [],
     },
     primarySubstance: {
         type: String,
         required: true,
     },
     primarySubstanceMethodOfUse: {
-        type: [String],
-        enum: ["oral", "injection", "inhalation", "other"],
+        type: String,
+        enum: ["Oral", "Injection", "Inhalation", "Other"],
         required: true,
     },
     secondarySubstances: {
@@ -24,24 +24,23 @@ const patientInitialHistorySchema = new mongoose.Schema({
         default: [],
     },
     pastAddictionTreatment: {
-        type: Boolean,
+        type: String,
+        enum: ["Yes", "No"],
         required: true,
     },
     withdrawalSymptoms: {
-        type: Boolean,
+        type: String,
+        enum: ["Yes", "No"],
         required: true,
     },
     socialSupportNetwork: {
-        type: [String],
-        enum: ["family", "friend", "support group", "other"],
+        type: String,
+        enum: ["Family", "Friend", "Support Group", "Other", "None"],
         required: true,
     },
-    allergies: {
-        type: [String],
-        default: [],
-    },
     historyOfTraumaOrAbuse: {
-        type: Boolean,
+        type: String,
+        enum: ["Yes", "No", "Unknown"],
         required: true,
     },
 });
