@@ -30,6 +30,7 @@ const professionalSchema = new mongoose.Schema({
         required: true,
     },
     bio: {
+
         type: String,
         required: true,
     },
@@ -41,10 +42,25 @@ const professionalSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numberOfPatients: {
+        type: Number,
+        default: 0,
+    },
+    patients: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Patient",
+            required: false,
+        },
+    ],
+    numberOfAppointments: {
+        type: Number,
+        default: 0,
+    },
     status: {
         type: String,
         required: true,
-        enum: ["active", "suspended", "terminated"], //! removed inactive
+        enum: ["active", "suspended", "terminated"],
         default: "active",
     },
     //! Add professional photo

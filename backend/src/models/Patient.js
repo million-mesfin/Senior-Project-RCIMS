@@ -17,25 +17,29 @@ const patientSchema = new mongoose.Schema({
     },
     livingSituation: {
         type: String,
-        enum: ["alone", "family", "shelter", "other"],
+        enum: ["Alone", "Family", "Shelter", "Other"],
         required: true,
     },
     patientType: {
         type: String,
-        enum: ["inpatient", "outpatient"],
+        enum: ["In-patient", "Out-patient"],
         required: true,
     },
     roomNumber: {
         type: String,
         required: function () {
-            return this.patientType === "inpatient";
+            return this.patientType === "In-patient";
         },
     },
     bedNumber: {
         type: String,
         required: function () {
-            return this.patientType === "inpatient";
+            return this.patientType === "In-patient";
         },
+    },
+    allergies: {
+        type: [String],
+        default: [],
     },
     assignedProfessionals: [
         {
@@ -45,15 +49,15 @@ const patientSchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        enum: ["active", "discharged", "suspended"],
+        enum: ["Active", "Discharged", "Suspended"],
         required: true,
-        default: "active",
+        default: "Active",
     },
 });
 
 // Custom validation
 patientSchema.pre("validate", function (next) {
-    if (this.patientType === "outpatient") {
+    if (this.patientType === "Out-patient") {
         this.roomNumber = undefined;
         this.bedNumber = undefined;
     }
