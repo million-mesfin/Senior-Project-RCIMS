@@ -54,20 +54,26 @@ const ProfessionalsList = () => {
         setSelectedProfessional(professional);
         setEditFormData({
             _id: professional._id,
-            name: professional.user?.name || '',
-            fatherName: professional.user?.fatherName || '',
-            grandfatherName: professional.user?.grandfatherName || '',
-            speciality: professional.speciality || '',
-            phoneNumber: professional.user?.phoneNumber || '',
-            address: professional.user?.address || '',
-            dateOfBirth: professional.user?.dateOfBirth ? new Date(professional.user.dateOfBirth).toISOString().split('T')[0] : '',
-            gender: professional.user?.gender || '',
-            yearsOfExperience: professional.yearsOfExperience || '',
-            qualification: professional.qualification || '',
-            bio: professional.bio || '',
-            languagesSpoken: professional.languagesSpoken ? professional.languagesSpoken.join(', ') : '',
-            workingHours: professional.workingHours || '',
-            status: professional.status || '',
+            name: professional.user?.name || "",
+            fatherName: professional.user?.fatherName || "",
+            grandfatherName: professional.user?.grandfatherName || "",
+            speciality: professional.speciality || "",
+            phoneNumber: professional.user?.phoneNumber || "",
+            address: professional.user?.address || "",
+            dateOfBirth: professional.user?.dateOfBirth
+                ? new Date(professional.user.dateOfBirth)
+                      .toISOString()
+                      .split("T")[0]
+                : "",
+            gender: professional.user?.gender || "",
+            yearsOfExperience: professional.yearsOfExperience || "",
+            qualification: professional.qualification || "",
+            bio: professional.bio || "",
+            languagesSpoken: professional.languagesSpoken
+                ? professional.languagesSpoken.join(", ")
+                : "",
+            workingHours: professional.workingHours || "",
+            status: professional.status || "",
         });
         setIsEditing(true);
     };
@@ -93,7 +99,7 @@ const ProfessionalsList = () => {
                 const updatedUser = response.data.user;
                 const combinedData = {
                     ...updatedProfessional,
-                    user: updatedUser
+                    user: updatedUser,
                 };
                 fetchProfessionals();
                 setIsEditing(false);
@@ -104,7 +110,6 @@ const ProfessionalsList = () => {
             setError(`Failed to update professional. ${error.message}`);
         }
     };
-
 
     const handleRemove = async (professionalId) => {
         const isConfirmed = window.confirm(
@@ -151,7 +156,11 @@ const ProfessionalsList = () => {
             {selectedProfessional ? (
                 isEditing ? (
                     <div className="professional-edit-form">
-                        <button onClick={() => handleBackToDetails(selectedProfessional)}>
+                        <button
+                            onClick={() =>
+                                handleBackToDetails(selectedProfessional)
+                            }
+                        >
                             Back to Details
                         </button>
                         <h2>Edit Professional</h2>
@@ -290,10 +299,17 @@ const ProfessionalsList = () => {
                             </label>
                             <label>
                                 Status:
-                                <select name="status" value={editFormData.status || ""} onChange={handleEditFormChange} required>
+                                <select
+                                    name="status"
+                                    value={editFormData.status || ""}
+                                    onChange={handleEditFormChange}
+                                    required
+                                >
                                     <option value="active">Active</option>
                                     <option value="suspended">Suspended</option>
-                                    <option value="terminated">Terminated</option>
+                                    <option value="terminated">
+                                        Terminated
+                                    </option>
                                 </select>
                             </label>
                             <button type="submit">Update Professional</button>
