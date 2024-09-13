@@ -7,6 +7,8 @@ const loginRoute = require('./routes/Login');
 const authenticatedRoute = require('./routes/Authenticated');
 const professionalManagementRoute = require('./routes/Admin routes/ProfessionalManagement');
 const patientManagementRoute = require('./routes/Admin routes/PatientManagement');
+const caregiverManagementRoute = require('./routes/CaregiverManagement');
+const patientHistoryManagementRoute = require('./routes/PatientHistoryManagement');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,8 +23,10 @@ createAdminAccount();
 app.use('/user', signupRoute);
 app.use('/auth', loginRoute);
 app.use('/api', authenticatedRoute);
-app.use('/api/admin/professionals', professionalManagementRoute);
-app.use('/api/admin/patients', patientManagementRoute);
+app.use('/api/professionals', professionalManagementRoute);
+app.use('/api/patients', patientManagementRoute);
+app.use('/api/caregiver', caregiverManagementRoute);
+app.use('/api/patient-history', patientHistoryManagementRoute);
 
 
 app.listen(PORT, () => {
