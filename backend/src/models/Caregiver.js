@@ -6,7 +6,7 @@ const caregiverSchema = new mongoose.Schema({
         ref: "Patient",
         required: true,
     },
-    name: {
+    fullName: {
         type: String,
         required: true,
     },

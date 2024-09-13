@@ -119,6 +119,7 @@ const attachPatient = async (req, res) => {
         res.status(200).json({
             message: "Patient attached to professional successfully",
             professional: professional,
+            patient: patient,
         });
     } catch (error) {
         console.error("Error in attachPatientToProfessional:", error);
@@ -209,6 +210,7 @@ const updateProfessional = async (req, res) => {
 };
 
 // API - delete a professional
+//! change to deactivate the professional instead of deleting
 const deleteProfessional = async (req, res) => {
     try {
         const { id } = req.params;
@@ -304,7 +306,7 @@ const getProfessionalsOfPatient = async (req, res) => {
         });
     }
 };
-// API - Get professionals by department
+// API - Get professionals by department - For filtering
 const getProfessionalsByDepartment = async (req, res) => {
     try {
         const { department } = req.params;
@@ -319,8 +321,57 @@ const getProfessionalsByDepartment = async (req, res) => {
     }
 };
 
-// TODO: get professional with the least number of patients in a department
-// TODO: when transfering a patient to another department, first get the professional with the least number of patients in the new department and then transfer the patient to that professional
+// API - Get professionals by status and department - For filtering
+//! Method not working properly - needs fix
+const getProfessionalsByStatusAndDepartment = async (req, res) => {
+    try {
+        const { status, department } = req.query;
+        
+        let filter = {};
+        if (status) filter.status = status;
+        if (department) filter.department = department;
+
+        const professionals = await Professional.find(filter);
+        res.json(professionals);
+    } catch (error) {
+        console.error("Error in getProfessionalsByStatusAndDepartment:", error);
+        res.status(500).json({
+            message: "Error getting professionals by status and department",
+            error: error.message,
+        });
+    }
+};
+
+// API - search professional by name or phone number
+const searchProfessional = async (req, res) => {
+    try {
+        const { key } = req.params;
+        
+        const professionals = await Professional.find().populate({
+            path: 'user',
+            match: {
+                $or: [
+                    { name: { $regex: key, $options: "i" } },
+                    { phoneNumber: { $regex: key, $options: "i" } }
+                ]
+            },
+            select: '-password'
+        }).exec();
+
+        // Filter out professionals where user is null (didn't match the criteria)
+        const filteredProfessionals = professionals.filter(prof => prof.user !== null);
+
+        res.json(filteredProfessionals);
+    } catch (error) {
+        console.error("Error in searchProfessional:", error);
+        res.status(500).json({
+            message: "Error searching professional",
+            error: error.message,
+        });
+    }
+};
+
+
 // TODO: add a max number of patients a professional can have
 // TODO: add patient to the professional only if the professional has less than the maximum number of patients
 
@@ -335,5 +386,7 @@ module.exports = {
     removePatientFromProfessional,
     getProfessionalsByStatus,
     getProfessionalsOfPatient,
-    getProfessionalsByDepartment
+    getProfessionalsByDepartment,
+    getProfessionalsByStatusAndDepartment,
+    searchProfessional,
 };

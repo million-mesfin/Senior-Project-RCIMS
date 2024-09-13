@@ -9,6 +9,8 @@ const {
     dischargePatient,
     attachProfessional,
     getPatientsByStatus,
+    searchPatient,
+    getPatientInformation
 } = require("../../controller/PatientController");
 
 const router = express.Router();
@@ -21,5 +23,6 @@ router.put("/update-patient/:id", updatePatient);
 router.put("/discharge-patient/:id", dischargePatient);
 router.post("/attach-professional", attachProfessional);
 router.get("/get-patients-by-status/:status", getPatientsByStatus);
-
+router.get("/search-patient/:key", searchPatient);
+router.get("/get-patient-information/:id", getPatientInformation);
 module.exports = router;

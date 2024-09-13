@@ -7,18 +7,20 @@ const { signupUser, removeUser } = require("./UserController");
 const {
     addPatientToProfessionalDefault,
     getProfessionalWithLeastPatientsInDepartment,
-    removePatient,
 } = require("./Patient-Professional-SharedController");
 
 // API - Add a new patient
 const addPatient = async (req, res) => {
     let user;
     let professionals;
+    let isolator = 0;
     try {
         user = await signupUser(req, res);
         if (!user) {
             return res.status(400).json({ error: "Failed to create user" });
         }
+
+        isolator = 1;
 
         // get the basic patient data from the request body
         const {
@@ -84,13 +86,29 @@ const addPatient = async (req, res) => {
         });
     } catch (error) {
         console.error("Error in addPatient:", error);
-        removeUser(user._id);
-        res.status(500).json({
-            message: !professionals
-                ? "Missing professionals to assign patient to."
-                : "Error adding patient",
-            error: error.message,
-        });
+        if(isolator === 1){
+            removeUser(user._id);
+            res.status(500).json({
+                message: !professionals
+                    ? "Missing professionals to assign patient to."
+                    : "Error adding patient",
+                error: error.message,
+            });
+        }else{
+            // check if the phone number already exists
+            const { phoneNumber } = req.body;
+            const existingUser = await User.findOne({ phoneNumber });
+            if (existingUser) {
+                res.status(400).json({ message: "Phone number already exists! Please use a different phone number." });
+            }else{
+                
+            res.status(500).json({
+                message: "Error creating user",
+                    error: error.message,
+                });
+            }
+        }
+        
     }
 };
 
@@ -299,12 +317,10 @@ const dischargePatient = async (req, res) => {
 
         // Make sure the patient has no assigned professionals
         if (patient.assignedProfessionals.length > 0) {
-            return res
-                .status(400)
-                .json({
-                    message:
-                        "All assigned professionals must be detached before discharging the patient",
-                });
+            return res.status(400).json({
+                message:
+                    "All assigned professionals must be detached before discharging the patient",
+            });
         }
 
         // Change the status of the patient to "Discharged"
@@ -336,7 +352,53 @@ const getPatientsByStatus = async (req, res) => {
     }
 };
 
-// TODO: search patient by name or phone number
+// API - search patient by name or phone number
+const searchPatient = async (req, res) => {
+    try {
+        const { key } = req.params;
+        const patients = await Patient.find()
+            .populate({
+                path: "user",
+                match: {
+                    $or: [
+                        { name: { $regex: key, $options: "i" } },
+                        { phoneNumber: { $regex: key, $options: "i" } },
+                    ],
+                },
+                select: "-password",
+            })
+            .exec();
+
+        // Filter out patients where user is null (didn't match the criteria)
+        const filteredPatients = patients.filter(
+            (patient) => patient.user !== null
+        );
+        res.json(filteredPatients);
+    } catch (error) {
+        console.error("Error in searchPatient:", error);
+        res.status(500).json({
+            message: "Error searching patient",
+            error: error.message,
+        });
+    }
+};
+
+// API - Get all of patient's information
+const getPatientInformation = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const patient = await Patient.findById(id).populate("user", "-password");
+        const patientHistory = await PatientHistory.find({ patient: id });
+        const caregiver = await Caregiver.find({ patient: id });
+        res.json({ patient, patientHistory, caregiver });
+    } catch (error) {
+        console.error("Error in getPatientInformation:", error);
+        res.status(500).json({
+            message: "Error getting patient information",
+            error: error.message,
+        });
+    }
+};
 
 module.exports = {
     addPatient,
@@ -347,4 +409,6 @@ module.exports = {
     dischargePatient,
     attachProfessional,
     getPatientsByStatus,
+    searchPatient,
+    getPatientInformation,
 };
