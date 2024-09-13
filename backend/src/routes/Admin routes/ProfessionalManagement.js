@@ -10,7 +10,9 @@ const {
     removePatientFromProfessional,
     getProfessionalsByStatus,
     getProfessionalsOfPatient,
-    getProfessionalsByDepartment
+    getProfessionalsByDepartment,
+    getProfessionalsByStatusAndDepartment,
+    searchProfessional,
 } = require("../../controller/ProfessionalController");
 
 const router = express.Router();
@@ -26,5 +28,7 @@ router.post("/detach-patient-from-professional", removePatientFromProfessional);
 router.get("/get-professionals-by-status/:status", getProfessionalsByStatus);
 router.get("/get-professionals-of-patient/:patientId", getProfessionalsOfPatient);
 router.get("/get-professionals-by-department/:department", getProfessionalsByDepartment);
+router.get("/get-professionals-by-status-and-department/:status/:department", getProfessionalsByStatusAndDepartment);
+router.get("/search-professional/:key", searchProfessional);
 
 module.exports = router;
