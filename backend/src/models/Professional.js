@@ -29,6 +29,11 @@ const professionalSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    type: {
+        type: String,
+        required: true,
+        enum: ["isolated", "group", "physical"],
+    },
     bio: {
 
         type: String,
