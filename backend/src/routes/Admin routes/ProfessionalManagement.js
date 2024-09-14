@@ -13,6 +13,7 @@ const {
     getProfessionalsByDepartment,
     getProfessionalsByStatusAndDepartment,
     searchProfessional,
+    getPatientsOfProfessional
 } = require("../../controller/ProfessionalController");
 
 const router = express.Router();
@@ -30,5 +31,6 @@ router.get("/get-professionals-of-patient/:patientId", getProfessionalsOfPatient
 router.get("/get-professionals-by-department/:department", getProfessionalsByDepartment);
 router.get("/get-professionals-by-status-and-department/:status/:department", getProfessionalsByStatusAndDepartment);
 router.get("/search-professional/:key", searchProfessional);
+router.get("/get-patients-of-professional/:professionalId", getPatientsOfProfessional);
 
 module.exports = router;
