@@ -27,6 +27,7 @@ const addProfessional = async (req, res) => {
             licenseNumber,
             yearsOfExperience,
             department,
+            type,
             bio,
             languagesSpoken,
             workingHours,
@@ -39,6 +40,7 @@ const addProfessional = async (req, res) => {
             licenseNumber,
             yearsOfExperience,
             department,
+            type,
             bio,
             languagesSpoken,
             workingHours,
@@ -371,6 +373,23 @@ const searchProfessional = async (req, res) => {
     }
 };
 
+// API - Get all the patients of a professional
+const getPatientsOfProfessional = async (req, res) => {
+    try {
+        const { professionalId } = req.params;
+        
+        // Find all patients that have the professionalId in their assignedProfessionals array
+        const patients = await Patient.find({ assignedProfessionals: professionalId });
+        res.json(patients);
+    } catch (error) {
+        console.error("Error in getPatientsOfProfessional:", error);
+        res.status(500).json({
+            message: "Error getting patients of professional",
+            error: error.message,
+        });
+    }
+};
+
 
 // TODO: add a max number of patients a professional can have
 // TODO: add patient to the professional only if the professional has less than the maximum number of patients
@@ -389,4 +408,5 @@ module.exports = {
     getProfessionalsByDepartment,
     getProfessionalsByStatusAndDepartment,
     searchProfessional,
+    getPatientsOfProfessional
 };
