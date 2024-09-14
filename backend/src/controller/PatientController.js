@@ -400,6 +400,22 @@ const getPatientInformation = async (req, res) => {
     }
 };
 
+// API - Get patients ready to discharge
+const getPatientsReadyToDischarge = async (req, res) => {
+    try {
+        // Find all patients that have no assigned professionals
+        const patients = await Patient.find({ assignedProfessionals: { $size: 0 } });
+        res.json(patients);
+    } catch (error) {
+        console.error("Error in getPatientsReadyToDischarge:", error);
+        res.status(500).json({
+            message: "Error getting patients ready to discharge",
+            error: error.message,
+        });
+    }
+};
+
+
 module.exports = {
     addPatient,
     checkPhoneNumber,
@@ -411,4 +427,5 @@ module.exports = {
     getPatientsByStatus,
     searchPatient,
     getPatientInformation,
+    getPatientsReadyToDischarge,
 };
