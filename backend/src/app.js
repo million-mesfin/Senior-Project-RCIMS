@@ -1,33 +1,75 @@
-const express = require('express');
-const signupRoute = require('./routes/Signup');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { createAdminAccount } = require('./scripts/setup');
-const loginRoute = require('./routes/Login');
-const authenticatedRoute = require('./routes/Authenticated');
-const professionalManagementRoute = require('./routes/Admin routes/ProfessionalManagement');
-const patientManagementRoute = require('./routes/Admin routes/PatientManagement');
-const caregiverManagementRoute = require('./routes/CaregiverManagement');
-const patientHistoryManagementRoute = require('./routes/PatientHistoryManagement');
+const express = require("express");
+const signupRoute = require("./routes/Signup");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const { createAdminAccount } = require("./scripts/setup");
+const loginRoute = require("./routes/Login");
+const authenticatedRoute = require("./routes/Authenticated");
+const professionalManagementRoute = require("./routes/Admin routes/ProfessionalManagement");
+const patientManagementRoute = require("./routes/Admin routes/PatientManagement");
+const caregiverManagementRoute = require("./routes/CaregiverManagement");
+const patientHistoryManagementRoute = require("./routes/PatientHistoryManagement");
+const scheduleRoute = require("./routes/ScheduleRoutes");
+const {
+    updateSchedule,
+    updateAvailabilityBasedOnTime,
+} = require("./controller/ScheduleController");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+
+// Weekly schedule update
+updateSchedule();
+
+// Update availability based on time - hourly schedule update
+const updateAvailability = async () => {
+    try {
+        await updateAvailabilityBasedOnTime();
+        console.log("Availability updated successfully");
+    } catch (error) {
+        console.error("Error updating availability:", error);
+    }
+};
+
+// Function to schedule the next update at the top of the hour
+const scheduleNextUpdate = () => {
+    const now = new Date();
+    const nextHour = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        now.getHours() + 1,
+        0,
+        0,
+        0
+    );
+    const delay = nextHour.getTime() - now.getTime();
+
+    setTimeout(() => {
+        updateAvailability();
+        scheduleNextUpdate(); // Schedule the next update
+    }, delay);
+};
+
+// Update availability immediately when the server starts
+updateAvailability();
+
+// Schedule the first update at the next hour mark
+scheduleNextUpdate();
 
 createAdminAccount();
 
-app.use('/user', signupRoute);
-app.use('/auth', loginRoute);
-app.use('/api', authenticatedRoute);
-app.use('/api/professionals', professionalManagementRoute);
-app.use('/api/patients', patientManagementRoute);
-app.use('/api/caregiver', caregiverManagementRoute);
-app.use('/api/patient-history', patientHistoryManagementRoute);
-
+app.use("/user", signupRoute);
+app.use("/auth", loginRoute);
+app.use("/api", authenticatedRoute);
+app.use("/api/professionals", professionalManagementRoute);
+app.use("/api/patients", patientManagementRoute);
+app.use("/api/caregiver", caregiverManagementRoute);
+app.use("/api/patient-history", patientHistoryManagementRoute);
+app.use("/api/schedule", scheduleRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
