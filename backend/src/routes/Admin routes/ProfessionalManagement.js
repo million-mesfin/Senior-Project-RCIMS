@@ -13,7 +13,8 @@ const {
     getProfessionalsByDepartment,
     getProfessionalsByStatusAndDepartment,
     searchProfessional,
-    getPatientsOfProfessional
+    getPatientsOfProfessional,
+    getProfessionalByUserId,
 } = require("../../controller/ProfessionalController");
 
 const router = express.Router();
@@ -27,10 +28,23 @@ router.get("/check-phone/:phoneNumber", checkPhoneNumber);
 router.post("/attach-patient", attachPatient);
 router.post("/detach-patient-from-professional", removePatientFromProfessional);
 router.get("/get-professionals-by-status/:status", getProfessionalsByStatus);
-router.get("/get-professionals-of-patient/:patientId", getProfessionalsOfPatient);
-router.get("/get-professionals-by-department/:department", getProfessionalsByDepartment);
-router.get("/get-professionals-by-status-and-department/:status/:department", getProfessionalsByStatusAndDepartment);
+router.get(
+    "/get-professionals-of-patient/:patientId",
+    getProfessionalsOfPatient
+);
+router.get(
+    "/get-professionals-by-department/:department",
+    getProfessionalsByDepartment
+);
+router.get(
+    "/get-professionals-by-status-and-department/:status/:department",
+    getProfessionalsByStatusAndDepartment
+);
 router.get("/search-professional/:key", searchProfessional);
-router.get("/get-patients-of-professional/:professionalId", getPatientsOfProfessional);
+router.get(
+    "/get-patients-of-professional/:professionalId",
+    getPatientsOfProfessional
+);
+router.get("/get-professional-by-user-id/:userId", getProfessionalByUserId);
 
 module.exports = router;

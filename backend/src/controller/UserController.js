@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 
 // Add a new user
 // when used as an API endpoint, this function is used to create a new admin.
-async function signupUser(req) {  // Remove 'res' parameter
+async function signupUser(req) {
+
     try {
         const defaultPassword = "password123";
         const {
@@ -32,10 +33,10 @@ async function signupUser(req) {  // Remove 'res' parameter
         });
 
         const savedUser = await newUser.save();
-        return savedUser;  // Return the user object instead of sending a response
+        return savedUser;
     } catch (error) {
         console.error("Error in signupUser:", error);
-        throw error;  // Throw the error to be caught in addProfessional
+        throw error;
     }
 }
 
