@@ -18,7 +18,7 @@ async function login(req, res) {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid password" });
+            return res.status(401).json({ message: "Invalid phone number or password" });
         }
         if (user.role === 'professional') {
             const professional = await Professional.findOne({ user: user._id });
