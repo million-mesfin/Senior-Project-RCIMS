@@ -4,6 +4,7 @@ const Patient = require("../models/Patient");
 const { signupUser } = require("./UserController");
 const {
     detatchProfessionalFromPatient,
+    getProfessionalWithLeastPatientsInDepartment,
 } = require("./Patient-Professional-SharedController");
 
 // API - add a new professional
@@ -102,11 +103,11 @@ const getProfessionalById = async (req, res) => {
 // API - Attach a patient to a professional
 const attachPatient = async (req, res) => {
     try {
-        const { professionalId, patientId, department } = req.body;
+        let { professionalId, patientId, department } = req.body;
 
         // if professionalID is null, attach the patient to the professional with the least number of patients
         if (!professionalId) {
-            const professional =
+            let professional =
                 await getProfessionalWithLeastPatientsInDepartment(department);
             professionalId = professional._id;
         }
@@ -298,7 +299,9 @@ const getProfessionalsOfPatient = async (req, res) => {
     try {
         const { patientId } = req.params;
         const patient = await Patient.findById(patientId);
-        const professionals = await Professional.find({ patients: patient.user });
+        const professionals = await Professional.find({
+            patients: patient.user,
+        });
         res.json(professionals);
     } catch (error) {
         console.error("Error in getProfessionalsOfPatient:", error);
@@ -328,7 +331,7 @@ const getProfessionalsByDepartment = async (req, res) => {
 const getProfessionalsByStatusAndDepartment = async (req, res) => {
     try {
         const { status, department } = req.query;
-        
+
         let filter = {};
         if (status) filter.status = status;
         if (department) filter.department = department;
@@ -348,20 +351,24 @@ const getProfessionalsByStatusAndDepartment = async (req, res) => {
 const searchProfessional = async (req, res) => {
     try {
         const { key } = req.params;
-        
-        const professionals = await Professional.find().populate({
-            path: 'user',
-            match: {
-                $or: [
-                    { name: { $regex: key, $options: "i" } },
-                    { phoneNumber: { $regex: key, $options: "i" } }
-                ]
-            },
-            select: '-password'
-        }).exec();
+
+        const professionals = await Professional.find()
+            .populate({
+                path: "user",
+                match: {
+                    $or: [
+                        { name: { $regex: key, $options: "i" } },
+                        { phoneNumber: { $regex: key, $options: "i" } },
+                    ],
+                },
+                select: "-password",
+            })
+            .exec();
 
         // Filter out professionals where user is null (didn't match the criteria)
-        const filteredProfessionals = professionals.filter(prof => prof.user !== null);
+        const filteredProfessionals = professionals.filter(
+            (prof) => prof.user !== null
+        );
 
         res.json(filteredProfessionals);
     } catch (error) {
@@ -377,9 +384,13 @@ const searchProfessional = async (req, res) => {
 const getPatientsOfProfessional = async (req, res) => {
     try {
         const { professionalId } = req.params;
-        
+
         // Find all patients that have the professionalId in their assignedProfessionals array
-        const patients = await Patient.find({ assignedProfessionals: professionalId });
+        // and populate the user field
+        const patients = await Patient.find({
+            assignedProfessionals: professionalId,
+        }).populate('user', '-password'); // Populate user data, excluding the password field
+
         res.json(patients);
     } catch (error) {
         console.error("Error in getPatientsOfProfessional:", error);
@@ -389,7 +400,20 @@ const getPatientsOfProfessional = async (req, res) => {
         });
     }
 };
-
+// API - get professional with the given user id
+const getProfessionalByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const professional = await Professional.find({ user: userId });
+        res.status(200).json({ professional });
+    } catch (error) {
+        console.error("Error in getProfessionalByUserId:", error);
+        res.status(500).json({
+            message: "Error getting professional by user id",
+            error: error.message,
+        });
+    }
+};
 
 // TODO: add a max number of patients a professional can have
 // TODO: add patient to the professional only if the professional has less than the maximum number of patients
@@ -408,5 +432,6 @@ module.exports = {
     getProfessionalsByDepartment,
     getProfessionalsByStatusAndDepartment,
     searchProfessional,
-    getPatientsOfProfessional
+    getPatientsOfProfessional,
+    getProfessionalByUserId,
 };
