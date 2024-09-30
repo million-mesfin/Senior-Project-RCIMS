@@ -44,6 +44,7 @@ const addProfessionalSchedule = async (req, res) => {
                         currentWeek.push({
                             date: pastDay,
                             sessionNumber: j,
+                            type: "isolated",
                             status: "unavailable",
                         });
                     }
@@ -73,7 +74,7 @@ const addProfessionalSchedule = async (req, res) => {
                                 : "unavailable";
 
                         //! Remove this later - testing only
-                        if (status === "available") {
+                        /* if (status === "available") {
                             console.log("Session time (UTC):", sessionTime);
                             console.log("Current time (UTC):", currentTime);
                             console.log(
@@ -85,10 +86,11 @@ const addProfessionalSchedule = async (req, res) => {
                                 sessionTime.getUTCMinutes()
                             );
                         }
-
+*/
                         currentWeek.push({
                             date: new Date(nextDay),
                             sessionNumber: j,
+                            type: "isolated",
                             status: status,
                         });
                     }
@@ -104,6 +106,7 @@ const addProfessionalSchedule = async (req, res) => {
                         nextWeek.push({
                             date: new Date(nextDay),
                             sessionNumber: j,
+                            type: "isolated",
                             status: "available",
                         });
                     }
@@ -125,6 +128,7 @@ const addProfessionalSchedule = async (req, res) => {
                             currentWeek.push({
                                 date: pastDay,
                                 sessionNumber: j,
+                                type: "group",
                                 status: "unavailable",
                             });
                         }
@@ -142,6 +146,7 @@ const addProfessionalSchedule = async (req, res) => {
                             currentWeek.push({
                                 date: new Date(nextDay),
                                 sessionNumber: j,
+                                type: "group",
                                 status: "available",
                             });
                         }
@@ -159,6 +164,7 @@ const addProfessionalSchedule = async (req, res) => {
                             nextWeek.push({
                                 date: new Date(nextDay),
                                 sessionNumber: j,
+                                type: "group",
                                 status: "available",
                             });
                         }
@@ -181,6 +187,7 @@ const addProfessionalSchedule = async (req, res) => {
                         currentWeek.push({
                             date: pastDay,
                             sessionNumber: j,
+                            type: "physical",
                             status: "unavailable",
                         });
                     }
@@ -196,6 +203,7 @@ const addProfessionalSchedule = async (req, res) => {
                         currentWeek.push({
                             date: new Date(nextDay),
                             sessionNumber: j,
+                            type: "physical",
                             status: "available",
                         });
                     }
@@ -211,6 +219,7 @@ const addProfessionalSchedule = async (req, res) => {
                         nextWeek.push({
                             date: new Date(nextDay),
                             sessionNumber: j,
+                            type: "physical",
                             status: "available",
                         });
                     }
@@ -321,12 +330,31 @@ const addPatientSchedule = async (req, res) => {
                     const pastDay = new Date();
                     pastDay.setDate(pastDay.getDate() - pastDay.getDay() + i);
                     for (let j = 1; j <= 8; j++) {
+                        if (j === 1 || j === 2 || j === 3) {
+                            currentWeek.push({
+                                date: pastDay,
+                                sessionNumber: j,
+                                type: "physical",
+                                status: "unavailable",
+                            });
+                        }
                         if (j === 4) continue;
-                        currentWeek.push({
-                            date: pastDay,
-                            sessionNumber: j,
-                            status: "unavailable",
-                        });
+                        if (j === 5 || j === 6) {
+                            currentWeek.push({
+                                date: pastDay,
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "unavailable",
+                            });
+                        }
+                        if (j === 7 || j === 8) {
+                            currentWeek.push({
+                                date: pastDay,
+                                sessionNumber: j,
+                                type: "group",
+                                status: "unavailable",
+                            });
+                        }
                     }
                 }
 
@@ -337,12 +365,31 @@ const addPatientSchedule = async (req, res) => {
                         currentDate.getDate() - currentDate.getDay() + i + 1
                     );
                     for (let j = 1; j <= 8; j++) {
+                        if (j === 1 || j === 2 || j === 3) {
+                            currentWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "physical",
+                                status: "available",
+                            });
+                        }
                         if (j === 4) continue;
-                        currentWeek.push({
-                            date: new Date(nextDay),
-                            sessionNumber: j,
-                            status: "available",
-                        });
+                        if (j === 5 || j === 6) {
+                            currentWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "available",
+                            });
+                        }
+                        if (j === 7 || j === 8) {
+                            currentWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "group",
+                                status: "available",
+                            });
+                        }
                     }
                 }
 
@@ -353,12 +400,31 @@ const addPatientSchedule = async (req, res) => {
                         currentDate.getDate() - currentDate.getDay() + i + 7
                     );
                     for (let j = 1; j <= 8; j++) {
+                        if (j === 1 || j === 2 || j === 3) {
+                            nextWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "physical",
+                                status: "available",
+                            });
+                        }
                         if (j === 4) continue;
-                        nextWeek.push({
-                            date: new Date(nextDay),
-                            sessionNumber: j,
-                            status: "available",
-                        });
+                        if (j === 5 || j === 6) {
+                            nextWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "available",
+                            });
+                        }
+                        if (j === 7 || j === 8) {
+                            nextWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "group",
+                                status: "available",
+                            });
+                        }
                     }
                 }
 
@@ -376,11 +442,22 @@ const addPatientSchedule = async (req, res) => {
                     pastDay.setDate(pastDay.getDate() - pastDay.getDay() + i);
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 5 || j === 6) continue;
-                        currentWeek.push({
-                            date: pastDay,
-                            sessionNumber: j,
-                            status: "unavailable",
-                        });
+                        if (j === 2 || j === 3) {
+                            currentWeek.push({
+                                date: pastDay,
+                                sessionNumber: j,
+                                type: "group",
+                                status: "unavailable",
+                            });
+                        }
+                        if (j === 4 || j === 7 || j === 8) {
+                            currentWeek.push({
+                                date: pastDay,
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "unavailable",
+                            });
+                        }
                     }
                 }
 
@@ -392,11 +469,22 @@ const addPatientSchedule = async (req, res) => {
                     );
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 5 || j === 6) continue;
-                        currentWeek.push({
-                            date: new Date(nextDay),
-                            sessionNumber: j,
-                            status: "available",
-                        });
+                        if (j === 2 || j === 3) {
+                            currentWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "group",
+                                status: "available",
+                            });
+                        }
+                        if (j === 4 || j === 7 || j === 8) {
+                            currentWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "available",
+                            });
+                        }
                     }
                 }
 
@@ -408,11 +496,22 @@ const addPatientSchedule = async (req, res) => {
                     );
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 5 || j === 6) continue;
-                        nextWeek.push({
-                            date: new Date(nextDay),
-                            sessionNumber: j,
-                            status: "available",
-                        });
+                        if (j === 2 || j === 3) {
+                            nextWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "group",
+                                status: "available",
+                            });
+                        }
+                        if (j === 4 || j === 7 || j === 8) {
+                            nextWeek.push({
+                                date: new Date(nextDay),
+                                sessionNumber: j,
+                                type: "isolated",
+                                status: "available",
+                            });
+                        }
                     }
                 }
 
@@ -687,8 +786,12 @@ const getCommonAvailableSessions = async (req, res) => {
             });
         }
 
-        const professionalSchedule = await Schedule.findOne({ userId: professional.user });
-        const patientSchedule = await Schedule.findOne({ userId: patient.user });
+        const professionalSchedule = await Schedule.findOne({
+            userId: professional.user,
+        });
+        const patientSchedule = await Schedule.findOne({
+            userId: patient.user,
+        });
 
         if (!professionalSchedule || !patientSchedule) {
             return res.status(404).json({
@@ -696,31 +799,43 @@ const getCommonAvailableSessions = async (req, res) => {
             });
         }
 
-        const commonAvailableSessionsCurrentWeek = professionalSchedule.currentWeek
-            .filter(profSession => profSession.status === "available")
-            .map(profSession => {
-                const matchingPatientSession = patientSchedule.currentWeek.find(patientSession => 
-                    patientSession.sessionNumber === profSession.sessionNumber && 
-                    patientSession.status === "available"
-                );
-                return matchingPatientSession ? {
-                    professional: profSession,
-                    patient: matchingPatientSession
-                } : null;
-            })
-            .filter(Boolean);
+        const commonAvailableSessionsCurrentWeek =
+            professionalSchedule.currentWeek
+                .filter((profSession) => profSession.status === "available")
+                .map((profSession) => {
+                    const matchingPatientSession =
+                        patientSchedule.currentWeek.find(
+                            (patientSession) =>
+                                patientSession.sessionNumber ===
+                                    profSession.sessionNumber &&
+                                    patientSession.type === profSession.type &&
+                                patientSession.status === "available"
+                        );
+                    return matchingPatientSession
+                        ? {
+                              professional: profSession,
+                              patient: matchingPatientSession,
+                          }
+                        : null;
+                })
+                .filter(Boolean);
 
         const commonAvailableSessionsNextWeek = professionalSchedule.nextWeek
-            .filter(profSession => profSession.status === "available")
-            .map(profSession => {
-                const matchingPatientSession = patientSchedule.nextWeek.find(patientSession => 
-                    patientSession.sessionNumber === profSession.sessionNumber && 
-                    patientSession.status === "available"
+            .filter((profSession) => profSession.status === "available")
+            .map((profSession) => {
+                const matchingPatientSession = patientSchedule.nextWeek.find(
+                    (patientSession) =>
+                        patientSession.sessionNumber ===
+                            profSession.sessionNumber &&
+                            patientSession.type === profSession.type &&
+                        patientSession.status === "available"
                 );
-                return matchingPatientSession ? {
-                    professional: profSession,
-                    patient: matchingPatientSession
-                } : null;
+                return matchingPatientSession
+                    ? {
+                          professional: profSession,
+                          patient: matchingPatientSession,
+                      }
+                    : null;
             })
             .filter(Boolean);
 
@@ -735,7 +850,9 @@ const getCommonAvailableSessions = async (req, res) => {
             error: error.message,
         });
     }
-}
+};
+
+// todo - book session
 
 module.exports = {
     addProfessionalSchedule,

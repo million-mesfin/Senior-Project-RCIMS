@@ -16,12 +16,17 @@ const scheduleSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            type: {
+                type: String,
+                required: true,
+                enum: ["physical", "group", "isolated"],
+            },
             status: {
                 type: String,
                 required: true,
                 enum: ["available", "booked", "unavailable"],
             },
-        }
+        },
     ],
 
     nextWeek: [
@@ -34,13 +39,18 @@ const scheduleSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            type: {
+                type: String,
+                required: true,
+                enum: ["physical", "group", "isolated"],
+            },
             status: {
                 type: String,
                 required: true,
                 enum: ["available", "booked", "unavailable"],
             },
-        }
-    ]
+        },
+    ],
 });
 
 module.exports = mongoose.model("Schedule", scheduleSchema);
