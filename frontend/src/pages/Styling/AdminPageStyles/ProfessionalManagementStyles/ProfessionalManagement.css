@@ -1,46 +1,108 @@
-.professional-management {
+/* Professional Management Page Styles */
+.professional-management-page {
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* Tabs */
+.tabs {
     display: flex;
-    height: calc(100vh - 60px); /* Assuming navbar height is 60px */
-    background-color: #f5f5f5;
+    justify-content: flex-start;
+    margin-bottom: 20px;
 }
 
-.side-nav {
-    width: 250px;
-    height: 100%; /* Changed from calc(100% - 60px) to 100% */
-    background-color: #ffffff;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 20px 0;
-    overflow-y: auto; /* Added to enable scrolling if content overflows */
-}
-
-.side-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.side-nav li {
-    padding: 15px 20px;
+.tab-button {
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
     transition: background-color 0.3s ease;
 }
 
-.side-nav li:hover {
+.tab-button.active {
+    background-color: #004d40;
+    color: #fff;
+}
+
+.tab-button:hover {
     background-color: #f0f0f0;
 }
 
-.side-nav li.active {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-.main-panel {
-    flex-grow: 1;
+/* Content Wrapper */
+.tab-content {
     padding: 20px;
-    overflow-y: auto; /* Added to enable scrolling if content overflows */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Professional Management Page Styles */
+.professional-management-page {
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 
-h2 {
-    color: #333;
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: flex-start;
     margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.tab-button.active {
+    background-color: #004d40;
+    color: #fff;
+}
+
+.tab-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Content Wrapper */
+.tab-content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search and Filter */
+.search-filter-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    width: 200px;
+}
+
+.filter-select {
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.search-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
