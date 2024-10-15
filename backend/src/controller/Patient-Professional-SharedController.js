@@ -19,10 +19,15 @@ const getProfessionalWithLeastPatientsInDepartment = async (department) => {
 };
 
 // Local function - Add patient to professional
-const addPatientToProfessionalDefault = async (professionalId, patientId) => {
+const addPatientToProfessionalDefault = async (professionalId, patientId, patientType) => {
     const professional = await Professional.findById(professionalId);
     professional.patients.push(patientId);
     professional.numberOfPatients++;
+    if (patientType === "In-patient") {
+        professional.numberOfInPatients++;
+    } else {
+        professional.numberOfOutPatients++;
+    }
     await professional.save();
 };
 
@@ -38,6 +43,13 @@ const detatchProfessionalFromPatient = async (professionalId, patientId) => {
 
         professional.patients.pull(patient.user);
         professional.numberOfPatients = Math.max(0, professional.numberOfPatients - 1);
+
+        // check if the patient is an inpatient or outpatient
+        if (patient.patientType === "In-patient") {
+            professional.numberOfInPatients = Math.max(0, professional.numberOfInPatients - 1);
+        } else {
+            professional.numberOfOutPatients = Math.max(0, professional.numberOfOutPatients - 1);
+        }
 
         await professional.save();
 
