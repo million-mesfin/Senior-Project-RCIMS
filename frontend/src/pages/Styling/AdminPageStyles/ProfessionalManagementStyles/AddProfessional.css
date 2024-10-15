@@ -1,23 +1,25 @@
 .add-professional-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
 h1 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
+  color: #003c1c;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 form {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  align-items: center;
 }
 
 .form-group {
@@ -26,52 +28,54 @@ form {
 }
 
 label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #555;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-input, select, textarea {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+input, textarea {
+  padding: 12px;
   font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   transition: border-color 0.3s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus, textarea:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
 textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
 }
 
-.submit-btn {
-  grid-column: 1 / -1;
-  background-color: #007bff;
-  color: white;
+button[type="submit"] {
+  background-color: #28a745;
+  color: #fff;
   border: none;
-  padding: 1rem;
-  font-size: 1.1rem;
-  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  grid-column: span 2;
 }
 
-.submit-btn:hover {
-  background-color: #0056b3;
+button[type="submit"]:hover {
+  background-color: #218838;
 }
 
 @media (max-width: 768px) {
-  .add-professional-container {
-    padding: 1rem;
-  }
-
   form {
     grid-template-columns: 1fr;
+  }
+
+  button[type="submit"] {
+    width: 100%;
   }
 }

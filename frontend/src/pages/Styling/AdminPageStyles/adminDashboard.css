@@ -1,80 +1,233 @@
-/* AdminDashboard.css */
-
-body {
-    font-family: "Arial", sans-serif;
-    background-color: #f4f4f9;
+/* General body styling */
+body, html {
     margin: 0;
     padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f8fa;
+    height: 100%;
+    width: 100%;
 }
 
-.admin-dashboard {
+.dashboard-container {
     display: flex;
-    flex-direction: column;
-    height: 100vh;
+    width: 100vw; /* Ensure full width coverage */
+    height: 100vh; /* Full height to cover the screen */
 }
 
-.admin-dashboard-nav {
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.logo img {
+    width: 100%;
+    max-width: 120px;
+    margin-bottom: 10px;
+}
+
+.logo h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Ensure no default margin */
+}
+
+.menu-item {
+    font-size: 16px;
+    color: #333;
+    padding: 10px 15px; /* Increased padding for better spacing */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* Add space between menu items */
+    transition: background-color 0.3s;
+}
+
+.menu-item .icon {
+    margin-right: 10px; /* Space between the icon and text */
+    font-size: 18px; /* Adjust icon size for better visibility */
+}
+
+.menu-item.active, .menu-item:hover {
+    background-color: #e6f7ff;
+    border-radius: 8px;
+}
+
+/* Ensure no additional spacing issue */
+.menu-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Main content styling */
+.main-content {
+    margin-left: 250px; /* Adjust for fixed sidebar width */
+    width: calc(100vw - 250px);
+    height: calc(100vh - 100px); /* Adjust for fixed navbar height */
+    flex-grow: 1; /* Make main content take the rest of the space */
+    padding: 30px; /* Increase padding for main content */
+    overflow-y: auto; /* Scroll for smaller screens */
+    min-height: 100vh; /* Ensure the main content fills the entire height */
+    background-color: #f0f2f5; 
+}
+
+/* Spacing between sections */
+.header, .dashboard {
+    margin-bottom: 30px; /* Increase space between sections */
+}
+
+.header {
     display: flex;
     justify-content: space-between;
-    /* make the vertical alignment centered*/
     align-items: center;
-    padding: 1rem 2rem;
-    background-color: #343a40;
-    color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-height: 5vh;
-    height: 60px; /* Adjust this value if your navbar has a different height */
+    padding: 20px; /* Increased padding */
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    width: 100%;
 }
 
-.admin-dashboard-nav h1 {
-    margin: 0;
+.welcome-message h1 {
     font-size: 1.5rem;
-    color: #fff;
+    color: #333;
 }
 
-.admin-dashboard-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
+.welcome-message p {
+    font-size: 1rem;
+    color: #666;
 }
 
-.admin-dashboard-nav a:hover {
-    background-color: #495057;
-    border-radius: 4px;
+.search-bar {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
 }
 
-.admin-dashboard-nav div {
+.search-bar input {
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    width: 100%;
+}
+
+.dashboard {
+    left:250px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Increased gap between sections */
+}
+
+.cards {
+    display: grid;
+    gap: 30px; /* Increased gap between cards */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.card {
+    flex: 1;
+    padding: 25px; /* Increased padding inside cards */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.increase {
+    color: green;
+}
+
+/* Statistics and Calendar sections */
+
+.StatAndCal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.statistics, .calendar {
+    padding: 25px;
+    margin: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+    width: 50%;
+}
+
+.chart-placeholder, .calendar-placeholder {
+    height: 500px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    color: #999;
 }
 
-.admin-dashboard-nav button {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+/* Media Queries for smaller screen adjustments */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column; /* Stack sidebar and content on top of each other */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto; /* Make the sidebar fit the screen on smaller devices */
+        position: relative;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .header {
+        flex-direction: column; /* Stack the welcome message and search bar */
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr; /* Make the cards stack vertically on small screens */
+    }
 }
 
-.admin-dashboard-nav button:hover {
-    background-color: #c82333;
-}
+@media (max-width: 480px) {
+    .welcome-message h1 {
+        font-size: 1.25rem;
+    }
 
-.container {
-    flex-grow: 1;
-    overflow: hidden; /* Prevents scrolling on the container level */
-    /* padding: 2rem; */
-}
+    .welcome-message p {
+        font-size: 0.875rem;
+    }
 
-.container h2 {
-    font-size: 2rem;
-    color: #343a40;
-}
+    .card h2 {
+        font-size: 1rem;
+    }
 
-.container p {
-    font-size: 1rem;
-    color: #6c757d;
+    .card p {
+        font-size: 0.875rem;
+    }
 }

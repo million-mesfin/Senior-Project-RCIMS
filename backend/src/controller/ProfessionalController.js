@@ -7,6 +7,8 @@ const {
     getProfessionalWithLeastPatientsInDepartment,
 } = require("./Patient-Professional-SharedController");
 
+const { addProfessionalSchedule } = require("./ScheduleController"); 
+
 // API - add a new professional
 const addProfessional = async (req, res) => {
     try {
@@ -48,6 +50,7 @@ const addProfessional = async (req, res) => {
         });
 
         const savedProfessional = await newProfessional.save();
+        await addProfessionalSchedule(user._id);
 
         res.status(201).json({
             message: "Professional added successfully",
@@ -118,6 +121,9 @@ const attachPatient = async (req, res) => {
         professional.patients.push(patientId);
         professional.numberOfPatients++;
         await professional.save();
+
+        patient.assignedProfessionals.push(professionalId);
+        await patient.save();
 
         res.status(200).json({
             message: "Patient attached to professional successfully",

@@ -1,0 +1,72 @@
+.add-patient-history {
+  width: 80%; /* Container width */
+  margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.btn-back {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+h2 {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+.wide-textarea-container {
+  border: none;
+  padding: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.wide-textarea {
+  width: 500px; /* Full container width */
+  height: 500px; /* Adjusted to be taller */
+  border: 1px solid #ddd; /* Simple border */
+  resize: none; /* Disable resizing */
+  padding: 15px;
+  font-family: 'Arial', sans-serif;
+  font-size: 18px; /* Increased font size */
+  line-height: 1.7;
+}
+
+.wide-textarea::placeholder {
+  color: #888;
+  font-family: 'Arial', sans-serif;
+}
+
+.submit-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #2980b9;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,73 @@
+.predictions-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .predictions-page h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-results {
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .search-result-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .search-result-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .patient-risk {
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+  }
+  
+  .low-risk {
+    background-color: #2ecc71;
+  }
+  
+  .medium-risk {
+    background-color: #f39c12;
+  }
+  
+  .high-risk {
+    background-color: #e74c3c;
+  }
+  
+  .patient-risk h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .patient-risk p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  

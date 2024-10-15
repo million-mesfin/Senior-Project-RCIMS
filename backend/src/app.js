@@ -14,6 +14,7 @@ const {
     updateSchedule,
     updateAvailabilityBasedOnTime,
 } = require("./controller/ScheduleController");
+const appointmentManagementRoute = require("./routes/AppointmentManagement");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -70,6 +71,7 @@ app.use("/api/patients", patientManagementRoute);
 app.use("/api/caregiver", caregiverManagementRoute);
 app.use("/api/patient-history", patientHistoryManagementRoute);
 app.use("/api/schedule", scheduleRoute);
+app.use("/api/appointment", appointmentManagementRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

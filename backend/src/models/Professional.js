@@ -58,6 +58,14 @@ const professionalSchema = new mongoose.Schema({
             required: false,
         },
     ],
+    numberOfOutPatients: {
+        type: Number,
+        default: 0,
+    },
+    numberOfInPatients: {
+        type: Number,
+        default: 0,
+    },
     numberOfAppointments: {
         type: Number,
         default: 0,
