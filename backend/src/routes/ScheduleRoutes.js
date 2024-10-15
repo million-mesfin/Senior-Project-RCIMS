@@ -10,14 +10,13 @@ const {
     getCommonAvailableSessions
 } = require("../controller/ScheduleController");
 
-router.post("/professional-schedule", addProfessionalSchedule);
+// router.post("/professional-schedule", addProfessionalSchedule);
 router.get(
     "/professional-schedule/earliest-available-date/:professionalID",
     getEarliestAvailableDateProfessional
 );
-router.post("/patient-schedule", addPatientSchedule);
+// router.post("/patient-schedule", addPatientSchedule);
 router.put("/update-availability/", updateAvailabilityBasedOnTime);
 router.get("/schedule/:userId", getScheduleForUser);
-router.get("/common-sessions/:professionalId/:patientId", getCommonAvailableSessions);
 
 module.exports = router;

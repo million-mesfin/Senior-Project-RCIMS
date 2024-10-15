@@ -14,9 +14,8 @@ const sessionStartTime = {
 };
 
 // Local function - add a new schedule for a newly created professional
-const addProfessionalSchedule = async (req, res) => {
+const addProfessionalSchedule = async (userId) => {
     try {
-        const { userId } = req.body;
         const professional = await Professional.findOne({ user: userId });
 
         if (!professional) {
@@ -236,15 +235,9 @@ const addProfessionalSchedule = async (req, res) => {
         }
 
         const savedSchedule = await newSchedule.save();
-        res.status(201).json({
-            message: "Schedule added successfully",
-            schedule: savedSchedule,
-        });
+        return savedSchedule;
     } catch (error) {
-        res.status(500).json({
-            message: "Error adding schedule",
-            error: error.message,
-        });
+        throw new Error(`Error adding professional schedule: ${error.message}`);
     }
 };
 
@@ -299,17 +292,13 @@ const getEarliestAvailableDateProfessional = async (req, res) => {
     }
 };
 
-// API - add a new schedule for in-patient
-const addPatientSchedule = async (req, res) => {
+// Local function - add a new schedule for a patient
+const addPatientSchedule = async (userId) => {
     try {
-        const { userId } = req.body;
-
         const patient = await Patient.findOne({ user: userId });
 
         if (!patient) {
-            return res.status(404).json({
-                message: "Patient not found",
-            });
+            throw new Error("Patient not found");
         }
 
         const patientType = patient.patientType;
@@ -362,7 +351,7 @@ const addPatientSchedule = async (req, res) => {
                 for (let i = currentDayOfWeek + 1; i < 7; i++) {
                     const nextDay = new Date();
                     nextDay.setDate(
-                        currentDate.getDate() - currentDate.getDay() + i + 1
+                        currentDate.getDate() - currentDate.getDay() + i
                     );
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 2 || j === 3) {
@@ -465,7 +454,7 @@ const addPatientSchedule = async (req, res) => {
                 for (let i = currentDayOfWeek + 1; i < 7; i++) {
                     const nextDay = new Date();
                     nextDay.setDate(
-                        currentDate.getDate() - currentDate.getDay() + i + 1
+                        currentDate.getDate() - currentDate.getDay() + i
                     );
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 5 || j === 6) continue;
@@ -525,17 +514,9 @@ const addPatientSchedule = async (req, res) => {
                 throw new Error("Invalid patient type");
         }
 
-        const savedSchedule = await newSchedule.save();
-
-        res.status(201).json({
-            message: "Schedule added successfully",
-            schedule: savedSchedule,
-        });
+        return await newSchedule.save();
     } catch (error) {
-        res.status(500).json({
-            message: "Error adding in-patient schedule",
-            error: error.message,
-        });
+        throw new Error(`Error adding patient schedule: ${error.message}`);
     }
 };
 
@@ -550,6 +531,10 @@ const updateSchedule = async () => {
 
         // get the first enty of schedule from the schedule collection
         const schedule = await Schedule.findOne();
+        // Check if a schedule exists
+        if (!schedule) {
+            return;
+        }
         // find the first saved date in the schedule for the current week
         let firstDayOfNextWeek = schedule.nextWeek[0].date;
         const firstDayOfNextWeekString = `${firstDayOfNextWeek.getFullYear()}-${padZero(
@@ -596,6 +581,7 @@ const updateSchedule = async () => {
                                     date: new Date(nextDay),
                                     sessionNumber: j,
                                     status: "available",
+                                    type: "isolated",
                                 });
                             }
                         }
@@ -617,6 +603,7 @@ const updateSchedule = async () => {
                                         date: new Date(nextDay),
                                         sessionNumber: j,
                                         status: "available",
+                                        type: "group",
                                     });
                                 }
                             }
@@ -638,6 +625,7 @@ const updateSchedule = async () => {
                                     date: new Date(nextDay),
                                     sessionNumber: j,
                                     status: "available",
+                                    type: "physical",
                                 });
                             }
                         }
@@ -660,12 +648,31 @@ const updateSchedule = async () => {
                                     7
                             );
                             for (let j = 1; j <= 8; j++) {
+                                if (j === 1 || j === 2 || j === 3) {
+                                    newNextWeek.push({
+                                        date: new Date(nextDay),
+                                        sessionNumber: j,
+                                        type: "physical",
+                                        status: "available",
+                                    });
+                                }
                                 if (j === 4) continue;
-                                newNextWeek.push({
-                                    date: new Date(nextDay),
-                                    sessionNumber: j,
-                                    status: "available",
-                                });
+                                if (j === 5 || j === 6) {
+                                    newNextWeek.push({
+                                        date: new Date(nextDay),
+                                        sessionNumber: j,
+                                        type: "isolated",
+                                        status: "available",
+                                    });
+                                }
+                                if (j === 7 || j === 8) {
+                                    newNextWeek.push({
+                                        date: new Date(nextDay),
+                                        sessionNumber: j,
+                                        type: "group",
+                                        status: "available",
+                                    });
+                                }
                             }
                         }
                         // add the new next week to the schedule
@@ -683,11 +690,22 @@ const updateSchedule = async () => {
                             );
                             for (let j = 1; j <= 8; j++) {
                                 if (j === 1 || j === 5 || j === 6) continue;
-                                newNextWeek.push({
-                                    date: new Date(nextDay),
-                                    sessionNumber: j,
-                                    status: "available",
-                                });
+                                if (j === 2 || j === 3) {
+                                    newNextWeek.push({
+                                        date: new Date(nextDay),
+                                        sessionNumber: j,
+                                        type: "group",
+                                        status: "available",
+                                    });
+                                }
+                                if (j === 4 || j === 7 || j === 8) {
+                                    newNextWeek.push({
+                                        date: new Date(nextDay),
+                                        sessionNumber: j,
+                                        type: "isolated",
+                                        status: "available",
+                                    });
+                                }
                             }
                         }
                         // add the new next week to the schedule
@@ -774,86 +792,6 @@ const getScheduleForUser = async (req, res) => {
     }
 };
 
-// API - get common available days for a given professional and patient
-const getCommonAvailableSessions = async (req, res) => {
-    try {
-        const { professionalId, patientId } = req.params;
-        const professional = await Professional.findById(professionalId);
-        const patient = await Patient.findById(patientId);
-        if (!professional || !patient) {
-            return res.status(404).json({
-                message: "Professional or patient not found",
-            });
-        }
-
-        const professionalSchedule = await Schedule.findOne({
-            userId: professional.user,
-        });
-        const patientSchedule = await Schedule.findOne({
-            userId: patient.user,
-        });
-
-        if (!professionalSchedule || !patientSchedule) {
-            return res.status(404).json({
-                message: "Schedule not found",
-            });
-        }
-
-        const commonAvailableSessionsCurrentWeek =
-            professionalSchedule.currentWeek
-                .filter((profSession) => profSession.status === "available")
-                .map((profSession) => {
-                    const matchingPatientSession =
-                        patientSchedule.currentWeek.find(
-                            (patientSession) =>
-                                patientSession.sessionNumber ===
-                                    profSession.sessionNumber &&
-                                    patientSession.type === profSession.type &&
-                                patientSession.status === "available"
-                        );
-                    return matchingPatientSession
-                        ? {
-                              professional: profSession,
-                              patient: matchingPatientSession,
-                          }
-                        : null;
-                })
-                .filter(Boolean);
-
-        const commonAvailableSessionsNextWeek = professionalSchedule.nextWeek
-            .filter((profSession) => profSession.status === "available")
-            .map((profSession) => {
-                const matchingPatientSession = patientSchedule.nextWeek.find(
-                    (patientSession) =>
-                        patientSession.sessionNumber ===
-                            profSession.sessionNumber &&
-                            patientSession.type === profSession.type &&
-                        patientSession.status === "available"
-                );
-                return matchingPatientSession
-                    ? {
-                          professional: profSession,
-                          patient: matchingPatientSession,
-                      }
-                    : null;
-            })
-            .filter(Boolean);
-
-        res.status(200).json({
-            message: "Common available sessions retrieved successfully",
-            commonAvailableSessionsCurrentWeek,
-            commonAvailableSessionsNextWeek,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error retrieving common available sessions",
-            error: error.message,
-        });
-    }
-};
-
-// todo - book session
-
 module.exports = {
     addProfessionalSchedule,
     getEarliestAvailableDateProfessional,
@@ -861,5 +799,4 @@ module.exports = {
     updateSchedule,
     updateAvailabilityBasedOnTime,
     getScheduleForUser,
-    getCommonAvailableSessions,
 };
