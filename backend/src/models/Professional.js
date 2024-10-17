@@ -35,9 +35,8 @@ const professionalSchema = new mongoose.Schema({
         enum: ["isolated", "group", "physical"],
     },
     bio: {
-
         type: String,
-        required: true,
+        required: false,
     },
     languagesSpoken: {
         type: [String],
