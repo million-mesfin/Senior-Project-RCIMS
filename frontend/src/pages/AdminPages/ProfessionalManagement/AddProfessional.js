@@ -17,6 +17,7 @@ function AddProfessional() {
     licenseNumber: '',
     yearsOfExperience: '',
     department: '',
+    type: '',
     bio: '', // Bio is optional
     languagesSpoken: '',
     workingHours: '',
@@ -48,6 +49,7 @@ function AddProfessional() {
     if (!formData.licenseNumber) formErrors.licenseNumber = "License Number is required";
     if (!formData.yearsOfExperience) formErrors.yearsOfExperience = "Years of Experience is required";
     if (!formData.department) formErrors.department = "Department is required";
+    if (!formData.type) formErrors.type = "Type is required";
     if (!formData.languagesSpoken) formErrors.languagesSpoken = "Languages Spoken are required";
     if (!formData.workingHours) formErrors.workingHours = "Working Hours are required";
 
@@ -107,6 +109,7 @@ function AddProfessional() {
         licenseNumber: '',
         yearsOfExperience: '',
         department: '',
+        type: '',
         bio: '', // Reset bio (optional)
         languagesSpoken: '',
         workingHours: '',
@@ -208,6 +211,18 @@ function AddProfessional() {
           <label htmlFor="department">Department<span className="required">*</span></label>
           <input type="text" id="department" name="department" value={formData.department} onChange={handleChange} required />
           {errors.department && <span className="error-text">{errors.department}</span>}
+        </div>
+
+        {/* Type */}
+        <div className="form-group">
+          <label htmlFor="type">Type<span className="required">*</span></label>
+          <select id="type" name="type" value={formData.type} onChange={handleChange} required>
+            <option value="" disabled>Select Type</option>
+            <option value="isolated">Isolated</option>
+            <option value="group">Group</option>
+            <option value="physical">Physical</option>
+          </select>
+          {errors.type && <span className="error-text">{errors.type}</span>}
         </div>
 
         {/* Bio (Optional) */}
