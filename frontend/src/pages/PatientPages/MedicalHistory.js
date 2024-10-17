@@ -1,64 +1,116 @@
-import "./PatientPagesStyles/medicalHistory.css"
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const medicalHistory =() => {
+const PatientHistoryPage = ({ onGoBack }) => {
+    const [patientHistory, setPatientHistory] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [expandedHistory, setExpandedHistory] = useState(null);
+
+    // Function to get the logged-in user from localStorage
+    const getCurrentUser = () => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            return user; // This contains the logged-in user object (including _id)
+        } catch (err) {
+            console.error("Error getting user from localStorage", err);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        const fetchPatientHistory = async () => {
+            const user = getCurrentUser();
+            if (!user || !user._id) {
+                setError("User not found. Please log in again.");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await axios.get(
+                    `http://localhost:5000/api/patient-history/get-patient-history/${user._id}` // Fetch history for the patient
+                );
+                if (response.data.patientHistory.length > 0) {
+                    setPatientHistory(response.data.patientHistory); // Store the history data
+                } else {
+                    setError("No history available for this patient.");
+                }
+            } catch (error) {
+                setError("Failed to fetch patient history.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPatientHistory();
+    }, []);
+
+    const toggleHistoryDetails = (index) => {
+        if (expandedHistory === index) {
+            setExpandedHistory(null); // Collapse if already open
+        } else {
+            setExpandedHistory(index); // Expand the clicked one
+        }
+    };
+
     return (
-        <>
-        <div class="medical-history-page">
-  <h2>Medical History</h2>
+        <div className="patient-history-page">
+            <button className="btn btn-back" onClick={onGoBack}>
+                Back
+            </button>
+            <h2>Patient History</h2>
+            {loading && <p>Loading history...</p>}
+            {error && <p className="error">{error}</p>}
+            {!loading && patientHistory.length > 0 && (
+                <div className="history-list">
+                    {patientHistory.map((historyItem, index) => (
+                        <div key={index} className="history-card">
+                            <p className="history-number">#{index + 1}</p>
+                            <p>
+                                <strong>Date:</strong>{" "}
+                                {new Date(
+                                    historyItem.createdAt
+                                ).toLocaleDateString()}
+                            </p>
+                            <p>
+                                <strong>Details:</strong>{" "}
+                                {historyItem.historyData.slice(0, 50)}...
+                            </p>
 
-  {/* <!-- Section for past appointments --> */}
-  <div class="history-section">
-    <h3>Past Appointments</h3>
-    <div class="history-card">
-      <p><strong>Date:</strong> 12th Aug 2023</p>
-      <p><strong>Doctor:</strong> Dr. John Doe</p>
-      <p><strong>Reason:</strong> Follow-up</p>
-      <p><strong>Notes:</strong> Continue medication and follow-up after 1 month.</p>
-    </div>
+                            {/* Display the professional's name and email if available */}
+                            {historyItem.professional && (
+                                <p>
+                                    <strong>Added by:</strong>{" "}
+                                    {historyItem.professionalName}
+                                </p>
+                            )}
 
-    <div class="history-card">
-      <p><strong>Date:</strong> 5th July 2023</p>
-      <p><strong>Doctor:</strong> Dr. Jane Smith</p>
-      <p><strong>Reason:</strong> Annual Checkup</p>
-      <p><strong>Notes:</strong> General health check. Blood pressure slightly elevated.</p>
-    </div>
-  </div>
+                            <div className="button-container">
+                                <button
+                                    className="btn btn-details"
+                                    onClick={() => toggleHistoryDetails(index)}
+                                >
+                                    {expandedHistory === index
+                                        ? "Hide Details"
+                                        : "View Details"}
+                                </button>
+                            </div>
 
-  {/* <!-- Section for diagnoses --> */}
-  <div class="history-section">
-    <h3>Diagnoses</h3>
-    <div class="history-card">
-      <p><strong>Date:</strong> 5th July 2023</p>
-      <p><strong>Diagnosis:</strong> Hypertension</p>
-      <p><strong>Doctor:</strong> Dr. Jane Smith</p>
-      <p><strong>Treatment:</strong> Prescribed blood pressure medication</p>
-    </div>
-  </div>
-
-  {/* <!-- Section for medications --> */}
-  <div class="history-section">
-    <h3>Medications</h3>
-    <div class="history-card">
-      <p><strong>Medication:</strong> Lisinopril</p>
-      <p><strong>Dosage:</strong> 10 mg, once daily</p>
-      <p><strong>Prescribed on:</strong> 12th Aug 2023</p>
-    </div>
-  </div>
-
-  {/* <!-- Section for treatments --> */}
-  <div class="history-section">
-    <h3>Ongoing Treatments</h3>
-    <div class="history-card">
-      <p><strong>Treatment:</strong> Physiotherapy for lower back pain</p>
-      <p><strong>Start Date:</strong> 10th July 2023</p>
-      <p><strong>Therapist:</strong> Sarah Wilson</p>
-      <p><strong>Frequency:</strong> Twice a week</p>
-    </div>
-  </div>
-</div>
-</>
+                            {expandedHistory === index && (
+                                <div className="expanded-details">
+                                    <p>
+                                        <strong>Full Details:</strong>{" "}
+                                        {historyItem.historyData}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
     );
-}
+};
 
-
-export default medicalHistory
+export default PatientHistoryPage;
