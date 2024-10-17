@@ -12,7 +12,6 @@ const AppointmentManagement = () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
             const response = await axios.get(`http://localhost:5000/api/appointment/user-appointments/${user._id}`);
-            console.log(response.data);
             setFetchAppointments(response.data);
         } catch (error) {
             console.error("Error fetching appointments:", error);
@@ -29,11 +28,17 @@ const AppointmentManagement = () => {
     const renderActiveTab = () => {
         switch (activeTab) {
             case "ListOfAppointments":
-                return <ListOfAppointments appointments={fetchAppointments} />; 
+                return <ListOfAppointments 
+                    appointments={fetchAppointments} 
+                    onAppointmentCancelled={fetchedAppointments}
+                />; 
             case "AddAppointment":
                 return <AddAppointment onAppointmentAdded={fetchedAppointments} />;
             default:
-                return <ListOfAppointments appointments={fetchAppointments} />; 
+                return <ListOfAppointments 
+                    appointments={fetchAppointments} 
+                    onAppointmentCancelled={fetchedAppointments}
+                />; 
         }
     };
 

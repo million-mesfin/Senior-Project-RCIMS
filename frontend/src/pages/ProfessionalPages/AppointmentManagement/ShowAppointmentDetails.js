@@ -40,16 +40,30 @@ const ShowAppointmentDetails = ({ appointmentId, onGoBack, onEditAppointment }) 
     }
 
     // Format the date
-    const formattedDate = new Date(
-        appointmentDetails.date
-    ).toLocaleDateString();
+    const formattedDate = new Date(appointmentDetails.date).toUTCString().split(' ').slice(0, 4).join(' ');
     function capitalizeFirstLetter(str) {
         return str.charAt(0).toUpperCase() + str.substr(1);
     }
+
+    const onCancelAppointment = async () => {
+        try {
+            // show a confirmation dialog to the user
+            const confirmation = window.confirm("Are you sure you want to cancel this appointment?");
+            
+            if (confirmation) {
+                await axios.delete(`http://localhost:5000/api/appointment/cancel-appointment/${appointmentId}`);
+                onGoBack(true);
+            }
+        } catch (error) {
+            console.error("Error canceling appointment:", error);
+            setError("Error canceling appointment: " + error.message);
+        }
+    };
     return (
         <div className="appointment-details">
             <h2>Appointment Details</h2>
             <p>Date: <strong>{formattedDate}</strong></p>
+            <p>Session Number: <strong>{appointmentDetails.sessionNumber}</strong></p>
             <p>Duration: <strong>{appointmentDetails.duration} Hr</strong></p>
             <p>Patient Name: <strong>{patientName || "Not available"}</strong></p>
             <p>Patient Type: <strong>{patientType || "Not specified"}</strong></p>
@@ -76,6 +90,7 @@ const ShowAppointmentDetails = ({ appointmentId, onGoBack, onEditAppointment }) 
             <div className="button-group">
                 <button onClick={onGoBack}>Back to List</button>
                 <button onClick={() => onEditAppointment(appointmentDetails._id)}>Edit Appointment</button>
+                <button onClick={() => onCancelAppointment(appointmentDetails._id)}>Cancel Appointment</button>
             </div>
         </div>
     );

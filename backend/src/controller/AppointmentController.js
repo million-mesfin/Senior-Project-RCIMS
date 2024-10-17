@@ -3,6 +3,9 @@ const Patient = require("../models/Patient");
 const Professional = require("../models/Professional");
 const Schedule = require("../models/Schedule");
 const User = require("../models/User");
+const {
+    updateAvailabilityBasedOnTime,
+} = require("./ScheduleController");
 
 //* API - get matching available isolated sessions - pass professional and patient ID
 const getCommonAvailableSessions = async (req, res) => {
@@ -109,7 +112,7 @@ const addIsolatedAppointment = async (req, res) => {
         }
 
         // Find patient session in current week
-        const patientSession = patientSchedule.currentWeek.find(
+        let patientSession = patientSchedule.currentWeek.find(
             (session) => session._id.toString() === patientSessionId
         );
         if (!patientSession) {
@@ -125,7 +128,7 @@ const addIsolatedAppointment = async (req, res) => {
         }
 
         // Find professional session in current week
-        const professionalSession = professionalSchedule.currentWeek.find(
+        let professionalSession = professionalSchedule.currentWeek.find(
             (session) => session._id.toString() === professionalSessionId
         );
         if (!professionalSession) {
@@ -141,6 +144,7 @@ const addIsolatedAppointment = async (req, res) => {
         }
 
         const sessionDate = patientSession.date;
+        const dateString = `${sessionDate.getUTCFullYear()}-${(sessionDate.getUTCMonth() + 1).toString().padStart(2, '0')}-${sessionDate.getUTCDate().toString().padStart(2, '0')}`;
         const sessionType = patientSession.type;
 
         // update the status of the sessions
@@ -193,7 +197,7 @@ const addIsolatedAppointment = async (req, res) => {
             professionalId,
             sessionNumber: sessionNumber,
             startTime,
-            date: sessionDate,
+            date: dateString,
         });
 
         const savedAppointment = await newAppointment.save();
@@ -203,6 +207,7 @@ const addIsolatedAppointment = async (req, res) => {
             appointment: savedAppointment,
         });
     } catch (error) {
+        console.error("Error in addIsolatedAppointment:", error);
         res.status(500).json({
             message: "Error adding appointment",
             error: error.message,
@@ -259,12 +264,11 @@ const getAppointmentDetails = async (req, res) => {
             " " +
             professionalUser.grandfatherName;
 
-
         res.status(200).json({
             appointment,
             patientType,
             patientName,
-            professionalName
+            professionalName,
         });
     } catch (error) {
         res.status(500).json({
@@ -274,9 +278,94 @@ const getAppointmentDetails = async (req, res) => {
     }
 };
 
+//* API - cancel appointment
+const cancelAppointment = async (req, res) => {
+    try {
+        const { appointmentId } = req.params;
+        const appointment = await Appointment.findById(appointmentId);
+        if (!appointment) {
+            return res.status(404).json({ message: "Appointment not found" });
+        }
+        // find appointment patient session and professional session and update the status to available
+        let professional = await Professional.findById(
+            appointment.professionalId
+        );
+        const patient = await Patient.findById(appointment.patientId);
+
+        const professionalSchedule = await Schedule.findOne({
+            userId: professional.user,
+        });
+        const patientSchedule = await Schedule.findOne({
+            userId: patient.user,
+        });
+
+        if (!professionalSchedule || !patientSchedule) {
+            return res.status(404).json({
+                message: "Schedule not found",
+            });
+        }
+
+        // Find patient session in current week
+        let patientSession = patientSchedule.currentWeek.find(
+            (session) => session._id.toString() === appointment.patientSession[0].toString()
+        );
+        if (!patientSession) {
+            // Find session in next week
+            patientSession = patientSchedule.nextWeek.find(
+                (session) => session._id.toString() === appointment.patientSession[0].toString()
+            );
+            if (!patientSession) {
+                return res
+                    .status(404)
+                    .json({ message: "Patient session not found" });
+            }
+        }
+
+        // Find professional session in current week
+        let professionalSession = professionalSchedule.currentWeek.find(
+            (session) => session._id.toString() === appointment.professionalSession[0].toString()
+        );
+        if (!professionalSession) {
+            // Find session in next week
+            professionalSession = professionalSchedule.nextWeek.find(
+                (session) => session._id.toString() === appointment.professionalSession[0].toString()
+            );
+            if (!professionalSession) {
+                return res
+                    .status(404)
+                    .json({ message: "Professional session not found" });
+            }
+        }
+
+        // update the status of the sessions
+        patientSession.status = "available";
+        professionalSession.status = "available";
+
+        // Save the parent documents
+        await patientSchedule.save();
+        await professionalSchedule.save();
+
+        // Decrement the number of appointments for the professional
+        professional.numberOfAppointments -= 1;
+        await professional.save();
+
+        // remove the appointment from the appointment database
+        await Appointment.findByIdAndDelete(appointmentId);
+        updateAvailabilityBasedOnTime();
+
+        res.status(200).json({ message: "Appointment cancelled successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error canceling appointment",
+            error: error.message,
+        });
+    }
+};
+// TODO: add edit appointment
 module.exports = {
     getCommonAvailableSessions,
-    addIsolatedAppointment, // Use this endpoint for professionals with type isolated
+    addIsolatedAppointment,
     getAllAppointmentsForUser,
     getAppointmentDetails,
+    cancelAppointment,
 };
