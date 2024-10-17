@@ -109,7 +109,7 @@ const addIsolatedAppointment = async (req, res) => {
         }
 
         // Find patient session in current week
-        const patientSession = patientSchedule.currentWeek.find(
+        let patientSession = patientSchedule.currentWeek.find(
             (session) => session._id.toString() === patientSessionId
         );
         if (!patientSession) {
@@ -125,7 +125,7 @@ const addIsolatedAppointment = async (req, res) => {
         }
 
         // Find professional session in current week
-        const professionalSession = professionalSchedule.currentWeek.find(
+        let professionalSession = professionalSchedule.currentWeek.find(
             (session) => session._id.toString() === professionalSessionId
         );
         if (!professionalSession) {
@@ -203,6 +203,7 @@ const addIsolatedAppointment = async (req, res) => {
             appointment: savedAppointment,
         });
     } catch (error) {
+        console.error("Error in addIsolatedAppointment:", error);
         res.status(500).json({
             message: "Error adding appointment",
             error: error.message,
