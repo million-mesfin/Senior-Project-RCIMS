@@ -147,7 +147,7 @@ const AddAppointment = () => {
                                 key={`${session.professional._id}|${session.patient._id}`}
                                 value={`${session.professional._id}|${session.patient._id}`}
                             >
-                                {new Date(session.professional.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} - {session.professional.sessionNumber}
+                                {new Date(session.professional.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })} - {session.professional.sessionNumber}
                             </option>
                         ))}
                     </select>
