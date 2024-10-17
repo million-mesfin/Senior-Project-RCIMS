@@ -145,59 +145,49 @@ const updateProfessional = async (req, res) => {
         const { id } = req.params;
         const {
             // Professional fields
-            qualification,
-            speciality,
-            licenseNumber,
-            yearsOfExperience,
-            department,
-            bio,
-            languagesSpoken,
-            workingHours,
-            status,
+            qualification, speciality, licenseNumber, yearsOfExperience,
+            department, bio, languagesSpoken, workingHours, status,
             // User fields
-            name,
-            fatherName,
-            grandfatherName,
-            phoneNumber,
-            dateOfBirth,
-            gender,
-            address,
+            name, fatherName, grandfatherName, phoneNumber,
+            dateOfBirth, gender, address,
         } = req.body;
 
         // Update Professional
         const updatedProfessional = await Professional.findByIdAndUpdate(
             id,
             {
-                qualification,
-                speciality,
-                licenseNumber,
-                yearsOfExperience,
-                department,
-                bio,
-                languagesSpoken,
-                workingHours,
-                status,
+                $set: {
+                    qualification, speciality, licenseNumber, yearsOfExperience,
+                    department, bio, languagesSpoken, workingHours, status,
+                }
             },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         if (!updatedProfessional) {
             return res.status(404).json({ message: "Professional not found" });
         }
 
+        // Check if phone number is being changed
+        const existingUser = await User.findById(updatedProfessional.user);
+        if (existingUser.phoneNumber !== phoneNumber) {
+            // Check if the new phone number already exists
+            const phoneExists = await User.findOne({ phoneNumber });
+            if (phoneExists) {
+                return res.status(400).json({ message: "Phone number already in use" });
+            }
+        }
+
         // Update related User
         const updatedUser = await User.findByIdAndUpdate(
             updatedProfessional.user,
             {
-                name,
-                fatherName,
-                grandfatherName,
-                phoneNumber,
-                dateOfBirth,
-                gender,
-                address,
+                $set: {
+                    name, fatherName, grandfatherName, phoneNumber,
+                    dateOfBirth, gender, address,
+                }
             },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         if (!updatedUser) {
