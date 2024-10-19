@@ -9,6 +9,7 @@ const {
     getProfessionalWithLeastPatientsInDepartment,
 } = require("./Patient-Professional-SharedController");
 const { addPatientSchedule } = require("./ScheduleController");
+const { createEarliestAppointment } = require("./AppointmentController");
 
 // API - Add a new patient
 const addPatient = async (req, res) => {
@@ -36,8 +37,16 @@ const addPatient = async (req, res) => {
 
         professionals = await assignProfessional(user._id);
 
-        await addPatientToProfessionalDefault(professionals[0], user._id, patientType);
-        await addPatientToProfessionalDefault(professionals[1], user._id, patientType);
+        await addPatientToProfessionalDefault(
+            professionals[0],
+            user._id,
+            patientType
+        );
+        await addPatientToProfessionalDefault(
+            professionals[1],
+            user._id,
+            patientType
+        );
 
         const newPatient = await Patient.create({
             user: user._id,
@@ -82,6 +91,10 @@ const addPatient = async (req, res) => {
 
         await addPatientSchedule(user._id);
 
+        // Create earliest appointment for the patient and professional
+        await createEarliestAppointment(professionals[0]._id, savedPatient._id);
+        await createEarliestAppointment(professionals[1]._id, savedPatient._id);
+
         res.status(201).json({
             message: "Patient added successfully",
             patient: savedPatient,
@@ -89,7 +102,7 @@ const addPatient = async (req, res) => {
         });
     } catch (error) {
         console.error("Error in addPatient:", error);
-        if(isolator === 1){
+        if (isolator === 1) {
             removeUser(user._id);
             res.status(500).json({
                 message: !professionals
@@ -97,21 +110,22 @@ const addPatient = async (req, res) => {
                     : "Error adding patient",
                 error: error.message,
             });
-        }else{
+        } else {
             // check if the phone number already exists
             const { phoneNumber } = req.body;
             const existingUser = await User.findOne({ phoneNumber });
             if (existingUser) {
-                res.status(400).json({ message: "Phone number already exists! Please use a different phone number." });
-            }else{
-                
-            res.status(500).json({
-                message: "Error creating user",
+                res.status(400).json({
+                    message:
+                        "Phone number already exists! Please use a different phone number.",
+                });
+            } else {
+                res.status(500).json({
+                    message: "Error creating user",
                     error: error.message,
                 });
             }
         }
-        
     }
 };
 
@@ -390,7 +404,10 @@ const searchPatient = async (req, res) => {
 const getPatientInformation = async (req, res) => {
     try {
         const { id } = req.params;
-        const patient = await Patient.findById(id).populate("user", "-password");
+        const patient = await Patient.findById(id).populate(
+            "user",
+            "-password"
+        );
         const patientHistory = await PatientHistory.find({ patient: id });
         const caregiver = await Caregiver.find({ patient: id });
         res.json({ patient, patientHistory, caregiver });
