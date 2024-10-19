@@ -559,6 +559,9 @@ const updateAppointmentStatus = async () => {
             if (professionalSession.status === "unavailable") {
                 appointment.status = "passed";
                 await appointment.save();
+                
+                professional.numberOfAppointments -= 1;
+                await professional.save();
             }
         }
 
