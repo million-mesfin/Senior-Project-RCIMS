@@ -9,7 +9,7 @@ const scheduleSchema = new mongoose.Schema({
     currentWeek: [
         {
             date: {
-                type: Date,
+                type: String,
                 required: true,
             },
             sessionNumber: {
@@ -32,7 +32,7 @@ const scheduleSchema = new mongoose.Schema({
     nextWeek: [
         {
             date: {
-                type: Date,
+                type: String,
                 required: true,
             },
             sessionNumber: {
