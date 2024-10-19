@@ -44,7 +44,7 @@ const appointmentSchema = new mongoose.Schema({
         default: 1,
     },
     startTime: {
-        type: Date,
+        type: String,
         required: true,
     },
     status: {
