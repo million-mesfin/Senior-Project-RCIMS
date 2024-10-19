@@ -41,7 +41,7 @@ const addProfessionalSchedule = async (userId) => {
                     pastDay.setDate(pastDay.getDate() - pastDay.getDay() + i);
                     for (let j = 4; j <= 8; j++) {
                         currentWeek.push({
-                            date: pastDay,
+                            date: pastDay.toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "isolated",
                             status: "unavailable",
@@ -72,22 +72,8 @@ const addProfessionalSchedule = async (userId) => {
                                 ? "available"
                                 : "unavailable";
 
-                        //! Remove this later - testing only
-                        /* if (status === "available") {
-                            console.log("Session time (UTC):", sessionTime);
-                            console.log("Current time (UTC):", currentTime);
-                            console.log(
-                                "Hours (UTC):",
-                                sessionTime.getUTCHours()
-                            );
-                            console.log(
-                                "Minutes (UTC):",
-                                sessionTime.getUTCMinutes()
-                            );
-                        }
-*/
                         currentWeek.push({
-                            date: new Date(nextDay),
+                            date: new Date(nextDay).toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "isolated",
                             status: status,
@@ -103,7 +89,7 @@ const addProfessionalSchedule = async (userId) => {
                     );
                     for (let j = 4; j <= 8; j++) {
                         nextWeek.push({
-                            date: new Date(nextDay),
+                            date: new Date(nextDay).toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "isolated",
                             status: "available",
@@ -125,7 +111,7 @@ const addProfessionalSchedule = async (userId) => {
                     for (let j = 2; j <= 8; j++) {
                         if (j === 2 || j === 3 || j === 7 || j === 8) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "unavailable",
@@ -143,7 +129,7 @@ const addProfessionalSchedule = async (userId) => {
                     for (let j = 2; j <= 8; j++) {
                         if (j === 2 || j === 3 || j === 7 || j === 8) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
@@ -161,7 +147,7 @@ const addProfessionalSchedule = async (userId) => {
                     for (let j = 2; j <= 8; j++) {
                         if (j === 2 || j === 3 || j === 7 || j === 8) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
@@ -184,7 +170,7 @@ const addProfessionalSchedule = async (userId) => {
                     pastDay.setDate(pastDay.getDate() - pastDay.getDay() + i);
                     for (let j = 1; j <= 3; j++) {
                         currentWeek.push({
-                            date: pastDay,
+                            date: pastDay.toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "physical",
                             status: "unavailable",
@@ -200,7 +186,7 @@ const addProfessionalSchedule = async (userId) => {
                     );
                     for (let j = 1; j <= 3; j++) {
                         currentWeek.push({
-                            date: new Date(nextDay),
+                            date: new Date(nextDay).toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "physical",
                             status: "available",
@@ -216,7 +202,7 @@ const addProfessionalSchedule = async (userId) => {
                     );
                     for (let j = 1; j <= 3; j++) {
                         nextWeek.push({
-                            date: new Date(nextDay),
+                            date: new Date(nextDay).toISOString().split('T')[0],
                             sessionNumber: j,
                             type: "physical",
                             status: "available",
@@ -321,7 +307,7 @@ const addPatientSchedule = async (userId) => {
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 2 || j === 3) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "physical",
                                 status: "unavailable",
@@ -330,7 +316,7 @@ const addPatientSchedule = async (userId) => {
                         if (j === 4) continue;
                         if (j === 5 || j === 6) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "unavailable",
@@ -338,7 +324,7 @@ const addPatientSchedule = async (userId) => {
                         }
                         if (j === 7 || j === 8) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "unavailable",
@@ -356,7 +342,7 @@ const addPatientSchedule = async (userId) => {
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 2 || j === 3) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "physical",
                                 status: "available",
@@ -365,7 +351,7 @@ const addPatientSchedule = async (userId) => {
                         if (j === 4) continue;
                         if (j === 5 || j === 6) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "available",
@@ -373,7 +359,7 @@ const addPatientSchedule = async (userId) => {
                         }
                         if (j === 7 || j === 8) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
@@ -391,24 +377,21 @@ const addPatientSchedule = async (userId) => {
                     for (let j = 1; j <= 8; j++) {
                         if (j === 1 || j === 2 || j === 3) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "physical",
                                 status: "available",
                             });
-                        }
-                        if (j === 4) continue;
-                        if (j === 5 || j === 6) {
+                        } else if (j === 5 || j === 6) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "available",
                             });
-                        }
-                        if (j === 7 || j === 8) {
+                        } else if (j === 7 || j === 8) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
@@ -433,7 +416,7 @@ const addPatientSchedule = async (userId) => {
                         if (j === 1 || j === 5 || j === 6) continue;
                         if (j === 2 || j === 3) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "unavailable",
@@ -441,7 +424,7 @@ const addPatientSchedule = async (userId) => {
                         }
                         if (j === 4 || j === 7 || j === 8) {
                             currentWeek.push({
-                                date: pastDay,
+                                date: pastDay.toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "unavailable",
@@ -457,18 +440,16 @@ const addPatientSchedule = async (userId) => {
                         currentDate.getDate() - currentDate.getDay() + i
                     );
                     for (let j = 1; j <= 8; j++) {
-                        if (j === 1 || j === 5 || j === 6) continue;
                         if (j === 2 || j === 3) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
                             });
-                        }
-                        if (j === 4 || j === 7 || j === 8) {
+                        } else if (j === 4 || j === 7 || j === 8) {
                             currentWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "available",
@@ -484,18 +465,16 @@ const addPatientSchedule = async (userId) => {
                         currentDate.getDate() - currentDate.getDay() + i + 7
                     );
                     for (let j = 1; j <= 8; j++) {
-                        if (j === 1 || j === 5 || j === 6) continue;
                         if (j === 2 || j === 3) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "group",
                                 status: "available",
                             });
-                        }
-                        if (j === 4 || j === 7 || j === 8) {
+                        } else if (j === 4 || j === 7 || j === 8) {
                             nextWeek.push({
-                                date: new Date(nextDay),
+                                date: new Date(nextDay).toISOString().split('T')[0],
                                 sessionNumber: j,
                                 type: "isolated",
                                 status: "available",
@@ -537,12 +516,9 @@ const updateSchedule = async () => {
         }
         // find the first saved date in the schedule for the current week
         let firstDayOfNextWeek = schedule.nextWeek[0].date;
-        const firstDayOfNextWeekString = `${firstDayOfNextWeek.getFullYear()}-${padZero(
-            firstDayOfNextWeek.getMonth() + 1
-        )}-${padZero(firstDayOfNextWeek.getDate())}`;
 
         // check if the current date is the same as the first date of the next week or greater
-        if (currentDate < firstDayOfNextWeekString) {
+        if (currentDate < firstDayOfNextWeek) { // instead of firstDayOfNextWeekString
             return;
         }
 
@@ -562,7 +538,6 @@ const updateSchedule = async () => {
             });
             let newNextWeek = [];
             if (professional) {
-                console.log("Professional found");
                 // get the professional type
                 const professionalType = professional.type;
 
@@ -578,7 +553,7 @@ const updateSchedule = async () => {
                             );
                             for (let j = 4; j <= 8; j++) {
                                 newNextWeek.push({
-                                    date: new Date(nextDay),
+                                    date: new Date(nextDay).toISOString().split('T')[0],
                                     sessionNumber: j,
                                     status: "available",
                                     type: "isolated",
@@ -600,7 +575,7 @@ const updateSchedule = async () => {
                             for (let j = 2; j <= 8; j++) {
                                 if (j === 2 || j === 3 || j === 7 || j === 8) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         status: "available",
                                         type: "group",
@@ -622,7 +597,7 @@ const updateSchedule = async () => {
                             );
                             for (let j = 1; j <= 3; j++) {
                                 newNextWeek.push({
-                                    date: new Date(nextDay),
+                                    date: new Date(nextDay).toISOString().split('T')[0],
                                     sessionNumber: j,
                                     status: "available",
                                     type: "physical",
@@ -634,7 +609,6 @@ const updateSchedule = async () => {
                         break;
                 }
             } else if (patient) {
-                console.log("Patient found");
                 const patientType = patient.patientType;
                 switch (patientType) {
                     case "In-patient":
@@ -650,7 +624,7 @@ const updateSchedule = async () => {
                             for (let j = 1; j <= 8; j++) {
                                 if (j === 1 || j === 2 || j === 3) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         type: "physical",
                                         status: "available",
@@ -659,7 +633,7 @@ const updateSchedule = async () => {
                                 if (j === 4) continue;
                                 if (j === 5 || j === 6) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         type: "isolated",
                                         status: "available",
@@ -667,7 +641,7 @@ const updateSchedule = async () => {
                                 }
                                 if (j === 7 || j === 8) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         type: "group",
                                         status: "available",
@@ -692,7 +666,7 @@ const updateSchedule = async () => {
                                 if (j === 1 || j === 5 || j === 6) continue;
                                 if (j === 2 || j === 3) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         type: "group",
                                         status: "available",
@@ -700,7 +674,7 @@ const updateSchedule = async () => {
                                 }
                                 if (j === 4 || j === 7 || j === 8) {
                                     newNextWeek.push({
-                                        date: new Date(nextDay),
+                                        date: new Date(nextDay).toISOString().split('T')[0],
                                         sessionNumber: j,
                                         type: "isolated",
                                         status: "available",
@@ -752,11 +726,15 @@ const updateAvailabilityBasedOnTime = async () => {
                     0
                 );
 
-                if (session.status === "booked") {
-                    continue;
-                }
+                //! Test mod
+                // if (session.status === "booked") {
+                //     continue;
+                // }
 
                 if (currentTime < sessionTime) {
+                    if (session.status === "booked") {
+                        continue;
+                    }
                     session.status = "available";
                 } else {
                     session.status = "unavailable";
