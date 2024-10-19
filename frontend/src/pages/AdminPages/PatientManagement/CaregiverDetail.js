@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../Styling/AdminPageStyles/CareGiverDetails.css";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 function CaregiverDetail({ patientId, onBack }) {
   const [caregiver, setCaregiver] = useState(null);
   const [formData, setFormData] = useState({
@@ -92,20 +94,19 @@ function CaregiverDetail({ patientId, onBack }) {
 
   return (
     <div>
-      {/* Back button at the top */}
-      <button type="button" onClick={onBack} className="back-button">
-        Back
-      </button>
+      <ArrowBackIcon onClick={onBack}/>
+      <h2 class="patient-name">{`${patientId.user?.name} Caregiver Details `}</h2>
 
-      <h2>Caregiver Details</h2>
+      {/* <h2>Caregiver Details</h2> */}
       <form>
+        
         <div className="form-group">
           <label>Full Name:</label>
           <input type="text" value={formData.fullName} onChange={handleChange("fullName")} />
           {errors.fullName && <span className="error">{errors.fullName}</span>}
         </div>
-
-        <div className="form-group">
+      <div className="column">
+                <div className="form-group">
           <label>Phone Number:</label>
           <input type="text" value={formData.phoneNumber} onChange={handleChange("phoneNumber")} />
           {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
@@ -116,6 +117,9 @@ function CaregiverDetail({ patientId, onBack }) {
           <input type="text" value={formData.relationshipToPatient} onChange={handleChange("relationshipToPatient")} />
           {errors.relationshipToPatient && <span className="error">{errors.relationshipToPatient}</span>}
         </div>
+      </div>
+
+      <div className="column">
 
         <div className="form-group">
           <label>Gender:</label>
@@ -132,19 +136,18 @@ function CaregiverDetail({ patientId, onBack }) {
           <input type="text" value={formData.address} onChange={handleChange("address")} />
           {errors.address && <span className="error">{errors.address}</span>}
         </div>
-
+    </div>
         <div className="form-group">
           <label>Official ID Number:</label>
           <input type="text" value={formData.officialIdNumber} onChange={handleChange("officialIdNumber")} />
           {errors.officialIdNumber && <span className="error">{errors.officialIdNumber}</span>}
         </div>
 
-        <button type="button" onClick={handleUpdate}>
-          Update Caregiver
-        </button>
-        <button type="button" onClick={handleDelete}>
-          Delete Caregiver
-        </button>
+        <div className="action-buttons">
+          <button className="edit-button" type="button" onClick={handleUpdate}>Update Caregiver</button>
+          <button className="CareGiver-button" type="button" onClick={handleDelete}>Delete Caregiver</button>
+        </div>
+
       </form>
     </div>
   );

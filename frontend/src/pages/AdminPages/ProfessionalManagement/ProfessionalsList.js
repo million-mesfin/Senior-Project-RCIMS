@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../Styling/AdminPageStyles/ProfessionalManagementStyles/ProfessionalsList.css";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import {
     Table,
     TableBody,
@@ -20,6 +22,7 @@ import {
     Paper,
   } from "@mui/material";
 import ProfessionalDetail from "./ProfessionalDetail";
+import { red } from "@mui/material/colors";
 
 const ProfessionalsList = () => {
     const [professionals, setProfessionals] = useState([]);
@@ -194,16 +197,11 @@ const ProfessionalsList = () => {
         <div className="professionals-list-container">
             {selectedProfessional ? (
                 isEditing ? (
-                    <div className="professional-edit-form">
-                        <h2>Edit Professional</h2>
-                        <button
-                            className="back-button"
-                            onClick={() =>
-                                handleBackToDetails(selectedProfessional)
-                            }
-                        >
-                            Back to Details
-                        </button>
+                <div className="professional-edit-form">
+                 <div className="header">
+                 <ArrowBackIcon onClick={handleBackToDetails(selectedProfessional)} />
+                <h2>Edit Professional</h2>
+               </div>
                         <div className="professional-edit-form">
                             <form onSubmit={handleEditSubmit}>
                                 <label>
@@ -391,153 +389,94 @@ const ProfessionalsList = () => {
 
                     <div class="detail-container">
                     <div class="header">
-                        <button class="back-button" onClick={()=>handleBackToList}>Back</button>
-                        <h2 class="population-name"><span>{`${selectedProfessional.user?.name} ${selectedProfessional.user?.fatherName} ${selectedProfessional.user?.grandfatherName}`}</span></h2>
-                        <div class="header-actions">
-                            <button class="generate-report" onClick={()=>handleEdit(selectedProfessional)}>Edit</button>
-                            <button class="run-prediction" onClick={()=>handleRemove(selectedProfessional._id)}>Remove</button>
-                        </div>
+                    <ArrowBackIcon  onClick={handleBackToList} />
+                    <h2 class="professional-name">{`${selectedProfessional.user?.name} ${selectedProfessional.user?.fatherName} ${selectedProfessional.user?.grandfatherName}`}</h2>
                     </div>
-                
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <strong>Specialty:</strong>{" "}
-                            {selectedProfessional.speciality}
+              <div class="details">
+                    <div className="column1">
+                         <div className="detail-item-wrapper">  
+                          <div class="detail-item"> 
+                              <strong>Specialty</strong>{" "}
+                                <p>{selectedProfessional.speciality}</p>
+                            </div>
                         </div>
+                        <div className="detail-item-wrapper">
                         <div class="detail-item">
-                            <strong>Phone Number:</strong>{" "}
-                            {selectedProfessional.user?.phoneNumber}
+                        <strong>Phone Number</strong>{" "}
+                            <p>{selectedProfessional.user?.phoneNumber}</p> 
+                         </div>
                         </div>
+
+                         <div className="detail-item-wrapper">
+                       <div class="detail-item">
+                             <strong>Address</strong>{" "}
+                           <p>{selectedProfessional.user?.address}</p>  
+                     </div>
+                         </div>
+
+                       <div className="detail-item-wrapper">
                         <div class="detail-item">
-                            <strong>Address:</strong>{" "}
-                            {selectedProfessional.user?.address}
+                            <strong>Age</strong>
+                          <p>{calculateAge(selectedProfessional.user?.dateOfBirth )}</p> 
                         </div>
+                    </div>                        
+                    <div className="detail-item-wrapper">
                         <div class="detail-item">
-                           <strong>Age:</strong>{" "}
-                           {calculateAge(
-                  selectedProfessional.user?.dateOfBirth
-              )}
-                        </div>
-                        <div class="detail-item">
-                            <strong>Gender</strong>
+                           <strong>Gender</strong> 
                             <p> {selectedProfessional.user?.gender}</p>
                         </div>
+                            </div>
+                    </div>
+
+                    <div className="column2">
+                     <div className="detail-item-wrapper">
                         <div class="detail-item">
-                            <strong>Years of Experience:</strong>{" "}
+                           <strong>Years of Experience</strong>{" "}
                             <p>{selectedProfessional.yearsOfExperience}</p>
                         </div>
-                        <div class="detail-item">
-                          <strong>Qualifications:</strong>{" "}   
+                        </div>
+                      <div className="detail-item-wrapper">
+                         <div class="detail-item">
+                         <strong>Qualifications:</strong>{" "} 
                           <p>{selectedProfessional.qualification} </p>
                         </div>
-                        <div class="detail-item">
-                            <strong>Department: </strong>{" "}
+                        </div>
+
+                        <div className="detail-item-wrapper">  
+                          <div class="detail-item">
+                          <strong>Department: </strong>{" "}
                             <p>{selectedProfessional.department}</p>
                         </div>
+                        </div>
+
+                        <div className="detail-item-wrapper">
                         <div class="detail-item">
                             <strong>Status</strong>
                             <p class="status-active">{selectedProfessional.status}</p>
                         </div>
+                        </div>
                     </div>
+                 </div>
+                 <div class="header-actions">
+                            <button class="btn-edit" 
+                                   className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                         
+                            onClick={() => handleEdit(selectedProfessional)}>Edit</button>
+                            <button class="btn-remove"                                 className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+ onClick={() => handleRemove(selectedProfessional._id)}>Remove</button>
+                        </div>
                 </div>
-
-
-                //     <div className="professional-details professional-card">
-                //         <h3>Professional Details:</h3>
-                //         <button
-                //             className="back-button"
-                //             onClick={handleBackToList}
-                //         >
-                //             Back to List
-                //         </button>
-                //         <h2 className="professional-name">
-                //             Name:{" "}
-                //             <span>{`${selectedProfessional.user?.name} ${selectedProfessional.user?.fatherName} ${selectedProfessional.user?.grandfatherName}`}</span>
-                //         </h2>
-                //         <div className="professional-info-grid">
-                //             <p>
-                //                 <strong>Specialty:</strong>{" "}
-                //                 {selectedProfessional.speciality}
-                //             </p>
-                //             <p>
-                //                 <strong>Phone Number:</strong>{" "}
-                //                 {selectedProfessional.user?.phoneNumber}
-                //             </p>
-                //             <p>
-                //                 <strong>Address:</strong>{" "}
-                //                 {selectedProfessional.user?.address}
-                //             </p>
-                //             <p>
-                //                 <strong>Age:</strong>{" "}
-                //                 {calculateAge(
-                //                     selectedProfessional.user?.dateOfBirth
-                //                 )}
-                //             </p>
-                //             <p>
-                //                 <strong>Gender:</strong>{" "}
-                //                 {selectedProfessional.user?.gender}
-                //             </p>
-                //             <p>
-                //                 <strong>Years of Experience:</strong>{" "}
-                //                 {selectedProfessional.yearsOfExperience}
-                //             </p>
-                //             <p>
-                //                 <strong>Qualifications:</strong>{" "}
-                //                 {selectedProfessional.qualification}
-                //             </p>
-                //             <p>
-                //                 <strong>Department: </strong>{" "}
-                //                 {selectedProfessional.department}
-                //             </p>
-                //             <p>
-                //                 <strong>Bio:</strong> {selectedProfessional.bio}
-                //             </p>
-                //             <p>
-                //                 <strong>Languages:</strong>{" "}
-                //                 {selectedProfessional.languagesSpoken.join(
-                //                     ", "
-                //                 )}
-                //             </p>
-                //             <p>
-                //                 <strong>Working Hours:</strong>{" "}
-                //                 {selectedProfessional.workingHours}
-                //             </p>
-                //         </div>
-                //         <div className="status-wrapper">
-                //             <span
-                //                 className={`status-badge ${selectedProfessional.status}`}
-                //             >
-                //                 {selectedProfessional.status}
-                //             </span>
-                //         </div>
-                //         <div className="professional-actions">
-                //             <button
-                //                 className="btn btn-edit"
-                //                 onClick={() => handleEdit(selectedProfessional)}
-                //             >
-                //                 Edit
-                //             </button>
-                //             <button
-                //                 className="btn btn-remove"
-                //                 onClick={() =>
-                //                     handleRemove(selectedProfessional._id)
-                //                 }
-                //             >
-                //                 Remove
-                //             </button>
-                //         </div>
-                //     </div>
-
-
-
 
                 )
             ) : (
                 <div>
-                    <h1>Professional List</h1>
+                    {/* <h1>Professional List</h1> */}
 
                     {/* Search and Filter Section */}
-                    <div className="search-filter-container">
+                    {/* <div className="search-filter-container"> */}
+                    <div style={styles.header}>
+                 <h2 style={{color: "black", margin: 0}}>Professional List</h2>
+            <div style={styles.actions}>
                         <input
                             type="text"
                             placeholder="Search"
@@ -567,12 +506,10 @@ const ProfessionalsList = () => {
                             <option value="Psychiatry">Psychiatry</option>
                             <option value="Pediatrics">Pediatrics</option>
                         </select>
+                        </div>
                     </div>
 
-                    {/* <ul className="professionals-list">
-
-
-            {/* Table */}
+                       {/* Table */}
             <TableContainer>
                     <Table sx={{ minWidth: 650 }} aria-label="patient table">
                     <TableHead>
@@ -581,9 +518,9 @@ const ProfessionalsList = () => {
                         <TableCell>No</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Fathers Name</TableCell>
-                        <TableCell>GrandFather Name</TableCell>
+                        {/* <TableCell>GrandFather Name</TableCell> */}
                         <TableCell>Phone Number</TableCell>
-                        <TableCell>Patient Type</TableCell>
+                        {/* <TableCell>Patient Type</TableCell> */}
                         <TableCell>Gender</TableCell>
                         <TableCell>Address</TableCell>
                         {/* <TableCell>Condition</TableCell> */}
@@ -592,24 +529,18 @@ const ProfessionalsList = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredProfessionals.map((professional) => (
+                        {filteredProfessionals.map((professional, index) => (
                         <TableRow key={professional}>
 
-                            <TableCell>{professional._id}</TableCell>
+                            <TableCell>{index + 1}</TableCell>
                             <TableCell>{professional.user?.name}</TableCell>
                             <TableCell>{professional.user?.fatherName}</TableCell>
-                            <TableCell>{professional.user?.grandfatherName}</TableCell>
+                            {/* <TableCell>{professional.user?.grandfatherName}</TableCell> */}
                             <TableCell>{professional.user?.phoneNumber}</TableCell>
                             {/* <TableCell>{patient.patientType}</TableCell> */}
                             <TableCell>{professional.user?.gender}</TableCell> 
                             <TableCell>{professional.user?.address}</TableCell> 
                             
-
-                            {/* <TableCell>
-                            <span style={{ ...styles.statusBadge, backgroundColor: row.statusColor }}>
-                                {row.status}
-                            </span>
-                            </TableCell> */}
                             <TableCell>
                             <MoreHorizIcon onClick={()=> handleDetails(professional)}/>
                             </TableCell>
@@ -624,4 +555,40 @@ const ProfessionalsList = () => {
         </div>
     );
 };
+
+const styles = {
+    h2: {
+        color: "#333",
+    },
+    header: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 16,
+    },
+    button: {
+      background: "#29f2ff"
+    },
+    actions: {
+      display: "flex",
+      alignItems: "center",
+    },
+    paginationContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 16,
+    },
+    pageSelector: {
+      display: "flex",
+      alignItems: "center",
+    },
+    statusBadge: {
+      display: "inline-block",
+      padding: "4px 8px",
+      borderRadius: "12px",
+      color: "#fff",
+      fontWeight: "bold",
+    },
+  };
 export default ProfessionalsList;

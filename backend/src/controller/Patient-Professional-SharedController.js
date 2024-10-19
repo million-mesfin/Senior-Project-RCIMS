@@ -19,7 +19,11 @@ const getProfessionalWithLeastPatientsInDepartment = async (department) => {
 };
 
 // Local function - Add patient to professional
-const addPatientToProfessionalDefault = async (professionalId, patientId, patientType) => {
+const addPatientToProfessionalDefault = async (
+    professionalId,
+    patientId,
+    patientType
+) => {
     const professional = await Professional.findById(professionalId);
     professional.patients.push(patientId);
     professional.numberOfPatients++;
@@ -38,17 +42,26 @@ const detatchProfessionalFromPatient = async (professionalId, patientId) => {
         const patient = await Patient.findById(patientId);
 
         if (!professional || !patient) {
-            throw new Error('Professional or Patient not found');
+            throw new Error("Professional or Patient not found");
         }
 
         professional.patients.pull(patient.user);
-        professional.numberOfPatients = Math.max(0, professional.numberOfPatients - 1);
+        professional.numberOfPatients = Math.max(
+            0,
+            professional.numberOfPatients - 1
+        );
 
         // check if the patient is an inpatient or outpatient
         if (patient.patientType === "In-patient") {
-            professional.numberOfInPatients = Math.max(0, professional.numberOfInPatients - 1);
+            professional.numberOfInPatients = Math.max(
+                0,
+                professional.numberOfInPatients - 1
+            );
         } else {
-            professional.numberOfOutPatients = Math.max(0, professional.numberOfOutPatients - 1);
+            professional.numberOfOutPatients = Math.max(
+                0,
+                professional.numberOfOutPatients - 1
+            );
         }
 
         await professional.save();
@@ -59,7 +72,7 @@ const detatchProfessionalFromPatient = async (professionalId, patientId) => {
 
         return { success: true };
     } catch (error) {
-        console.error('Error in detachProfessionalFromPatient:', error);
+        console.error("Error in detachProfessionalFromPatient:", error);
         throw error;
     }
 };
@@ -79,5 +92,5 @@ module.exports = {
     getProfessionalWithLeastPatientsInDepartment,
     addPatientToProfessionalDefault,
     removePatient,
-    detatchProfessionalFromPatient
+    detatchProfessionalFromPatient,
 };

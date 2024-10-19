@@ -14,6 +14,9 @@ const {
     updateSchedule,
     updateAvailabilityBasedOnTime,
 } = require("./controller/ScheduleController");
+const {
+    updateAppointmentStatus,
+} = require("./controller/AppointmentController");
 const appointmentManagementRoute = require("./routes/AppointmentManagement");
 
 const app = express();
@@ -29,6 +32,7 @@ updateSchedule();
 const updateAvailability = async () => {
     try {
         await updateAvailabilityBasedOnTime();
+        await updateAppointmentStatus();
         console.log("Availability updated successfully");
     } catch (error) {
         console.error("Error updating availability:", error);

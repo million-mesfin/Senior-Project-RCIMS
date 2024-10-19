@@ -4,6 +4,7 @@ import "../../Styling/AdminPageStyles/AddPatient.css";
 
 function AddPatientForm() {
   const [step, setStep] = useState(1);
+  const [skipCaregiver, setSkipCaregiver] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     fatherName: "",
@@ -36,7 +37,7 @@ function AddPatientForm() {
   });
 
   const [errors, setErrors] = useState({});
-  
+
   // Validate form based on the current step
   const validateForm = (currentStep) => {
     let formErrors = {};
@@ -69,7 +70,7 @@ function AddPatientForm() {
       if (!formData.withdrawalSymptoms) formErrors.withdrawalSymptoms = "Withdrawal Symptoms is required";
       if (!formData.socialSupportNetwork) formErrors.socialSupportNetwork = "Social Support Network is required";
       if (!formData.historyOfTraumaOrAbuse) formErrors.historyOfTraumaOrAbuse = "History of Trauma or Abuse is required";
-    } else if (currentStep === 4) {
+    } else if (currentStep === 4 && !skipCaregiver) {
       if (!formData.caregiverFullName) formErrors.caregiverFullName = "Caregiver's Full Name is required";
       if (!formData.caregiverPhoneNumber) {
         formErrors.caregiverPhoneNumber = "Caregiver's Phone Number is required";
@@ -121,7 +122,7 @@ function AddPatientForm() {
           }
         );
 
-        if (response.status === 201) {
+        if (response.status === 201 && !skipCaregiver) {
           // After patient is added, add caregiver data
           const caregiverData = {
             patientId: response.data.patient._id,
@@ -148,8 +149,8 @@ function AddPatientForm() {
           } else {
             throw new Error("Failed to add caregiver.");
           }
-        } else {
-          throw new Error("Failed to add patient.");
+        } else if (skipCaregiver || response.status === 201) {
+          alert("Patient added successfully!");
         }
       } catch (error) {
         console.error("Error adding patient or caregiver:", error);
@@ -193,6 +194,7 @@ function AddPatientForm() {
           handleChange={handleChange}
           prevStep={prevStep}
           handleSubmit={handleSubmit}
+          setSkipCaregiver={setSkipCaregiver}
           errors={errors}
         />
       )}
@@ -215,7 +217,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
               onChange={handleChange("name")}
               required
             />
-            {/* {errors.name && <span className="error">{errors.name}</span>} */}
+            {errors.name && <span className="error">{errors.name}</span>}
           </div>
 
           <div className="form-group">
@@ -226,7 +228,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
               onChange={handleChange("fatherName")}
               required
             />
-            {/* {errors.fatherName && <span className="error">{errors.fatherName}</span>} */}
+            {errors.fatherName && <span className="error">{errors.fatherName}</span>}
           </div>
         </div>
         <div className="form-group">
@@ -237,7 +239,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
             onChange={handleChange("grandfatherName")}
             required
           />
-          {/* {errors.grandfatherName && <span className="error">{errors.grandfatherName}</span>} */}
+          {errors.grandfatherName && <span className="error">{errors.grandfatherName}</span>}
         </div>
         <div className="form-group">
           <label>Phone Number: <span className="required-asterisk">*</span></label>
@@ -247,7 +249,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
             onChange={handleChange("phoneNumber")}
             required
           />
-          {/* {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>} */}
+          {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
         </div>
         <div className="form-group">
           <label>Date of Birth: <span className="required-asterisk">*</span></label>
@@ -257,7 +259,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
             onChange={handleChange("dateOfBirth")}
             required
           />
-          {/* {errors.dateOfBirth && <span className="error">{errors.dateOfBirth}</span>} */}
+          {errors.dateOfBirth && <span className="error">{errors.dateOfBirth}</span>}
         </div>
         <div className="form-group">
           <label>Gender: <span className="required-asterisk">*</span></label>
@@ -272,7 +274,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          {/* {errors.gender && <span className="error">{errors.gender}</span>} */}
+          {errors.gender && <span className="error">{errors.gender}</span>}
         </div>
         <div className="form-group">
           <label>Address: <span className="required-asterisk">*</span></label>
@@ -282,7 +284,7 @@ function PersonalInfo({ formData, handleChange, nextStep, errors }) {
             onChange={handleChange("address")}
             required
           />
-          {/* {errors.address && <span className="error">{errors.address}</span>} */}
+          {errors.address && <span className="error">{errors.address}</span>}
         </div>
         <button 
           type="button" 
@@ -548,50 +550,43 @@ function MedicalHistory({ formData, handleChange, prevStep, nextStep, errors }) 
 }
 
 // Page 4: Caregiver Information
-function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit, errors }) {
+function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit, setSkipCaregiver, errors }) {
   return (
     <div>
       <h2>Caregiver Information</h2>
       <form>
         <div className="form-group">
-          <label>Caregiver Full Name: <span className="required-asterisk">*</span></label>
+          <label>Caregiver Full Name:</label>
           <input
             type="text"
             value={formData.caregiverFullName}
             onChange={handleChange("caregiverFullName")}
-            required
           />
-          {errors.caregiverFullName && <span className="error">{errors.caregiverFullName}</span>}
         </div>
 
         <div className="form-group">
-          <label>Caregiver Phone Number: <span className="required-asterisk">*</span></label>
+          <label>Caregiver Phone Number:</label>
           <input
             type="text"
             value={formData.caregiverPhoneNumber}
             onChange={handleChange("caregiverPhoneNumber")}
-            required
           />
-          {errors.caregiverPhoneNumber && <span className="error">{errors.caregiverPhoneNumber}</span>}
         </div>
 
         <div className="form-group">
-          <label>Relationship to Patient: <span className="required-asterisk">*</span></label>
+          <label>Relationship to Patient:</label>
           <input
             type="text"
             value={formData.caregiverRelationshipToPatient}
             onChange={handleChange("caregiverRelationshipToPatient")}
-            required
           />
-          {errors.caregiverRelationshipToPatient && <span className="error">{errors.caregiverRelationshipToPatient}</span>}
         </div>
 
         <div className="form-group">
-          <label>Caregiver Gender: <span className="required-asterisk">*</span></label>
+          <label>Caregiver Gender:</label>
           <select
             value={formData.caregiverGender}
             onChange={handleChange("caregiverGender")}
-            required
           >
             <option value="" disabled>
               Select Gender
@@ -599,29 +594,24 @@ function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit, errors 
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          {errors.caregiverGender && <span className="error">{errors.caregiverGender}</span>}
         </div>
 
         <div className="form-group">
-          <label>Caregiver Address: <span className="required-asterisk">*</span></label>
+          <label>Caregiver Address:</label>
           <input
             type="text"
             value={formData.caregiverAddress}
             onChange={handleChange("caregiverAddress")}
-            required
           />
-          {errors.caregiverAddress && <span className="error">{errors.caregiverAddress}</span>}
         </div>
 
         <div className="form-group">
-          <label>Official ID Number: <span className="required-asterisk">*</span></label>
+          <label>Official ID Number:</label>
           <input
             type="text"
             value={formData.caregiverOfficialIdNumber}
             onChange={handleChange("caregiverOfficialIdNumber")}
-            required
           />
-          {errors.caregiverOfficialIdNumber && <span className="error">{errors.caregiverOfficialIdNumber}</span>}
         </div>
 
         <button type="button" onClick={prevStep}>
@@ -629,6 +619,16 @@ function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit, errors 
         </button>
         <button type="button" onClick={handleSubmit}>
           Submit
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSkipCaregiver(true);
+            handleSubmit();
+          }}
+          className="skip-button"
+        >
+          Skip Caregiver and submit
         </button>
       </form>
     </div>
