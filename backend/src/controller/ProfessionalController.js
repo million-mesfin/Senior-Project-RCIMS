@@ -8,6 +8,7 @@ const {
 } = require("./Patient-Professional-SharedController");
 
 const { addProfessionalSchedule } = require("./ScheduleController"); 
+const { createEarliestAppointment } = require("./AppointmentController");
 
 // API - add a new professional
 const addProfessional = async (req, res) => {
@@ -124,6 +125,8 @@ const attachPatient = async (req, res) => {
 
         patient.assignedProfessionals.push(professionalId);
         await patient.save();
+
+        await createEarliestAppointment(professionalId, patientId);
 
         res.status(200).json({
             message: "Patient attached to professional successfully",
