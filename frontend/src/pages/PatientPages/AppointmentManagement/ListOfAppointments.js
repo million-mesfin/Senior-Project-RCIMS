@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../ProfessionalStyles/AppointmentList.css";
 import ShowAppointmentDetails from "./ShowAppointmentDetails"; // You'll need to create this component
 
 const ListOfAppointments = ({ appointments, onAppointmentCancelled }) => {

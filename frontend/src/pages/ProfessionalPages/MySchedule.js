@@ -7,21 +7,24 @@ const Schedule = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // Time slots for the schedule (2-hour intervals)
+    // Time slots based on the actual session times from your controller
     const timeSlots = [
-        "08:00 AM - 10:00 AM", 
-        "10:00 AM - 12:00 PM", 
-        "12:00 PM - 01:00 PM (Lunch Break)",
-        "01:00 PM - 03:00 PM", 
-        "03:00 PM - 05:00 PM", 
+        "01:00 AM - 02:00 AM",
+        "02:00 AM - 03:00 AM",
+        "03:00 AM - 04:00 AM",
+        "04:00 AM - 05:00 AM",
+        "08:00 AM - 09:00 AM",
+        "09:00 AM - 10:00 AM",
+        "10:00 AM - 11:00 AM",
+        "11:00 AM - 12:00 PM"
     ];
 
-    // Days of the week
-    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    // Days of the week (including Saturday and Sunday)
+    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     const fetchSchedule = async () => {
         try {
-            const user = JSON.parse(localStorage.getItem("user")); 
+            const user = JSON.parse(localStorage.getItem("user"));
 
             if (!user || !user._id) {
                 throw new Error("No user found in local storage.");
@@ -39,7 +42,7 @@ const Schedule = () => {
         } catch (err) {
             setError(
                 "Error fetching schedule: " +
-                    (err.response?.data?.message || err.message)
+                (err.response?.data?.message || err.message)
             );
         } finally {
             setLoading(false);
@@ -61,18 +64,21 @@ const Schedule = () => {
         });
 
         return sessionsForDay.find((session) => {
-            const sessionStartTime = sessionStartTimeMap[session.sessionNumber]; 
+            const sessionStartTime = sessionStartTimeMap[session.sessionNumber];
             return sessionStartTime === time;
         });
     };
 
-    // Mapping session numbers to time slots (each session lasts 2 hours)
+    // Mapping session numbers to time slots (based on your controller's sessionStartTime mapping)
     const sessionStartTimeMap = {
-        1: "08:00 AM - 10:00 AM",
-        2: "10:00 AM - 12:00 PM",
-        3: "12:00 PM - 01:00 PM (Lunch Break)",
-        4: "01:00 PM - 03:00 PM",
-        5: "03:00 PM - 05:00 PM"
+        1: "01:00 AM - 02:00 AM",
+        2: "02:00 AM - 03:00 AM",
+        3: "03:00 AM - 04:00 AM",
+        4: "04:00 AM - 05:00 AM",
+        5: "08:00 AM - 09:00 AM",
+        6: "09:00 AM - 10:00 AM",
+        7: "10:00 AM - 11:00 AM",
+        8: "11:00 AM - 12:00 PM"
     };
 
     return (
@@ -90,7 +96,7 @@ const Schedule = () => {
 
                 {/* Time slots and session rendering */}
                 {timeSlots.map((time) => (
-                    <>
+                    <React.Fragment key={time}>
                         {/* Time slot column */}
                         <div key={time} className="time-slot">
                             {time}
@@ -98,13 +104,13 @@ const Schedule = () => {
 
                         {/* Days columns */}
                         {daysOfWeek.map((_, dayIndex) => {
-                            const session = getSessionForTimeSlot(time, dayIndex + 1, 'currentWeek'); // Current week sessions
+                            const session = getSessionForTimeSlot(time, dayIndex + 1, 'currentWeek');
 
                             return (
                                 <div key={`${time}-${dayIndex}`} className="session-cell">
                                     {session ? (
                                         <div>
-                                            <p>Session {session.sessionNumber}</p>
+                                            <p>Session: {session.type} - {session.sessionNumber}</p>
                                             <p>Status: {session.status}</p>
                                         </div>
                                     ) : (
@@ -113,7 +119,7 @@ const Schedule = () => {
                                 </div>
                             );
                         })}
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
 
@@ -130,7 +136,7 @@ const Schedule = () => {
 
                 {/* Time slots and session rendering */}
                 {timeSlots.map((time) => (
-                    <>
+                    <React.Fragment key={time}>
                         {/* Time slot column */}
                         <div key={time} className="time-slot">
                             {time}
@@ -144,7 +150,7 @@ const Schedule = () => {
                                 <div key={`${time}-${dayIndex}`} className="session-cell">
                                     {session ? (
                                         <div>
-                                            <p>Session {session.sessionNumber}</p>
+                                            <p>Session: {session.type} - {session.sessionNumber}</p>
                                             <p>Status: {session.status}</p>
                                         </div>
                                     ) : (
@@ -153,7 +159,7 @@ const Schedule = () => {
                                 </div>
                             );
                         })}
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
         </div>

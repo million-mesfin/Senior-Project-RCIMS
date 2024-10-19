@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Appointments from "./Appointment/Appointments";
+import AppointmentManagement from "./AppointmentManagement/AppointmentManagement";
 import MedicalHistory from "./MedicalHistory";
 import Notifications from "./Notifications";
 import Messaging from "./Messaging";
@@ -102,7 +102,7 @@ const PatientDashboard = ({ patient, user }) => {
 
             <div className="main-content">
                 <div className="dashboard">
-                    {selectedComponent === "Appointments" && <Appointments patient={patient} />}
+                    {selectedComponent === "Appointments" && <AppointmentManagement patient={patient} />}
                     {selectedComponent === "MedicalHistory" && <MedicalHistory patient={patient} />}
                     {selectedComponent === "Notifications" && <Notifications patient={patient} />}
                     {selectedComponent === "Messaging" && <Messaging patient={patient} />}

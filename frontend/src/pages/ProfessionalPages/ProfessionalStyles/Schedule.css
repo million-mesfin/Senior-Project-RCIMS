@@ -1,47 +1,26 @@
-.schedule-container {
-    padding: 20px;
-}
-
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 5 for days + 1 for time column */
-    grid-auto-rows: minmax(60px, auto);
-    gap: 10px;
+    grid-template-columns: repeat(8, 1fr); /* 8 columns: 1 for time slots, 7 for days of the week */
+    gap: 10px; /* Space between grid cells */
+    text-align: center;
+    align-items: center;
 }
 
 .schedule-header {
     font-weight: bold;
-    text-align: center;
-    background-color: #f0f0f0;
     padding: 10px;
+    background-color: #f0f0f0;
     border: 1px solid #ddd;
 }
 
 .time-slot {
-    font-weight: bold;
-    text-align: right;
     padding: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
 }
 
 .session-cell {
-    text-align: center;
     padding: 10px;
     border: 1px solid #ddd;
-    background-color: #fff;
-}
-
-.session-cell p {
-    margin: 5px 0;
-}
-
-/* Optional: Distinguish between current and next week sections */
-.schedule-container h2 {
-    margin-top: 30px;
-    color: #ff7f50;
-}
-
-.schedule-container h2 + .schedule-grid {
-    margin-top: 10px;
+    background-color: #ffffff;
 }
