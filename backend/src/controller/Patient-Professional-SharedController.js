@@ -1,5 +1,6 @@
 const Patient = require("../models/Patient");
 const Professional = require("../models/Professional");
+const Appointment = require("../models/Appointment");
 
 // Local function - get professional from a specific department with the least number of patients
 const getProfessionalWithLeastPatientsInDepartment = async (department) => {
@@ -37,60 +38,55 @@ const addPatientToProfessionalDefault = async (
 
 // Local function - Remove professional from patient
 const detatchProfessionalFromPatient = async (professionalId, patientId) => {
-    try {
-        const professional = await Professional.findById(professionalId);
-        const patient = await Patient.findById(patientId);
+    const professional = await Professional.findById(professionalId);
+    const patient = await Patient.findById(patientId);
 
-        if (!professional || !patient) {
-            throw new Error("Professional or Patient not found");
-        }
+    if (!professional || !patient) {
+        throw new Error("Professional or Patient not found");
+    }
 
-        professional.patients.pull(patient.user);
-        professional.numberOfPatients = Math.max(
-            0,
-            professional.numberOfPatients - 1
+    //check if the professional has any active appointments with the patient
+    const activeAppointments = await Appointment.find({
+        professionalId,
+        patientId,
+        status: "active",
+    });
+
+    if (activeAppointments.length > 0) {
+        throw new Error(
+            "Professional has active appointments with the patient"
         );
-
-        // check if the patient is an inpatient or outpatient
-        if (patient.patientType === "In-patient") {
-            professional.numberOfInPatients = Math.max(
-                0,
-                professional.numberOfInPatients - 1
-            );
-        } else {
-            professional.numberOfOutPatients = Math.max(
-                0,
-                professional.numberOfOutPatients - 1
-            );
-        }
-
-        await professional.save();
-
-        patient.assignedProfessionals.pull(professionalId);
-
-        await patient.save();
-
-        return { success: true };
-    } catch (error) {
-        console.error("Error in detachProfessionalFromPatient:", error);
-        throw error;
     }
-};
 
-// Local function - remove patient from professional
-//! Only development purpose
-const removePatient = async (patientId) => {
-    const professionals = await Professional.find({ patients: patientId });
-    for (const professional of professionals) {
-        professional.patients.pull(patientId);
-        professional.numberOfPatients--;
-        await professional.save();
+    professional.patients.pull(patient.user);
+    professional.numberOfPatients = Math.max(
+        0,
+        professional.numberOfPatients - 1
+    );
+    // check if the patient is an inpatient or outpatient
+    if (patient.patientType === "In-patient") {
+        professional.numberOfInPatients = Math.max(
+            0,
+            professional.numberOfInPatients - 1
+        );
+    } else {
+        professional.numberOfOutPatients = Math.max(
+            0,
+            professional.numberOfOutPatients - 1
+        );
     }
+
+    await professional.save();
+
+    patient.assignedProfessionals.pull(professionalId);
+
+    await patient.save();
+
+    return { success: true };
 };
 
 module.exports = {
     getProfessionalWithLeastPatientsInDepartment,
     addPatientToProfessionalDefault,
-    removePatient,
     detatchProfessionalFromPatient,
 };
