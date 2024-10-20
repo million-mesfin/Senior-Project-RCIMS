@@ -11,7 +11,7 @@ const {
     getPatientsByStatus,
     searchPatient,
     getPatientInformation,
-    getPatientsReadyToDischarge
+    getPatientsToDischarge
 } = require("../../controller/PatientController");
 
 const router = express.Router();
@@ -26,5 +26,5 @@ router.post("/attach-professional", attachProfessional);
 router.get("/get-patients-by-status/:status", getPatientsByStatus);
 router.get("/search-patient/:key", searchPatient);
 router.get("/get-patient-information/:id", getPatientInformation);
-router.get("/get-patients-ready-to-discharge", getPatientsReadyToDischarge);
+router.get("/get-patients-to-discharge", getPatientsToDischarge);
 module.exports = router;

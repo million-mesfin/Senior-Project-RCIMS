@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../Styling/AdminPageStyles/PatientManagement.css";
 import ListOfPatients from "./ListOfPatients"; 
 import AddPatient from "./AddPatient";
+import PatientsToDischarge from "./PatientsToDischarge";
 import axios from "axios";
 
 const PatientManagement = () => {
@@ -40,6 +41,8 @@ const PatientManagement = () => {
         return <ListOfPatients patients={filteredPatients} />; // Updated to use ListOfPatients
       case "AddPatient":
         return <AddPatient />;
+      case "PatientsToDischarge":
+        return <PatientsToDischarge />;
       default:
         return <ListOfPatients patients={filteredPatients} />; // Updated to use ListOfPatients
     }
@@ -60,6 +63,12 @@ const PatientManagement = () => {
           onClick={() => setActiveTab("AddPatient")}
         >
           Add Patient
+        </button>
+        <button
+          className={`tab-button ${activeTab === "PatientsToDischarge" ? "active" : ""}`}
+          onClick={() => setActiveTab("PatientsToDischarge")}
+        >
+          Patients to Discharge
         </button>
       </div>
 

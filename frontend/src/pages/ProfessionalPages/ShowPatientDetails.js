@@ -4,6 +4,8 @@ import "./ProfessionalStyles/AttachPatient.css";
 import "./ProfessionalStyles/ShowPatientDetails.css";
 
 import ShowHistory from "./showhistory"; // Import the ShowHistory component
+import AddPatientHistory from "./AddPatientHistory"; // Import the AddPatientHistory component
+import PatientProgress from "./PatientProgress"; // Import the PatientProgress component
 
 const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
   const [patient, setPatient] = useState(null);
@@ -11,6 +13,8 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
   const [loading, setLoading] = useState(true); 
   const [currentProfessionalId, setCurrentProfessionalId] = useState(""); 
   const [showHistory, setShowHistory] = useState(false); // Track if we should show the history page
+  const [addHistory, setAddHistory] = useState(false); // Track if we should navigate to AddPatientHistory page
+  const [showProgress, setShowProgress] = useState(false); // Track if we should navigate to PatientProgress page
 
   // Fetch the current professional's ID when the component mounts
   useEffect(() => {
@@ -87,6 +91,16 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
     return <ShowHistory patientId={patientId} onGoBack={() => setShowHistory(false)} />; // Pass onGoBack to return to this page
   }
 
+  // If addHistory is true, display the AddPatientHistory component
+  if (addHistory) {
+    return <AddPatientHistory patientId={patientId} onGoBack={() => setAddHistory(false)} />; // Pass onGoBack to return to this page
+  }
+
+  // If showProgress is true, display the PatientProgress component
+  if (showProgress) {
+    return <PatientProgress patientId={patientId} onGoBack={() => setShowProgress(false)} />; // Pass onGoBack to return to this page
+  }
+
   return (
     <div className="show-patient-details">
       {/* Back Button at the top */}
@@ -116,6 +130,16 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
           {/* New View History Button */}
           <button className="btn btn-view-history" onClick={() => setShowHistory(true)}>
             View History
+          </button>
+
+          {/* New Add History Button */}
+          <button className="btn btn-add-history" onClick={() => setAddHistory(true)}>
+            Add History
+          </button>
+
+          {/* New Progress Button */}
+          <button className="btn btn-progress" onClick={() => setShowProgress(true)}>
+            Add Progress
           </button>
         </div>
       ) : (
