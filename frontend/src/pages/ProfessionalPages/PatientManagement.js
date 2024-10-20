@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/PatientManagement.css";
-import ShowPatientDetails from "./ShowPatientDetails"; // Use the imported ShowPatientDetails
-import AddPatientHistory from "./AddPatientHistory"; // Import AddPatientHistory component
+import ShowPatientDetails from "./ShowPatientDetails"; 
 
 const PatientManagement = () => {
   const [activeTab, setActiveTab] = useState("ListOfPatients");
@@ -77,13 +76,11 @@ const PatientManagement = () => {
           <ListOfPatients
             patients={patients}
             onViewPatient={handleViewPatient}
-            onAddHistory={handleAddHistory}
+            
           />
         );
       case "ViewPatientDetails":
         return <ShowPatientDetails patientId={selectedPatientId} onGoBack={handleGoBack} fetchPatients={fetchPatients} />; // Pass fetchPatients to update the list after detachment
-      case "AddPatientHistory":
-        return <AddPatientHistory patientId={selectedPatientId} onGoBack={handleGoBack} />;
       default:
         return <ListOfPatients patients={patients} />;
     }
@@ -125,9 +122,7 @@ const ListOfPatients = ({ patients, onViewPatient, onAddHistory }) => {
                 <button className="btn btn-details" onClick={() => onViewPatient(patient._id)}>
                   View Details
                 </button>
-                <button className="btn btn-add-history" onClick={() => onAddHistory(patient._id)}>
-                  Add History
-                </button>
+               
               </div>
             </li>
           ))}
