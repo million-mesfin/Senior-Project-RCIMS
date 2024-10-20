@@ -7,7 +7,7 @@ const {
     getProfessionalWithLeastPatientsInDepartment,
 } = require("./Patient-Professional-SharedController");
 
-const { addProfessionalSchedule } = require("./ScheduleController"); 
+const { addProfessionalSchedule } = require("./ScheduleController");
 const { createEarliestAppointment } = require("./AppointmentController");
 
 // API - add a new professional
@@ -148,11 +148,23 @@ const updateProfessional = async (req, res) => {
         const { id } = req.params;
         const {
             // Professional fields
-            qualification, speciality, licenseNumber, yearsOfExperience,
-            department, bio, languagesSpoken, workingHours, status,
+            qualification,
+            speciality,
+            licenseNumber,
+            yearsOfExperience,
+            department,
+            bio,
+            languagesSpoken,
+            workingHours,
+            status,
             // User fields
-            name, fatherName, grandfatherName, phoneNumber,
-            dateOfBirth, gender, address,
+            name,
+            fatherName,
+            grandfatherName,
+            phoneNumber,
+            dateOfBirth,
+            gender,
+            address,
         } = req.body;
 
         // Update Professional
@@ -160,9 +172,16 @@ const updateProfessional = async (req, res) => {
             id,
             {
                 $set: {
-                    qualification, speciality, licenseNumber, yearsOfExperience,
-                    department, bio, languagesSpoken, workingHours, status,
-                }
+                    qualification,
+                    speciality,
+                    licenseNumber,
+                    yearsOfExperience,
+                    department,
+                    bio,
+                    languagesSpoken,
+                    workingHours,
+                    status,
+                },
             },
             { new: true, runValidators: true }
         );
@@ -177,7 +196,9 @@ const updateProfessional = async (req, res) => {
             // Check if the new phone number already exists
             const phoneExists = await User.findOne({ phoneNumber });
             if (phoneExists) {
-                return res.status(400).json({ message: "Phone number already in use" });
+                return res
+                    .status(400)
+                    .json({ message: "Phone number already in use" });
             }
         }
 
@@ -186,9 +207,14 @@ const updateProfessional = async (req, res) => {
             updatedProfessional.user,
             {
                 $set: {
-                    name, fatherName, grandfatherName, phoneNumber,
-                    dateOfBirth, gender, address,
-                }
+                    name,
+                    fatherName,
+                    grandfatherName,
+                    phoneNumber,
+                    dateOfBirth,
+                    gender,
+                    address,
+                },
             },
             { new: true, runValidators: true }
         );
@@ -261,17 +287,39 @@ const checkPhoneNumber = async (req, res) => {
 // This function is used to remove a patient from a professional once the patient has completed the treatment with the professional
 // Pass the professionalId and patientId in the body
 const removePatientFromProfessional = async (req, res) => {
-    try {
-        const { professionalId, patientId } = req.body;
-        detatchProfessionalFromPatient(professionalId, patientId);
-        res.status(200).json({
-            message: "Patient removed from professional successfully",
-        });
+    const { professionalId, patientId } = req.body;
 
-        //TODO: send a discharge request to the admin
+    if (!professionalId || !patientId) {
+        return res.status(400).json({
+            message: "Professional ID and Patient ID are required",
+        });
+    }
+
+    try {
+        await detatchProfessionalFromPatient(professionalId, patientId);
+        return res.status(200).json({
+            message: "Patient detached from professional successfully",
+        });
     } catch (error) {
-        console.error("Error in removePatientFromProfessional:", error);
-        res.status(500).json({
+        if (
+            error.message ===
+            "Professional has active appointments with the patient"
+        ) {
+            return res.status(400).json({
+                message:
+                    "Cannot remove patient. There are active appointments.",
+                error: error.message,
+            });
+        }
+
+        if (error.message === "Professional or Patient not found") {
+            return res.status(404).json({
+                message: "Professional or Patient not found",
+                error: error.message,
+            });
+        }
+
+        return res.status(500).json({
             message: "Error removing patient from professional",
             error: error.message,
         });
@@ -388,7 +436,7 @@ const getPatientsOfProfessional = async (req, res) => {
         // and populate the user field
         const patients = await Patient.find({
             assignedProfessionals: professionalId,
-        }).populate('user', '-password'); // Populate user data, excluding the password field
+        }).populate("user", "-password"); // Populate user data, excluding the password field
 
         res.json(patients);
     } catch (error) {
