@@ -10,6 +10,7 @@ const {
 } = require("./Patient-Professional-SharedController");
 const { addPatientSchedule } = require("./ScheduleController");
 const { createEarliestAppointment } = require("./AppointmentController");
+const Appointment = require("../models/Appointment");
 
 // API - Add a new patient
 const addPatient = async (req, res) => {
@@ -420,6 +421,47 @@ const getPatientInformation = async (req, res) => {
     }
 };
 
+//* API - get patients to discharge list
+const getPatientsToDischarge = async (req, res) => {
+    try {
+        // Find patients with no assigned professionals and active status
+        const patientsWithNoAssignedProfessionals = await Patient.find({
+            assignedProfessionals: { $size: 0 },
+            status: "Active",
+        }).populate("user", "-password");
+
+        // Get patient IDs
+        const patientIds = patientsWithNoAssignedProfessionals.map(
+            (patient) => patient._id
+        );
+
+        // Find active appointments for these patients
+        const activeAppointments = await Appointment.find({
+            patientId: { $in: patientIds },
+            status: "active",
+        });
+
+        // Filter out patients with active appointments
+        const patientsToDischarge = patientsWithNoAssignedProfessionals.filter(
+            (patient) =>
+                !activeAppointments.some((appointment) =>
+                    appointment.patientId.equals(patient._id)
+                )
+        );
+
+        res.status(200).json({
+            message: "Patients ready for discharge retrieved successfully",
+            patients: patientsToDischarge,
+        });
+    } catch (error) {
+        console.error("Error in getPatientsToDischarge:", error);
+        res.status(500).json({
+            message: "Error getting patients to discharge",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     addPatient,
     checkPhoneNumber,
@@ -431,4 +473,5 @@ module.exports = {
     getPatientsByStatus,
     searchPatient,
     getPatientInformation,
+    getPatientsToDischarge,
 };
