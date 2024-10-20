@@ -15,6 +15,7 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
   const [showHistory, setShowHistory] = useState(false); // Track if we should show the history page
   const [addHistory, setAddHistory] = useState(false); // Track if we should navigate to AddPatientHistory page
   const [showProgress, setShowProgress] = useState(false); // Track if we should navigate to PatientProgress page
+  const [message, setMessage] = useState("");
 
   // Fetch the current professional's ID when the component mounts
   useEffect(() => {
@@ -67,22 +68,19 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
         alert("Professional ID or Patient ID is missing.");
         return;
       }
-  
-      console.log('Professional ID:', currentProfessionalId); 
-      console.log('Patient ID:', patientId); 
       
-      // Corrected API URL
       const response = await axios.post("http://localhost:5000/api/professionals/detach-patient-from-professional", {
-        professionalId: currentProfessionalId, // Professional ID
-        patientId, // Patient ID
+        professionalId: currentProfessionalId,
+        patientId,
       });
       
-      alert("Patient detached successfully.");
+      alert(response.data.message); // Use the message from the API response
       fetchPatients(); // Refresh the patient list after detaching
       onGoBack(); // Navigate back to the list of patients
     } catch (error) {
       console.error("Error detaching patient:", error.response ? error.response.data : error);
-      alert("Error detaching patient. Please try again.");
+      const errorMessage = error.response?.data?.message || "Error detaching patient. Please try again.";
+      alert(errorMessage); // Use the error message from the API or a default message
     }
   };
 

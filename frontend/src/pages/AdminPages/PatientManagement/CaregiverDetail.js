@@ -81,9 +81,10 @@ function CaregiverDetail({ patientId, onBack }) {
       try {
         const response = await axios.delete(`http://localhost:5000/api/caregiver/delete-caregiver/${caregiver._id}`);
         alert(response.data.message);
-        // Optionally, redirect or perform another action after deletion
+        onBack();
       } catch (error) {
         console.error("Error deleting caregiver:", error);
+        alert("Failed to delete caregiver. Please try again.");
       }
     }
   };

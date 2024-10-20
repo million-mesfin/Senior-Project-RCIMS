@@ -78,14 +78,7 @@ const ListOfPatients = () => {
             setSelectedPatient(patientData);
 
             // Check if the patient already has a caregiver
-            if (
-                patientData.caregiver &&
-                Object.keys(patientData.caregiver).length > 0
-            ) {
-                setHasCaregiver(true); // Set caregiver status
-            } else {
-                setHasCaregiver(false); // No caregiver
-            }
+            getCareGiver(patientId);
 
             setIsEditing(false);
             setIsViewingCaregiver(false); // Reset caregiver view when loading patient details
@@ -98,11 +91,31 @@ const ListOfPatients = () => {
         }
     };
 
+    const getCareGiver = async (patientId) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/caregiver/get-caregiver-by-patient-id/${patientId}`);
+            if (response.status === 200) {
+                const caregiver = response.data.caregiver;
+                if (caregiver && Object.keys(caregiver).length > 0) {
+                    setHasCaregiver(true);
+                } else {
+                    setHasCaregiver(false);
+                }
+                return caregiver;
+            } else {
+                setError(`Failed to fetch caregiver. ${response.data.message}`);
+                setHasCaregiver(false);
+            }
+        } catch (error) {
+            setError(`Failed to fetch caregiver. ${error.response?.data?.message || error.message}`);
+            setHasCaregiver(false);
+        }
+    }
+
     const handleBackToList = () => {
         setSelectedPatient(null);
         setIsEditing(false);
         setIsViewingCaregiver(false);
-        setIsAddingCaregiver(false); // Reset add caregiver mode
     };
 
     const handleEdit = (patient) => {
@@ -191,6 +204,9 @@ const ListOfPatients = () => {
             officialIdNumber: e.target.officialIdNumber.value,
         };
         handleAddCaregiver(caregiverData);
+
+        // Reset form fields
+        e.target.reset();
     };
 
     const calculateAge = (selectedPatient) => {
@@ -581,7 +597,6 @@ const ListOfPatients = () => {
                                             Add Caregiver
                                         </button>
                                     )}
-                                    {/* <button className="CareGiver-button" onClick={handleNavigateToCaregiverDetail}>Caregiver Details</button> */}
                                 </div>
                             </div>
                         </div>

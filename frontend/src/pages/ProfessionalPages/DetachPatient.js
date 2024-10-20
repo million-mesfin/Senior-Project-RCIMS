@@ -35,7 +35,9 @@ const DetachPatient = ({ onGoBack }) => {
     // Fetch all professionals
     const fetchProfessionals = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/professionals/get-professionals");
+            const response = await axios.get(
+                "http://localhost:5000/api/professionals/get-professionals"
+            );
             setProfessionals(response.data.professionals || []); // Adjust the key based on your API response
         } catch (error) {
             console.error("Error fetching professionals:", error);
@@ -58,7 +60,10 @@ const DetachPatient = ({ onGoBack }) => {
                 );
                 setPatients(response.data || []); // Use an empty array if undefined
             } else {
-                console.error("No valid professional data available:", professionalResponse);
+                console.error(
+                    "No valid professional data available:",
+                    professionalResponse
+                );
                 setPatients([]); // Set to empty array if no professional data
             }
         } catch (error) {
@@ -68,28 +73,27 @@ const DetachPatient = ({ onGoBack }) => {
     };
 
     // Handle detaching patient from professional
-    // Handle detaching patient from professional
-const handleDetachPatient = async (e) => {
-    e.preventDefault();
+    const handleDetachPatient = async (e) => {
+        e.preventDefault();
 
-    try {
-        const response = await axios.post(
-            
-            "http://localhost:5000/api/professionals/removePatientFromProfessional",
-            {
-                professionalId: selectedProfessional,
-                patientId: selectedPatient,
-            }
-        );
-        setMessage(response.data.message);
-        // Remove detached patient from the UI
-        setPatients(patients.filter((p) => p._id !== selectedPatient));
-    } catch (error) {
-        console.error("Error detaching patient:", error);
-        setMessage("Failed to detach patient.");
-    }
-};
-
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/professionals/removePatientFromProfessional",
+                {
+                    professionalId: selectedProfessional,
+                    patientId: selectedPatient,
+                }
+            );
+            setMessage(response.data.message);
+            // Remove detached patient from the UI
+            setPatients(patients.filter((p) => p._id !== selectedPatient));
+        } catch (error) {
+            console.error("Error detaching patient:", error);
+            setMessage(
+                "An error occurred while detaching the patient. Please try again."
+            );
+        }
+    };
 
     return (
         <div className="attach-detach-container">
