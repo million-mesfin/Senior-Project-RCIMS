@@ -20,6 +20,8 @@ import {
     Select,
     MenuItem,
     Paper,
+    FormControl,
+    InputLabel
   } from "@mui/material";
 import ProfessionalDetail from "./ProfessionalDetail";
 import { red } from "@mui/material/colors";
@@ -84,9 +86,8 @@ const ProfessionalsList = () => {
         setIsEditing(false);
     };
 
-    const handleBackToDetails = async (professional) => {
+    const handleBackToDetails = () => {
         setIsEditing(false);
-        setSelectedProfessional(professional);
     };
 
     const handleEdit = (professional) => {
@@ -143,13 +144,14 @@ const ProfessionalsList = () => {
                 };
                 fetchProfessionals();
                 setIsEditing(false);
-                handleBackToDetails(combinedData);
+                setSelectedProfessional(combinedData);
             }
         } catch (error) {
             console.error("Error updating professional:", error);
             setError(`Failed to update professional. ${error.message}`);
         }
     };
+
     const handleRemove = async (professionalId) => {
         const isConfirmed = window.confirm(
             "Are you sure you want to remove this professional?"
@@ -172,8 +174,7 @@ const ProfessionalsList = () => {
             }
         }
     };
-    
-    
+
     // A function to calculate the age of the professional
     const calculateAge = (dateOfBirth) => {
         const today = new Date();
@@ -194,42 +195,46 @@ const ProfessionalsList = () => {
     }
 
     return (
+   
         <div className="professionals-list-container">
             {selectedProfessional ? (
                 isEditing ? (
-                <div className="professional-edit-form">
-                 <div className="header">
-                 <ArrowBackIcon onClick={handleBackToDetails(selectedProfessional)} />
-                <h2>Edit Professional</h2>
-               </div>
+                    
+                    <div className="professional-edit-form">
+                        <div className="header">
+                            
+                                <ArrowBackIcon onClick={handleBackToDetails}/>
+                            
+                            <h2 className="patient-name">Edit Professional</h2>
+                        </div><Paper>
                         <div className="professional-edit-form">
                             <form onSubmit={handleEditSubmit}>
-                                <label>
-                                    Name:
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={editFormData.name}
-                                        onChange={handleEditFormChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Father's Name:
-                                    <input
-                                        type="text"
-                                        name="fatherName"
-                                        value={
-                                            editFormData.fatherName || ""
-                                        }
-                                        onChange={handleEditFormChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Grandfather's Name:
-                                    <input
-                                        type="text"
+
+                            <div className="container">
+                              <TextField
+                                    label="Name"
+                                    name="name"
+                                    value={editFormData.name}
+                                    onChange={handleEditFormChange}
+                                    required
+                                    fullWidth
+                                    sx={{ paddingRight: "5px" }}
+                                />
+                               <TextField
+                                    label="Father's Name"
+                                    name="fatherName"
+                                    value={editFormData.fatherName || ""}
+                                    onChange={handleEditFormChange}
+                                    required
+                                    fullWidth
+                                    sx={{ paddingRight: "5px" }}
+                                />
+                             
+                            </div>
+
+                            <div className="container">
+                                <TextField
+                                        label="Grandfather's Name"
                                         name="grandfatherName"
                                         value={
                                             editFormData.grandfatherName ||
@@ -237,45 +242,49 @@ const ProfessionalsList = () => {
                                         }
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Specialty:
-                                    <input
-                                        type="text"
+                                     <TextField
+                                        label="Specialty"
                                         name="speciality"
                                         value={
                                             editFormData.speciality || ""
                                         }
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Phone Number:
-                                    <input
-                                        type="text"
+                            </div>
+                            
+                            <div className="container">
+                                  <TextField
+                                        label="Phone Number"
                                         name="phoneNumber"
                                         value={
                                             editFormData.phoneNumber || ""
                                         }
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Address:
-                                    <input
-                                        type="text"
+                                   <TextField
+                                        label="Address"
                                         name="address"
                                         value={editFormData.address || ""}
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Date of Birth:
-                                    <input
+                               
+                            </div>
+                              
+                              <div className="container">
+                                  <TextField
+                                        label="Date of Birth"
                                         type="date"
                                         name="dateOfBirth"
                                         value={
@@ -283,26 +292,27 @@ const ProfessionalsList = () => {
                                         }
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Gender:
-                                    <select
-                                        name="gender"
-                                        value={editFormData.gender || ""}
-                                        onChange={handleEditFormChange}
-                                        required
-                                    >
-                                        <option value="male">Male</option>
-                                        <option value="female">
-                                            Female
-                                        </option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Years of Experience:
-                                    <input
+                                
+                                    {/* Gender */}
+                                        <FormControl 
+                                        fullWidth  
+                                        sx={{paddingRight:"10px"}}
+                                        required>
+                                        <InputLabel>Gender</InputLabel>
+                                        <Select
+                                            name="gender"
+                                            value={editFormData.gender || ""}
+                                            onChange={handleEditFormChange}
+                                        >
+                                            <MenuItem value="male">Male</MenuItem>
+                                            <MenuItem value="female">Female</MenuItem>
+                                        </Select>
+                                        </FormControl>
+                                   <TextField
+                                        label="Years of Experience"
                                         type="number"
                                         name="yearsOfExperience"
                                         value={
@@ -311,248 +321,254 @@ const ProfessionalsList = () => {
                                         }
                                         onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Qualification:
-                                    <input
-                                        type="text"
-                                        name="qualification"
-                                        value={
-                                            editFormData.qualification || ""
-                                        }
-                                        onChange={handleEditFormChange}
+
+                              </div>
+                              
+                              <div className="container">
+                              <TextField
+                                     label="Qualification"
+                                       type="text"
+                                       name="qualification"
+                                       value={
+                                           editFormData.qualification || ""
+                                       }
+                                       onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Bio:
-                                    <textarea
-                                        name="bio"
-                                        value={editFormData.bio || ""}
-                                        onChange={handleEditFormChange}
+                          
+                                <TextField
+                                      label="Languages Spoken"
+                                      type="text"
+                                      name="languagesSpoken"
+                                      value={
+                                          editFormData.languagesSpoken ||
+                                          ""
+                                      }
+                                      onChange={handleEditFormChange}
                                         required
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
                                     />
-                                </label>
-                                <label>
-                                    Languages Spoken:
-                                    <input
-                                        type="text"
-                                        name="languagesSpoken"
-                                        value={
-                                            editFormData.languagesSpoken ||
-                                            ""
-                                        }
-                                        onChange={handleEditFormChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Working Hours:
-                                    <input
-                                        type="text"
-                                        name="workingHours"
+
+                                    <TextField
+                                      label="Working Hours"
+                                      type="text"
+                                      name="workingHours"
                                         value={
                                             editFormData.workingHours || ""
                                         }
                                         onChange={handleEditFormChange}
                                         required
-                                    />
-                                </label>
-                                <label>
-                                    Status:
-                                    <select
-                                        name="status"
-                                        value={editFormData.status || ""}
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
+                                    />                                 
+                              
+                              </div>
+                                
+                            <div className="container">
+                            <TextField
+                                      label="Bio"
+                                      type="text"
+                                      name="bio"
+                                      multiline
+                                        value={editFormData.bio || ""}
                                         onChange={handleEditFormChange}
                                         required
-                                    >
-                                        <option value="active">
-                                            Active
-                                        </option>
-                                        <option value="suspended">
-                                            Suspended
-                                        </option>
-                                        <option value="terminated">
-                                            Terminated
-                                        </option>
-                                    </select>
-                                </label>
+                                        fullWidth
+                                        sx={{ paddingRight: "5px" }}
+                                    /> 
+                                      {/* Status */}
+         <FormControl 
+               fullWidth  
+               sx={{paddingRight:"10px"}}
+               required>
+               <InputLabel>Status</InputLabel>
+               <Select
+             
+                    name="status"
+                    value={editFormData.status || ""}
+                    onChange={handleEditFormChange}
+               >
+                   <MenuItem value="active">Active</MenuItem>
+                   <MenuItem value="suspended">Suspended</MenuItem>
+                   <MenuItem value="terminated">Terminated</MenuItem>
+
+               </Select>
+               </FormControl>
+                               
+                                </div>
+                               
                                 <button type="submit">
                                     Update Professional
                                 </button>
                             </form>
                         </div>
+                        </Paper>
                     </div>
+
+
+
                 ) : (
-                 
-
                     <div class="detail-container">
-                    <div class="header">
-                    <ArrowBackIcon  onClick={handleBackToList} />
-                    <h2 class="professional-name">{`${selectedProfessional.user?.name} ${selectedProfessional.user?.fatherName} ${selectedProfessional.user?.grandfatherName}`}</h2>
-                    </div>
-              <div class="details">
-                    <div className="column1">
-                         <div className="detail-item-wrapper">  
-                          <div class="detail-item"> 
-                              <strong>Specialty</strong>{" "}
-                                <p>{selectedProfessional.speciality}</p>
+                        <div class="header">
+                           
+                                <ArrowBackIcon onClick={handleBackToList}/>
+                            
+                            <h2 class="professional-name">{`${selectedProfessional.user?.name} ${selectedProfessional.user?.fatherName} ${selectedProfessional.user?.grandfatherName}`}</h2>
+                        </div>
+                        <div class="details">
+                            <div className="column1">
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Specialty</strong>{" "}
+                                        <p>{selectedProfessional.speciality}</p>
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Phone Number</strong>{" "}
+                                        <p>{selectedProfessional.user?.phoneNumber}</p> 
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Address</strong>{" "}
+                                        <p>{selectedProfessional.user?.address}</p>  
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Age</strong>
+                                        <p>{calculateAge(selectedProfessional.user?.dateOfBirth)}</p> 
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Gender</strong> 
+                                        <p>{selectedProfessional.user?.gender}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="column2">
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Years of Experience</strong>{" "}
+                                        <p>{selectedProfessional.yearsOfExperience}</p>
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Qualifications:</strong>{" "} 
+                                        <p>{selectedProfessional.qualification}</p>
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">  
+                                    <div class="detail-item">
+                                        <strong>Department: </strong>{" "}
+                                        <p>{selectedProfessional.department}</p>
+                                    </div>
+                                </div>
+                                <div className="detail-item-wrapper">
+                                    <div class="detail-item">
+                                        <strong>Status</strong>
+                                        <p class="status-active">{selectedProfessional.status}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="detail-item-wrapper">
-                        <div class="detail-item">
-                        <strong>Phone Number</strong>{" "}
-                            <p>{selectedProfessional.user?.phoneNumber}</p> 
-                         </div>
-                        </div>
-
-                         <div className="detail-item-wrapper">
-                       <div class="detail-item">
-                             <strong>Address</strong>{" "}
-                           <p>{selectedProfessional.user?.address}</p>  
-                     </div>
-                         </div>
-
-                       <div className="detail-item-wrapper">
-                        <div class="detail-item">
-                            <strong>Age</strong>
-                          <p>{calculateAge(selectedProfessional.user?.dateOfBirth )}</p> 
-                        </div>
-                    </div>                        
-                    <div className="detail-item-wrapper">
-                        <div class="detail-item">
-                           <strong>Gender</strong> 
-                            <p> {selectedProfessional.user?.gender}</p>
-                        </div>
-                            </div>
-                    </div>
-
-                    <div className="column2">
-                     <div className="detail-item-wrapper">
-                        <div class="detail-item">
-                           <strong>Years of Experience</strong>{" "}
-                            <p>{selectedProfessional.yearsOfExperience}</p>
-                        </div>
-                        </div>
-                      <div className="detail-item-wrapper">
-                         <div class="detail-item">
-                         <strong>Qualifications:</strong>{" "} 
-                          <p>{selectedProfessional.qualification} </p>
-                        </div>
-                        </div>
-
-                        <div className="detail-item-wrapper">  
-                          <div class="detail-item">
-                          <strong>Department: </strong>{" "}
-                            <p>{selectedProfessional.department}</p>
-                        </div>
-                        </div>
-
-                        <div className="detail-item-wrapper">
-                        <div class="detail-item">
-                            <strong>Status</strong>
-                            <p class="status-active">{selectedProfessional.status}</p>
-                        </div>
+                        <div class="header-actions">
+                            <button
+                                class="btn-edit w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                                onClick={() => handleEdit(selectedProfessional)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                class="btn-remove w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                                onClick={() => handleRemove(selectedProfessional._id)}
+                            >
+                                Remove
+                            </button>
                         </div>
                     </div>
-                 </div>
-                 <div class="header-actions">
-                            <button class="btn-edit" 
-                                   className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
-                         
-                            onClick={() => handleEdit(selectedProfessional)}>Edit</button>
-                            <button class="btn-remove"                                 className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
- onClick={() => handleRemove(selectedProfessional._id)}>Remove</button>
-                        </div>
-                </div>
-
                 )
             ) : (
                 <div>
-                    {/* <h1>Professional List</h1> */}
-
-                    {/* Search and Filter Section */}
-                    {/* <div className="search-filter-container"> */}
                     <div style={styles.header}>
-                 <h2 style={{color: "black", margin: 0}}>Professional List</h2>
-            <div style={styles.actions}>
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
-                        />
-
-                        <select
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                            className="filter-select"
-                        >
-                            <option value="">All Statuses</option>
-                            <option value="active">Active</option>
-                            <option value="suspended">Suspended</option>
-                            <option value="terminated">Terminated</option>
-                        </select>
-
-                        <select
-                            value={filterSpeciality}
-                            onChange={(e) => setFilterSpeciality(e.target.value)}
-                            className="filter-select"
-                        >
-                            <option value="">All Specialties</option>
-                            <option value="MD">MD</option>
-                            <option value="Psychiatry">Psychiatry</option>
-                            <option value="Pediatrics">Pediatrics</option>
-                        </select>
+                        <h2 style={{ color: "black", margin: 0 }}>Professional List</h2>
+                        <div style={styles.actions}>
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="search-input"
+                            />
+                            <select
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                                className="filter-select"
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="suspended">Suspended</option>
+                                <option value="terminated">Terminated</option>
+                            </select>
+                            <select
+                                value={filterSpeciality}
+                                onChange={(e) => setFilterSpeciality(e.target.value)}
+                                className="filter-select"
+                            >
+                                <option value="">All Specialties</option>
+                                <option value="MD">MD</option>
+                                <option value="Psychiatry">Psychiatry</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                            </select>
                         </div>
                     </div>
 
-                       {/* Table */}
-            <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="patient table">
-                    <TableHead>
-                        <TableRow>
-
-                        <TableCell>No</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Fathers Name</TableCell>
-                        {/* <TableCell>GrandFather Name</TableCell> */}
-                        <TableCell>Phone Number</TableCell>
-                        {/* <TableCell>Patient Type</TableCell> */}
-                        <TableCell>Gender</TableCell>
-                        <TableCell>Address</TableCell>
-                        {/* <TableCell>Condition</TableCell> */}
-                        
-                        <TableCell />
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {filteredProfessionals.map((professional, index) => (
-                        <TableRow key={professional}>
-
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{professional.user?.name}</TableCell>
-                            <TableCell>{professional.user?.fatherName}</TableCell>
-                            {/* <TableCell>{professional.user?.grandfatherName}</TableCell> */}
-                            <TableCell>{professional.user?.phoneNumber}</TableCell>
-                            {/* <TableCell>{patient.patientType}</TableCell> */}
-                            <TableCell>{professional.user?.gender}</TableCell> 
-                            <TableCell>{professional.user?.address}</TableCell> 
-                            
-                            <TableCell>
-                            <MoreHorizIcon onClick={()=> handleDetails(professional)}/>
-                            </TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                    </Table>
-                </TableContainer>
-
+                    {/* Table */}
+                    <TableContainer>
+                        <Table sx={{ minWidth: 650 }} aria-label="patient table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>No</TableCell>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Fathers Name</TableCell>
+                                    <TableCell>Phone Number</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Address</TableCell>
+                                    <TableCell />
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {filteredProfessionals.map((professional, index) => (
+                                    <TableRow key={professional._id}>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{professional.user?.name}</TableCell>
+                                        <TableCell>{professional.user?.fatherName}</TableCell>
+                                        <TableCell>{professional.user?.phoneNumber}</TableCell>
+                                        <TableCell>{professional.user?.gender}</TableCell>
+                                        <TableCell>{professional.user?.address}</TableCell>
+                                        <TableCell>
+                                            <MoreHorizIcon onClick={() => handleDetails(professional)} />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </div>
             )}
         </div>
+       
+        
     );
 };
 
@@ -590,5 +606,6 @@ const styles = {
       color: "#fff",
       fontWeight: "bold",
     },
-  };
+};
+
 export default ProfessionalsList;

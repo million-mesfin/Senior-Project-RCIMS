@@ -46,7 +46,7 @@ const getAllFeedbacks = async (req, res) => {
     try {
         const feedbacks = await Feedback.find()
             .sort({ date: -1 })
-            .populate("sender", "name email");
+            .populate("sender", "name fatherName grandfatherName phoneNumber");
 
         const formattedFeedbacks = feedbacks.map((feedback) => ({
             ...feedback.toObject(),
@@ -63,40 +63,33 @@ const getAllFeedbacks = async (req, res) => {
 };
 
 // Update feedback status
-const updateFeedbackStatus = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { status } = req.body;
+const updateFeedbackStatus = async (id, status) => {
+  try {
+    const updatedFeedback = await Feedback.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
 
-        const updatedFeedback = await Feedback.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
-
-        if (!updatedFeedback) {
-            return res.status(404).json({ message: "Feedback not found" });
-        }
-
-        res.status(200).json({
-            message: "Feedback status updated successfully",
-            feedback: updatedFeedback,
-        });
-    } catch (error) {
-        res.status(400).json({
-            message: "Error updating feedback status",
-            error: error.message,
-        });
+    if (!updatedFeedback) {
+      throw new Error("Feedback not found");
     }
-};
 
+    return {
+      message: "Feedback status updated successfully",
+      feedback: updatedFeedback,
+    };
+  } catch (error) {
+    throw new Error(`Error updating feedback status: ${error.message}`);
+  }
+};
 // Get feedback by ID
 const getFeedbackById = async (req, res) => {
     try {
         const { id } = req.params;
         const feedback = await Feedback.findById(id).populate(
             "sender",
-            "name email"
+            "name fatherName grandfatherName phoneNumber"
         );
 
         if (!feedback) {
@@ -107,6 +100,8 @@ const getFeedbackById = async (req, res) => {
             ...feedback.toObject(),
             date: feedback.date.toUTCString(),
         };
+
+        await updateFeedbackStatus(id, "read");
 
         res.status(200).json(formattedFeedback);
     } catch (error) {
@@ -120,6 +115,5 @@ const getFeedbackById = async (req, res) => {
   module.exports = {
       addFeedback,
       getAllFeedbacks,
-      updateFeedbackStatus,
       getFeedbackById,
   };
