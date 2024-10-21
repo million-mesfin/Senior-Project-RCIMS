@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/AttachPatient.css";
 import "./ProfessionalStyles/ShowPatientDetails.css";
-
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DescriptionIcon from '@mui/icons-material/Description';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import ShowHistory from "./showhistory"; // Import the ShowHistory component
 import AddPatientHistory from "./AddPatientHistory"; // Import the AddPatientHistory component
 import PatientProgress from "./PatientProgress"; // Import the PatientProgress component
@@ -101,44 +104,88 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
 
   return (
     <div className="show-patient-details">
-      {/* Back Button at the top */}
-      <button className="btn btn-back" onClick={onGoBack}>
-        Back
-      </button>
 
-      <h2>Patient Details</h2>
       {patient ? (
-        <div className="patient-info">
-          <h3>{`${patient.user?.name} ${patient.user?.fatherName} ${patient.user?.grandfatherName}`}</h3>
-          <p><strong>Phone Number:</strong> {patient.user?.phoneNumber}</p>
-          <p><strong>Address:</strong> {patient.user?.address}</p>
-          <p><strong>Patient Type:</strong> {patient.patientType}</p>
-          <p><strong>Room Number:</strong> {patient.roomNumber || "N/A"}</p>
-          <p><strong>Bed Number:</strong> {patient.bedNumber || "N/A"}</p>
-          <p><strong>Employment Status:</strong> {patient.employmentStatus}</p>
-          <p><strong>Educational Level:</strong> {patient.educationalLevel}</p>
-          <p><strong>Living Situation:</strong> {patient.livingSituation}</p>
-          <p><strong>Allergies:</strong> {patient.allergies || "None"}</p>
 
-          {/* Detach Button that calls the API */}
-          <button className="btn btn-detach" onClick={handleDetachPatient}>
-            Detach Patient
-          </button>
+        <div className="detail-container">
+        <div class="header">
+            <ArrowBackIcon className=".back-button" onClick={onGoBack}/>
+            <h3 className="patient-name">{`${patient.user?.name} ${patient.user?.fatherName} ${patient.user?.grandfatherName}`}</h3>
+        </div>
+          <div className="container">
+                    <div className="column1">
+                        <div className="detail-item">
+                          <p>Phone Numbner</p>
+                          <strong> {patient.user?.phoneNumber}</strong>
+                        </div>
+                        <div class="detail-item">
+                          <p>Address</p>
+                            <strong> {patient.user?.address}</strong>
+                        </div>
+  
+                        <div className="detail-item">
+                          <p>Room Number</p>
+                          <strong>{patient.roomNumber || "N/A"}</strong>
+                        </div>
+                        <div class="detail-item">
+                            <p>Bed Number</p>
+                              <strong>{patient.bedNumber || "N/A"}</strong> 
+                        </div>
+                        <div className="icons-section">
+                        <div className="icon-item">
+                        {/* <DescriptionIcon onClick={{}} sx={{width: 100, height:40}}/>
+                          <p>History</p> */}
 
-          {/* New View History Button */}
-          <button className="btn btn-view-history" onClick={() => setShowHistory(true)}>
-            View History
-          </button>
+                          {/* New View History Button */}
+                          <button className="CareGiver-button" onClick={() => setShowHistory(true)}>
+                            View History
+                          </button>
 
-          {/* New Add History Button */}
-          <button className="btn btn-add-history" onClick={() => setAddHistory(true)}>
-            Add History
-          </button>
+                        </div>
+                        <div className="icon-item">
+                        
+                        <button className="CareGiver-button" onClick={() => setShowProgress(true)}>Add Progress</button>
 
-          {/* New Progress Button */}
-          <button className="btn btn-progress" onClick={() => setShowProgress(true)}>
-            Add Progress
-          </button>
+                          {/* <SupervisorAccountIcon onClick={handleNavigateToCaregiverDetail} sx={{width: 100, height:40}}/>
+                          <p>CareGiver </p> */}
+                        </div>
+                      </div>
+                      </div>
+
+                      <div className="column2">
+                        <div className="detail-item">
+                          <p>Employment Status</p>
+                        <strong>{patient.employmentStatus}</strong> 
+                          </div>
+                        <div className="detail-item">
+                          <p>Educational Level</p>
+                          <strong>{patient.educationalLevel}</strong>
+                        </div>
+                        <div class="detail-item">
+                          <p>Living Situation</p>
+                          <strong>{patient.livingSituation}</strong> 
+                        </div>  
+                        <div className="detail-item">
+                        <p>Allergies </p>
+                          <strong>{patient.allergies || "None"}</strong>
+                        </div>
+
+                      <div className="action-buttons">
+                        <div className="icon-item">
+                            <button className="CareGiver-button" onClick={() => setAddHistory(true)}>
+                              Add History
+                            </button> 
+                        </div>  
+
+                          {/* Detach Button that calls the API */}
+                      <div className="icon-item">
+                          <button className="CareGiver-button" onClick={handleDetachPatient}>
+                          Detach Patient
+                          </button> 
+                        </div> 
+                          </div>
+                      </div>
+                    </div>
         </div>
       ) : (
         <p>No patient details found.</p>

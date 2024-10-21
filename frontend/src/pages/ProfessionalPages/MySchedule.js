@@ -3,11 +3,10 @@ import axios from "axios";
 import "./ProfessionalStyles/Schedule.css"; // Custom CSS for the grid
 
 const Schedule = () => {
-    const [schedule, setSchedule] = useState(null); 
+    const [schedule, setSchedule] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // Time slots based on the actual session times from your controller
     const timeSlots = [
         "01:00 AM - 02:00 AM",
         "02:00 AM - 03:00 AM",
@@ -19,8 +18,7 @@ const Schedule = () => {
         "11:00 AM - 12:00 PM"
     ];
 
-    // Days of the week (including Saturday and Sunday)
-    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     const fetchSchedule = async () => {
         try {
@@ -30,15 +28,12 @@ const Schedule = () => {
                 throw new Error("No user found in local storage.");
             }
 
-            console.log("Fetched User ID from LocalStorage:", user._id);
-
             const response = await axios.get(`http://localhost:5000/api/schedule/schedule/${user._id}`);
-
             if (!response.data.schedule) {
                 throw new Error("No schedule found for this user.");
             }
 
-            setSchedule(response.data.schedule); 
+            setSchedule(response.data.schedule);
         } catch (err) {
             setError(
                 "Error fetching schedule: " +
@@ -56,11 +51,10 @@ const Schedule = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
-    // Helper function to display sessions based on time slot and day
     const getSessionForTimeSlot = (time, dayIndex, weekType) => {
         const sessionsForDay = schedule[weekType].filter((session) => {
             const sessionDay = new Date(session.date).getDay();
-            return sessionDay === dayIndex; // 0 = Sunday, 1 = Monday, etc.
+            return sessionDay === dayIndex;
         });
 
         return sessionsForDay.find((session) => {
@@ -69,7 +63,6 @@ const Schedule = () => {
         });
     };
 
-    // Mapping session numbers to time slots (based on your controller's sessionStartTime mapping)
     const sessionStartTimeMap = {
         1: "01:00 AM - 02:00 AM",
         2: "02:00 AM - 03:00 AM",
@@ -81,87 +74,97 @@ const Schedule = () => {
         8: "11:00 AM - 12:00 PM"
     };
 
+    const getSessionClass = (sessionType, status) => {
+        if (status === "unavailable") {
+            return "session-unavailable"; // Grey for unavailable sessions
+        } else if (status === "booked") {
+            return "session-booked"; // Light red for booked sessions
+        }
+        return "session-available"; // White for available sessions
+    };
+
+    const hasSessionsForWeek = (weekType) => {
+        return schedule[weekType].length > 0;
+    };
+
+    const getSessionsForTimeSlot = (time, weekType) => {
+        const sessionsForTimeSlot = [];
+
+        daysOfWeek.forEach((_, dayIndex) => {
+            const session = getSessionForTimeSlot(time, dayIndex, weekType);
+            if (session) {
+                sessionsForTimeSlot.push({ dayIndex, session });
+            }
+        });
+
+        return sessionsForTimeSlot;
+    };
+
     return (
         <div className="schedule-container">
-            {/* Current Week's Schedule */}
-            <h2>Current Week's Schedule</h2>
-            <div className="schedule-grid">
-                {/* Days of the week headers */}
-                <div className="schedule-header"></div> {/* Empty cell for time column */}
-                {daysOfWeek.map((day) => (
-                    <div key={day} className="schedule-header">
-                        {day}
-                    </div>
-                ))}
+            {hasSessionsForWeek("currentWeek") && (
+                <>
+                    <h2>Current Week's Schedule</h2>
+                    <div className="schedule-grid">
+                        {timeSlots.map((time) => {
+                            const sessionsForTimeSlot = getSessionsForTimeSlot(time, "currentWeek");
 
-                {/* Time slots and session rendering */}
-                {timeSlots.map((time) => (
-                    <React.Fragment key={time}>
-                        {/* Time slot column */}
-                        <div key={time} className="time-slot">
-                            {time}
-                        </div>
-
-                        {/* Days columns */}
-                        {daysOfWeek.map((_, dayIndex) => {
-                            const session = getSessionForTimeSlot(time, dayIndex + 1, 'currentWeek');
+                            if (sessionsForTimeSlot.length === 0) return null;
 
                             return (
-                                <div key={`${time}-${dayIndex}`} className="session-cell">
-                                    {session ? (
-                                        <div>
-                                            <p>Session: {session.type} - {session.sessionNumber}</p>
-                                            <p>Status: {session.status}</p>
+                                <React.Fragment key={time}>
+                                    <div key={time} className="time-slot">
+                                        {time}
+                                    </div>
+
+                                    {sessionsForTimeSlot.map(({ dayIndex, session }) => (
+                                        <div key={`${time}-${dayIndex}`} className="session-cell">
+                                            <div className={getSessionClass(session.type, session.status)}>
+                                                <p>{session.type}</p>
+                                                <p>{session.status === "unavailable" ? "Unavailable" : session.status === "booked" ? "Booked" : "Available"}</p>
+                                            </div>
                                         </div>
-                                    ) : (
-                                        <p>--</p> 
-                                    )}
-                                </div>
+                                    ))}
+                                </React.Fragment>
                             );
                         })}
-                    </React.Fragment>
-                ))}
-            </div>
-
-            {/* Next Week's Schedule */}
-            <h2>Next Week's Schedule</h2>
-            <div className="schedule-grid">
-                {/* Days of the week headers */}
-                <div className="schedule-header"></div> {/* Empty cell for time column */}
-                {daysOfWeek.map((day) => (
-                    <div key={day} className="schedule-header">
-                        {day}
                     </div>
-                ))}
+                </>
+            )}
 
-                {/* Time slots and session rendering */}
-                {timeSlots.map((time) => (
-                    <React.Fragment key={time}>
-                        {/* Time slot column */}
-                        <div key={time} className="time-slot">
-                            {time}
-                        </div>
+            {hasSessionsForWeek("nextWeek") && (
+                <>
+                    <h2>Next Week's Schedule</h2>
+                    <div className="schedule-grid">
+                        {timeSlots.map((time) => {
+                            const sessionsForTimeSlot = getSessionsForTimeSlot(time, "nextWeek");
 
-                        {/* Days columns */}
-                        {daysOfWeek.map((_, dayIndex) => {
-                            const session = getSessionForTimeSlot(time, dayIndex + 1, 'nextWeek'); // Next week sessions
+                            if (sessionsForTimeSlot.length === 0) return null;
 
                             return (
-                                <div key={`${time}-${dayIndex}`} className="session-cell">
-                                    {session ? (
-                                        <div>
-                                            <p>Session: {session.type} - {session.sessionNumber}</p>
-                                            <p>Status: {session.status}</p>
+                                <React.Fragment key={time}>
+                                    <div key={time} className="time-slot">
+                                        {time}
+                                    </div>
+
+                                    {sessionsForTimeSlot.map(({ dayIndex, session }) => (
+                                        <div key={`${time}-${dayIndex}`} className="session-cell">
+                                            <div className={getSessionClass(session.type, session.status)}>
+                                                <p>{session.type}</p>
+                                                <p>{session.status === "unavailable" ? "Unavailable" : session.status === "booked" ? "Booked" : "Available"}</p>
+                                            </div>
                                         </div>
-                                    ) : (
-                                        <p>--</p> // Default text for working hours without specific sessions
-                                    )}
-                                </div>
+                                    ))}
+                                </React.Fragment>
                             );
                         })}
-                    </React.Fragment>
-                ))}
-            </div>
+                    </div>
+                </>
+            )}
+
+            {!hasSessionsForWeek("currentWeek") && !hasSessionsForWeek("nextWeek") && (
+                <div>No schedule available for this week or next week.</div>
+            )}
         </div>
     );
 };

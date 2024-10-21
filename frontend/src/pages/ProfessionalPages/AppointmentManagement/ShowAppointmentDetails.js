@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EditAppointment from "./EditAppointment";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button } from "@mui/material";
 
 const ShowAppointmentDetails = ({ appointmentId, onGoBack }) => {
     const [appointmentData, setAppointmentData] = useState({
@@ -73,32 +75,49 @@ const ShowAppointmentDetails = ({ appointmentId, onGoBack }) => {
 
     return (
         <div className="appointment-details">
-            <h2>Appointment Details</h2>
-            <AppointmentInfo label="Date" value={formattedDate} />
-            <AppointmentInfo label="Session Number" value={details.sessionNumber} />
-            <AppointmentInfo label="Session Start Time" value={details.startTime} />
-            <AppointmentInfo label="Duration" value={`${details.duration} Hr`} />
-            <AppointmentInfo label="Patient Name" value={patientName || "Not available"} />
-            <AppointmentInfo label="Patient Type" value={patientType || "Not specified"} />
-            <AppointmentInfo label="Appointment Type" value={capitalizeFirstLetter(details.type)} />
-            <AppointmentInfo
-                label="Status"
-                value={capitalizeFirstLetter(details.status)}
-                style={{ color: details.status === "active" ? "green" : "red" }}
-            />
+            <div class="header">
+                <ArrowBackIcon  onClick={onGoBack}/>
+                <h3 className="patient-name">Appointment Details</h3>
+            </div>
+
+            <div className="container">
+                <div className="column1">
+                    <AppointmentInfo label="Date" value={formattedDate} />
+                    <AppointmentInfo label="Session Number" value={details.sessionNumber} />
+                    <AppointmentInfo label="Session Start Time" value={details.startTime} />
+                    <AppointmentInfo label="Duration" value={`${details.duration} Hr`} />
+                    <button type="submit" background="#0ea5e9" sx={{color:"white", }} fullWidth onClick={handleEditClick}>Edit Appointment</button>
+                </div>
+
+                <div className="column2">
+                    <AppointmentInfo label="Patient Name" value={patientName || "Not available"} />
+                    <AppointmentInfo label="Patient Type" value={patientType || "Not specified"} />
+                    <AppointmentInfo label="Appointment Type" value={capitalizeFirstLetter(details.type)} />
+                    <AppointmentInfo
+                        label="Status"
+                        value={capitalizeFirstLetter(details.status)}
+                        style={{ color: details.status === "active" ? "green" : "red" }}
+                    /> 
+                        <button type="submit"fullWidth onClick={() => onCancelAppointment(details._id)}>Cancel Appointment</button>
+       
+                </div>
+            </div>
+          
+         
             <div className="button-group">
-                <button onClick={onGoBack}>Back to List</button>
-                <button onClick={handleEditClick}>Edit Appointment</button>
-                <button onClick={() => onCancelAppointment(details._id)}>Cancel Appointment</button>
+                {/* <button onClick={handleEditClick}>Edit Appointment</button>
+                <button fullWidth onClick={() => onCancelAppointment(details._id)}>Cancel Appointment</button> */}
             </div>
         </div>
     );
 };
 
 const AppointmentInfo = ({ label, value, style }) => (
-    <p>
-        {label}: <strong style={style}>{value}</strong>
-    </p>
+   
+       <div className="detail-item">
+       <p> {label}</p>
+        <strong style={style}>{value}</strong>
+       </div>
 );
 
 const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);

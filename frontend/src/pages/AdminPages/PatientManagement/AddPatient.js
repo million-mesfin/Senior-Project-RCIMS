@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import "../../Styling/AdminPageStyles/AddPatient.css";
 
 function AddPatientForm() {
@@ -63,6 +64,7 @@ function AddPatientForm() {
     } else if (currentStep === 2) {
       if (!formData.employmentStatus) formErrors.employmentStatus = "Employment Status is required";
       if (!formData.patientType) formErrors.patientType = "Patient Type is required";
+      if (!formData.educationalLevel) formErrors.educationalLevel="Educational level is required"
     } else if (currentStep === 3) {
       if (!formData.primarySubstance) formErrors.primarySubstance = "Primary Substance is required";
       if (!formData.primarySubstanceMethodOfUse) formErrors.primarySubstanceMethodOfUse = "Method of Use is required";
@@ -101,6 +103,41 @@ function AddPatientForm() {
 
   const handleChange = (input) => (e) => {
     setFormData({ ...formData, [input]: e.target.value });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      fatherName: "",
+      grandfatherName: "",
+      phoneNumber: "",
+      dateOfBirth: "",
+      gender: "",
+      address: "",
+      employmentStatus: "",
+      educationalLevel: "",
+      livingSituation: "",
+      patientType: "",
+      roomNumber: "",
+      bedNumber: "",
+      allergies: "",
+      currentMedicalConditions: "",
+      primarySubstance: "",
+      primarySubstanceMethodOfUse: "",
+      secondarySubstances: "",
+      pastAddictionTreatment: "",
+      withdrawalSymptoms: "",
+      socialSupportNetwork: "",
+      historyOfTraumaOrAbuse: "",
+      caregiverFullName: "",
+      caregiverPhoneNumber: "",
+      caregiverRelationshipToPatient: "",
+      caregiverGender: "",
+      caregiverAddress: "",
+      caregiverOfficialIdNumber: "",
+    });
+    setStep(1); // Reset to first step
+    setSkipCaregiver(false);
   };
 
   const handleSubmit = async () => {
@@ -152,6 +189,7 @@ function AddPatientForm() {
         } else if (skipCaregiver || response.status === 201) {
           alert("Patient added successfully!");
         }
+        resetForm(); // Reset form and return to the first page
       } catch (error) {
         console.error("Error adding patient or caregiver:", error);
       }
@@ -161,7 +199,7 @@ function AddPatientForm() {
   };
 
   return (
-    <div>
+    <div className="add-patient-container">
       {step === 1 && (
         <PersonalInfo
           formData={formData}
@@ -205,95 +243,110 @@ function AddPatientForm() {
 // Page 1: Personal Information
 function PersonalInfo({ formData, handleChange, nextStep, errors }) {
   return (
-    <div>
-      <h2>Personal Information</h2>
-      <form>
-        <div className="name">
-          <div className="form-group">
-            <label>Name: <span className="required-asterisk">*</span></label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={handleChange("name")}
-              required
-            />
-            {errors.name && <span className="error">{errors.name}</span>}
-          </div>
+    <div  >
+    <h2>Personal Information</h2>
+    <form>
+    <div className="container">
+                <TextField 
+                label="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange("name")}
+                required
+                fullWidth
+                sx={{paddingRight:"5px"}}
+              />
 
-          <div className="form-group">
-            <label>Father’s Name: <span className="required-asterisk">*</span></label>
-            <input
-              type="text"
-              value={formData.fatherName}
-              onChange={handleChange("fatherName")}
-              required
-            />
-            {errors.fatherName && <span className="error">{errors.fatherName}</span>}
-          </div>
-        </div>
-        <div className="form-group">
-          <label>Grandfather’s Name: <span className="required-asterisk">*</span></label>
-          <input
-            type="text"
-            value={formData.grandfatherName}
-            onChange={handleChange("grandfatherName")}
-            required
-          />
-          {errors.grandfatherName && <span className="error">{errors.grandfatherName}</span>}
-        </div>
-        <div className="form-group">
-          <label>Phone Number: <span className="required-asterisk">*</span></label>
-          <input
-            type="text"
-            value={formData.phoneNumber}
-            onChange={handleChange("phoneNumber")}
-            required
-          />
-          {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
-        </div>
-        <div className="form-group">
-          <label>Date of Birth: <span className="required-asterisk">*</span></label>
-          <input
-            type="date"
-            value={formData.dateOfBirth}
-            onChange={handleChange("dateOfBirth")}
-            required
-          />
-          {errors.dateOfBirth && <span className="error">{errors.dateOfBirth}</span>}
-        </div>
-        <div className="form-group">
-          <label>Gender: <span className="required-asterisk">*</span></label>
-          <select
-            value={formData.gender}
-            onChange={handleChange("gender")}
-            required
-          >
-            <option value="" disabled>
-              Select Gender
-            </option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          {errors.gender && <span className="error">{errors.gender}</span>}
-        </div>
-        <div className="form-group">
-          <label>Address: <span className="required-asterisk">*</span></label>
-          <input
-            type="text"
-            value={formData.address}
-            onChange={handleChange("address")}
-            required
-          />
-          {errors.address && <span className="error">{errors.address}</span>}
-        </div>
-        <button 
-          type="button" 
-          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={nextStep}>
-          Next
-        </button>
-      </form>
-    </div>
+                    {/* Father's Name */}
+              <TextField
+                label="Father's Name"
+                name="fatherName"
+                value={formData.fatherName}
+                onChange={handleChange("fatherName")}
+                fullWidth
+                required
+              />  
+            </div>
+            <div className="container">
+
+              {/* Grandfather's Name */}
+              <TextField
+                label="Grandfather's Name"
+                name="grandfatherName"
+                value={formData.grandfatherName}
+                onChange={handleChange("grandfatherName")}
+                fullWidth
+                sx={{paddingRight:"25px"}}
+
+                required
+              />
+
+              {/* Phone Number */}
+              <TextField
+                label="Phone Number"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange("phoneNumber")}
+                // error={Boolean(error.phoneNumber)}
+                // helperText={error.phoneNumber}
+                required
+                fullWidth
+              />
+            </div>
+
+            <div className="container">
+
+                  {/* Date of Birth */}
+                <TextField
+                  label="Date of Birth"
+                  type="date"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange("dateOfBirth")}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                  sx={{paddingLeft:"10px"}}
+
+                  
+                />
+              {/* Gender */}
+              <FormControl 
+              fullWidth  
+              sx={{paddingRight:"10px"}}
+                required>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange("gender")}
+                  >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                </Select>
+              </FormControl> 
+            </div>
+
+            <div className="container">
+                 {/* Address */}
+                   <TextField
+                    label="Address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange("address")}
+                    fullWidth
+                    required
+                  />                      
+            </div>
+            <button 
+            type="submit"
+            className="w-3/4"
+            onClick={nextStep}>
+            Next
+           </button>
+  
+    </form>
+</div>
   );
 }
 
@@ -303,108 +356,128 @@ function PatientInfo({ formData, handleChange, prevStep, nextStep, errors }) {
     <div>
       <h2>Patient Information</h2>
       <form>
-        <div className="form-group">
-          <label>Employment Status: <span className="required-asterisk">*</span></label>
-          <input
-            type="text"
-            list="employment-status-options"
-            value={formData.employmentStatus}
-            onChange={handleChange("employmentStatus")}
-            required
-          />
-          <datalist id="employment-status-options">
-            <option value="Employed" />
-            <option value="Unemployed" />
-            <option value="Student" />
-            <option value="Retired" />
-          </datalist>
-          {errors.employmentStatus && <span className="error">{errors.employmentStatus}</span>}
-        </div>
+         <div className="container">
 
-        <div className="form-group">
-          <label>Educational Level:</label>
-          <input
-            type="text"
-            list="educational-level-options"
-            value={formData.educationalLevel}
-            onChange={handleChange("educationalLevel")}
-            required
-          />
-          <datalist id="educational-level-options">
-            <option value="Primary School" />
-            <option value="High School" />
-            <option value="College" />
-            <option value="Postgraduate" />
-          </datalist>
-        </div>
+            {/* Employee Status */}
+            <FormControl 
+            fullWidth  
+            sx={{paddingRight:"10px"}}
+            required>
+            <InputLabel>Employment Status</InputLabel>
+            <Select
+              name="employment-status-options"
+              value={formData.employmentStatus}
+              onChange={handleChange("employmentStatus")}
+              >
+              <MenuItem value="Employed" >Employed</MenuItem>
+              <MenuItem value="Unemployed">Unemployed</MenuItem>
+              <MenuItem value="Student">Student</MenuItem>
+              <MenuItem value="Retired">Retired</MenuItem>
+            </Select>
+            </FormControl> 
 
-        <div className="form-group">
-          <label>Living Situation: <span className="required-asterisk">*</span></label>
-          <select
-            value={formData.livingSituation}
-            onChange={handleChange("livingSituation")}
-            required
-          >
-            <option value="" disabled>
-              Select Living Situation
-            </option>
-            <option value="Alone">Alone</option>
-            <option value="Family">Family</option>
-          </select>
-          {errors.livingSituation && <span className="error">{errors.livingSituation}</span>}
-        </div>
+                        {/* Education Level */}
+                        <FormControl 
+            fullWidth  
+            sx={{paddingRight:"10px"}}
+            required>
+            <InputLabel>Educational Level</InputLabel>
+            <Select
+              name="employment-status-options"
+              value={formData.educationalLevel}
+              onChange={handleChange("educationalLevel")}
+              >
+              <MenuItem value="Primary School" >Primary School</MenuItem>
+              <MenuItem value="High School">High School</MenuItem>
+              <MenuItem value="College">College</MenuItem>
+              <MenuItem value="Postgraduate">Retired</MenuItem>
+            </Select>
+            </FormControl> 
+          </div>
 
-        <div className="form-group">
-          <label>Patient Type: <span className="required-asterisk">*</span></label>
-          <select
-            value={formData.patientType}
-            onChange={handleChange("patientType")}
-            required
-          >
-            <option value="" disabled>
-              Select Patient Type
-            </option>
-            <option value="In-patient">In-patient</option>
-            <option value="Out-patient">Out-patient</option>
-          </select>
-          {errors.patientType && <span className="error">{errors.patientType}</span>}
-        </div>
+          <div className="container">
+            {/* Living Status */}
+            <FormControl 
+            fullWidth  
+            sx={{paddingRight:"10px"}}
+            required>
+            <InputLabel>Living Situation</InputLabel>
+            <Select
+              name="employment-status-options"
+              value={formData.livingSituation}
+              onChange={handleChange("livingSituation")}
+              >
+              <MenuItem value="Alone" >Alone</MenuItem>
+              <MenuItem value="Family">Family</MenuItem>
+            </Select>
+            </FormControl>  
+
+          </div>
+
+      <div className="container">
+                <FormControl 
+            fullWidth  
+            sx={{paddingRight:"10px"}}
+            required>
+            <InputLabel>Patient Type</InputLabel>
+            <Select
+              name="patientType"
+              value={formData.patientType}
+              onChange={handleChange("patientType")}
+              >
+              <MenuItem value="In-patient">In-patient</MenuItem>
+              <MenuItem value="Out-patient">Out-patient</MenuItem>
+            </Select>
+          </FormControl> 
+      </div>
+ 
+
 
         {formData.patientType === "In-patient" && (
           <>
-            <div className="form-group">
-              <label>Room Number:</label>
-              <input
-                type="text"
-                value={formData.roomNumber}
-                onChange={handleChange("roomNumber")}
-              />
-            </div>
-            <div className="form-group">
-              <label>Bed Number:</label>
-              <input
-                type="text"
-                value={formData.bedNumber}
-                onChange={handleChange("bedNumber")}
-              />
+            <div className="container">
+                 {/* room Number */}
+                   <TextField
+                    label="Room Number"
+                    name="roomNumber"
+                    value={formData.roomNumber}
+                    onChange={handleChange("roomNumber")}
+                    fullWidth
+                    required
+                  />
+                 {/* Bed Number */}
+                 <TextField
+                    label="Bed Number"
+                    name="bedNumber"
+                    value={formData.bedNumber}
+                    onChange={handleChange("bedNumber")}
+                    fullWidth
+                    required
+                  />                                          
             </div>
           </>
+          
         )}
-
-        <div className="form-group">
-          <label>Allergies:</label>
-          <input
-            type="text"
-            value={formData.allergies}
-            onChange={handleChange("allergies")}
-          />
+        <div className="container">
+                           {/* Alergies */}
+                           <TextField
+                    label="Allergies"
+                    name="allergies"
+                    value={formData.allergies}
+                    onChange={handleChange("allergies")}
+                    fullWidth
+                    required
+                  /> 
         </div>
-        <button type="button" onClick={prevStep}>
+        <div className="flex">
+        <button type="submit" onClick={prevStep}>
           Back
         </button>
-        <button type="button" onClick={nextStep}>
+        <button type="submit" onClick={nextStep}>
           Next
-        </button>
+        </button>          
+        </div>
+
       </form>
     </div>
   );
@@ -416,221 +489,262 @@ function MedicalHistory({ formData, handleChange, prevStep, nextStep, errors }) 
     <div>
       <h2>Initial Medical History</h2>
       <form>
-        <div className="form-group">
-          <label>Current Medical Conditions:</label>
-          <input
-            type="text"
-            value={formData.currentMedicalConditions}
-            onChange={handleChange("currentMedicalConditions")}
-          />
+      <div className="container">
+                {/* Current Medical Conditions */}
+                <TextField
+                    label="Current Medical Conditions"
+                    name="Current Medical Conditions"
+                    value={formData.currentMedicalConditions}
+                    onChange={handleChange("currentMedicalConditions")}
+                    fullWidth
+                    required
+                  /> 
         </div>
 
-        <div className="form-group">
-          <label>Primary Substance: <span className="required-asterisk">*</span></label>
-          <input
-            type="text"
-            list="primary-substance-options"
+     <div className="container">
+        {/* Primary Substance*/}
+        <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>Primary Substance</InputLabel>
+          <Select
+            name="primary-substance-options"
             value={formData.primarySubstance}
             onChange={handleChange("primarySubstance")}
-            required
-          />
-          <datalist id="primary-substance-options">
-            <option value="Alcohol" />
-            <option value="Tobacco" />
-            <option value="Marijuana" />
-            <option value="Cocaine" />
-          </datalist>
-          {errors.primarySubstance && <span className="error">{errors.primarySubstance}</span>}
-        </div>
+            >
+            <MenuItem value="Alcohol" >Alcohol</MenuItem>
+            <MenuItem value="Tobacco">Tobacco</MenuItem>
+            <MenuItem value="Marijuana">Marijuana</MenuItem>
+            <MenuItem value="Cocaine">Cocaine</MenuItem>
+          </Select>
+          </FormControl> 
 
-        <div className="form-group">
-          <label>Method of Use: <span className="required-asterisk">*</span></label>
-          <select
+          {/* Method of Use */}
+          <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>Method of Use</InputLabel>
+          <Select
+            name="primarySubstanceMethodOfUse-options"
             value={formData.primarySubstanceMethodOfUse}
             onChange={handleChange("primarySubstanceMethodOfUse")}
-            required
-          >
-            <option value="" disabled>
-              Select Method of Use
-            </option>
-            <option value="Oral">Oral</option>
-            <option value="Injection">Injection</option>
-            <option value="Inhalation">Inhalation</option>
-            <option value="Other">Other</option>
-          </select>
-          {errors.primarySubstanceMethodOfUse && <span className="error">{errors.primarySubstanceMethodOfUse}</span>}
-        </div>
+            >
+            <MenuItem value="Oral">Oral</MenuItem>
+            <MenuItem value="Injection">Injection</MenuItem>
+            <MenuItem value="Inhalation">Inhalation</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </Select>
+          </FormControl> 
 
-        <div className="form-group">
-          <label>Secondary Substances:</label>
-          <input
-            type="text"
-            value={formData.secondarySubstances}
-            onChange={handleChange("secondarySubstances")}
-          />
         </div>
+        <div className="container">
+            {/* Secondary Substances */}
+            <TextField
+                label="Secondary Substances"
+                name="secondarySubstances"
+                value={formData.secondarySubstances}
+                onChange={handleChange("secondarySubstances")}
+                fullWidth
+                required
+              /> 
+        </div>  
 
-        <div className="form-group">
-          <label>Past Addiction Treatment: <span className="required-asterisk">*</span></label>
-          <select
+        <div className="container">
+        {/* Primary Substance*/}
+        <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>Past Addiction Treatment</InputLabel>
+          <Select
+            name="Past Addiction Treatment"
             value={formData.pastAddictionTreatment}
             onChange={handleChange("pastAddictionTreatment")}
-            required
-          >
-            <option value="" disabled>
-              Select Option
-            </option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-          {errors.pastAddictionTreatment && <span className="error">{errors.pastAddictionTreatment}</span>}
-        </div>
+            >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
 
-        <div className="form-group">
-          <label>Withdrawal Symptoms: <span className="required-asterisk">*</span></label>
-          <select
+          </Select>
+          </FormControl> 
+
+          {/* Withdrawal Symptoms */}
+          <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>Withdrawal Symptoms</InputLabel>
+          <Select
+            name="WithdrawalSymptoms-options"
             value={formData.withdrawalSymptoms}
             onChange={handleChange("withdrawalSymptoms")}
-            required
-          >
-            <option value="" disabled>
-              Select Option
-            </option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-          {errors.withdrawalSymptoms && <span className="error">{errors.withdrawalSymptoms}</span>}
+            >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
+          </Select>
+          </FormControl> 
+
         </div>
 
-        <div className="form-group">
-          <label>Social Support Network: <span className="required-asterisk">*</span></label>
-          <select
+        <div className="container">
+        {/* Social Support Network*/}
+        <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>Social Support Network</InputLabel>
+          <Select
+            name="Social Support Network"
             value={formData.socialSupportNetwork}
             onChange={handleChange("socialSupportNetwork")}
-            required
-          >
-            <option value="" disabled>
-              Select Network
-            </option>
-            <option value="Family">Family</option>
-            <option value="Friend">Friend</option>
-            <option value="Support Group">Support Group</option>
-            <option value="Other">Other</option>
-            <option value="None">None</option>
-          </select>
-          {errors.socialSupportNetwork && <span className="error">{errors.socialSupportNetwork}</span>}
-        </div>
+            >
+            <MenuItem value="Family">Family</MenuItem>
+            <MenuItem value="Friend">Friend</MenuItem>
+            <MenuItem value="Support Group">Support Group</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+            <MenuItem value="None">None</MenuItem>
 
-        <div className="form-group">
-          <label>History of Trauma or Abuse: <span className="required-asterisk">*</span></label>
-          <select
+          </Select>
+          </FormControl> 
+
+          {/* History of Trauma or Abuse */}
+          <FormControl 
+          fullWidth  
+          sx={{paddingRight:"10px"}}
+          required>
+          <InputLabel>History of Trauma or Abuse</InputLabel>
+          <Select
+            name="History of Trauma or Abuse-options"
             value={formData.historyOfTraumaOrAbuse}
             onChange={handleChange("historyOfTraumaOrAbuse")}
-            required
-          >
-            <option value="" disabled>
-              Select Option
-            </option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="Unknown">Unknown</option>
-          </select>
-          {errors.historyOfTraumaOrAbuse && <span className="error">{errors.historyOfTraumaOrAbuse}</span>}
+            >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
+            <MenuItem value="Unknown">Unknown</MenuItem>                     
+          </Select>
+          </FormControl> 
+
         </div>
 
-        <button type="button" onClick={prevStep}>
+
+        <div className="flex">
+        <button type="submit" onClick={prevStep}>
           Back
         </button>
-        <button type="button" onClick={nextStep}>
+        <button type="submit" onClick={nextStep}>
           Next
-        </button>
+        </button>          
+        </div>
       </form>
     </div>
   );
 }
 
 // Page 4: Caregiver Information
-function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit, setSkipCaregiver, errors }) {
+function CaregiverInfo({ formData, handleChange, prevStep, handleSubmit,setSkipCaregiver,  errors }) {
   return (
     <div>
       <h2>Caregiver Information</h2>
       <form>
-        <div className="form-group">
-          <label>Caregiver Full Name:</label>
-          <input
-            type="text"
-            value={formData.caregiverFullName}
-            onChange={handleChange("caregiverFullName")}
-          />
+      <div className="container">
+                {/* Caregiver Full Name */}
+                <TextField
+                    label="Caregiver Full Name"
+                    name="Caregiver Full Name"
+                    value={formData.caregiverFullName}
+                    onChange={handleChange("caregiverFullName")}
+                    fullWidth
+                    required
+                  /> 
         </div>
 
-        <div className="form-group">
-          <label>Caregiver Phone Number:</label>
-          <input
-            type="text"
-            value={formData.caregiverPhoneNumber}
-            onChange={handleChange("caregiverPhoneNumber")}
-          />
+        <div className="container">
+                        {/* CareGiver's Phone Number */}
+                        <TextField
+                label="Caregiver Phone Number"
+                name="Caregiver Phone Number"
+                value={formData.caregiverPhoneNumber}
+                onChange={handleChange("caregiverPhoneNumber")}
+                // error={Boolean(error.phoneNumber)}
+                // helperText={error.phoneNumber}
+                required
+                fullWidth
+              />
+                        {/*Relationship to Patient*/}
+             <TextField
+                label="Relationship to Patient"
+                name="Relationship to Patient"
+                value={formData.caregiverRelationshipToPatient}
+                onChange={handleChange("caregiverRelationshipToPatient")}
+                // error={Boolean(error.phoneNumber)}
+                // helperText={error.phoneNumber}
+                required
+                fullWidth
+              />              
         </div>
 
-        <div className="form-group">
-          <label>Relationship to Patient:</label>
-          <input
-            type="text"
-            value={formData.caregiverRelationshipToPatient}
-            onChange={handleChange("caregiverRelationshipToPatient")}
-          />
+        <div className="container">
+          {/* Caregiver Gender */}
+          <FormControl 
+              fullWidth  
+              sx={{paddingRight:"10px"}}
+                required>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  name="Caregiver Gender"
+                  value={formData.caregiverGender}
+                  onChange={handleChange("caregiverGender")}
+                  >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                </Select>
+              </FormControl> 
+
+                {/* Caregiver Address */}
+                <TextField
+                    label="Caregiver Address"
+                    name="Caregiver Address"
+                    value={formData.caregiverAddress}
+                    onChange={handleChange("caregiverAddress")}
+                    fullWidth
+                    required
+                  /> 
+      
         </div>
 
-        <div className="form-group">
-          <label>Caregiver Gender:</label>
-          <select
-            value={formData.caregiverGender}
-            onChange={handleChange("caregiverGender")}
-          >
-            <option value="" disabled>
-              Select Gender
-            </option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
+        <div className="container">
+                {/*Official ID Number */}
+                <TextField
+                    label="Official ID Number"
+                    name="Official ID Number"
+                    value={formData.caregiverOfficialIdNumber}
+                    onChange={handleChange("caregiverOfficialIdNumber")}
+                    fullWidth
+                    required
+                  /> 
         </div>
 
-        <div className="form-group">
-          <label>Caregiver Address:</label>
-          <input
-            type="text"
-            value={formData.caregiverAddress}
-            onChange={handleChange("caregiverAddress")}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Official ID Number:</label>
-          <input
-            type="text"
-            value={formData.caregiverOfficialIdNumber}
-            onChange={handleChange("caregiverOfficialIdNumber")}
-          />
-        </div>
-
-        <button type="button" onClick={prevStep}>
-          Back
-        </button>
-        <button type="button" onClick={handleSubmit}>
-          Submit
-        </button>
-        <button
-          type="button"
+      </form> 
+          <div className="flex">
+           <button type="submit" onClick={prevStep} 
+             className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+            > Back</button>
+             <button type="submit" onClick={handleSubmit} 
+             className="bg-"
+             >Submit</button> 
+          </div>
+          <button type="submit"
+            className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+          // type="button"
           onClick={() => {
             setSkipCaregiver(true);
             handleSubmit();
           }}
-          className="skip-button"
+          // className="skip-button"
         >
           Skip Caregiver and submit
         </button>
-      </form>
     </div>
   );
 }

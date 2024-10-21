@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import "../ProfessionalStyles/AppointmentList.css";
 import ShowAppointmentDetails from "./ShowAppointmentDetails"; // You'll need to create this component
-
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Pagination,
+    Paper,
+  } from "@mui/material";
 const ListOfAppointments = ({ appointments, onAppointmentCancelled }) => {
 
     // Helper function to format date and time in UTC
@@ -47,27 +57,48 @@ const ListOfAppointments = ({ appointments, onAppointmentCancelled }) => {
     const renderAppointmentsList = () => {
         return (
             <>
-                <h2>Your Appointments</h2>
+                <h2>My Appointments</h2>
                 {!hasAppointments ? (
                     <p>No appointments found.</p>
                 ) : (
-                    <ul className="appointments-list">
-                        {appointmentsArray.map((appointment) => (
-                            <li key={appointment._id} className="appointment-item">
-                                <div className="appointment-info">
-                                    <h3><strong>{formatDateTimeUTC(appointment.date)} </strong></h3>
-                                    <p>Session Number: <strong>{appointment.sessionNumber} ({appointment.startTime})</strong></p>
-                                    <p>Status:<strong> <span style={{ color: appointment.status === "active" ? "green" : "red" }}>{capitalizeFirstLetter(appointment.status)}</span></strong></p>
-                                    
-                                </div>
-                                <div className="appointment-actions">
-                                    <button className="btn btn-details" onClick={() => handleDetails(appointment._id)}>
+                    <Paper maxWidth = {"600px"}>
+                    <TableContainer>
+                        <Table sx={{ minWidth: 650 }} aria-label="patient table">
+                        <TableHead>
+                            <TableRow>
+
+                            <TableCell>No</TableCell>
+                            <TableCell><CalendarMonthIcon sx={{paddingRight: "10px"}}/>Date</TableCell>
+                            <TableCell>Session Number</TableCell>
+                            <TableCell>Status</TableCell>
+                          
+                            
+                            <TableCell />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {appointmentsArray.map((appointment,index) => (
+                            <TableRow key={ appointment._id}>
+
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell><strong>{formatDateTimeUTC(appointment.date)}</strong></TableCell>
+                                <TableCell><strong>{appointment.sessionNumber} ({appointment.startTime})</strong></TableCell>
+                                <TableCell><strong> <span style={{ color: appointment.status === "active" ? "Green" : "Red",backgroundColor: appointment.status === "active" ? "#f0fdf4" : "#fecaca" , padding: "10px", borderRadius:"5px"}}>{capitalizeFirstLetter(appointment.status)}</span></strong></TableCell>
+                              
+
+                                <TableCell>
+                                <button className="btn btn-details" onClick={() => handleDetails(appointment._id)}>
                                         Details
                                     </button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                                </TableCell>
+                            </TableRow>
+                            ))}
+                        </TableBody>
+                        </Table>
+                    </TableContainer>
+                    </Paper>
+
+                    
                 )}
             </>
         );

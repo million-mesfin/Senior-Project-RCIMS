@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/PatientManagement.css";
-import ShowPatientDetails from "./ShowPatientDetails"; 
+import ShowPatientDetails from "./ShowPatientDetails"; // Use the imported ShowPatientDetails
+import AddPatientHistory from "./AddPatientHistory"; // Import AddPatientHistory component
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Pagination,
+  Paper,
+} from "@mui/material";
+
 
 const PatientManagement = () => {
   const [activeTab, setActiveTab] = useState("ListOfPatients");
@@ -76,7 +88,6 @@ const PatientManagement = () => {
           <ListOfPatients
             patients={patients}
             onViewPatient={handleViewPatient}
-            
           />
         );
       case "ViewPatientDetails":
@@ -105,33 +116,86 @@ const PatientManagement = () => {
 };
 
 // ListOfPatients Component
-const ListOfPatients = ({ patients, onViewPatient, onAddHistory }) => {
+const ListOfPatients = ({ patients, onViewPatient }) => {
   return (
-    <div>
-      <h2>List of Patients</h2>
-      {patients.length > 0 ? (
-        <ul className="patients-list">
-          {patients.map((patient) => (
-            <li key={patient._id} className="patient-item">
-              <div className="patient-info">
-                <h3>{`${patient.user?.name} ${patient.user?.fatherName} ${patient.user?.grandfatherName}`}</h3>
-                <p><strong>Phone Number:</strong> {patient.user?.phoneNumber}</p>
-                <p><strong>Patient Type:</strong> {patient.patientType}</p>
-              </div>
-              <div className="patient-actions">
-                <button className="btn btn-details" onClick={() => onViewPatient(patient._id)}>
+    
+      <Paper  sx={{elevation: 0,}}>
+      <div>
+          <div style={styles.header}>
+            <h2 style={{ margin: 0 }}>Patient List</h2>
+      </div>
+      
+      {/* Table */}
+      <TableContainer>
+        <Table sx={{ minWidth: 650 }} aria-label="patient table">
+          <TableHead>
+            <TableRow sx={{boxShadow: 0}}>
+
+              <TableCell>No</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Fathers Name</TableCell>
+              <TableCell>Phone Number</TableCell>
+              <TableCell>Patient Type</TableCell>
+             
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {patients.map((patient, index) => (
+              <TableRow key={patient._id} >
+
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{patient.user?.name}</TableCell>
+                <TableCell>{patient.user?.fatherName}</TableCell>
+                <TableCell>{patient.user?.phoneNumber}</TableCell>
+                <TableCell>{patient.patientType}</TableCell>
+
+                <TableCell>
+                <button className="CareGiver-button" onClick={() => onViewPatient(patient._id)}>
                   View Details
-                </button>
-               
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No patients found.</p>
-      )}
+                </button>                 
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
+      </Paper>
   );
 };
 
+
+const styles = {
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  button: {
+    background: "#29f2ff"
+  },
+  actions: {
+    display: "flex",
+    alignItems: "center",
+  },
+  paginationContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  pageSelector: {
+    display: "flex",
+    alignItems: "center",
+  },
+  statusBadge: {
+    display: "inline-block",
+    padding: "4px 8px",
+    borderRadius: "12px",
+    color: "#fff",
+    fontWeight: "bold",
+  },
+};
 export default PatientManagement;

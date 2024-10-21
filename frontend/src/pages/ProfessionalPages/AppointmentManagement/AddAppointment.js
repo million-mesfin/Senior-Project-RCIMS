@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
 const AddAppointment = () => {
     const [patients, setPatients] = useState([]);
@@ -113,12 +114,12 @@ const AddAppointment = () => {
     };
 
     return (
-        <div>
-            <h1>Add Appointment</h1>
+        <div className="attach-detach-container">
+            <h1 className="patient-name">Add Appointment</h1>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="patient">Select Patient:</label>
+                {/* <div className="form-group">
+                  <label htmlFor="patient">Select Patient:</label>
                     <select
                         id="patient"
                         value={selectedPatient}
@@ -132,8 +133,9 @@ const AddAppointment = () => {
                             </option>
                         ))}
                     </select>
-                </div>
-                <div>
+                </div> */}
+
+                 {/* <div className="form-group"> 
                     <label htmlFor="session">Select Available Session:</label>
                     <select
                         id="session"
@@ -148,11 +150,60 @@ const AddAppointment = () => {
                                 value={`${session.professional._id}|${session.patient._id}`}
                             >
                                 {new Date(session.professional.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })} - {session.professional.sessionNumber}
-                                {/* {console.log(session.professional.date)} */}
+                                 {console.log(session.professional.date)} *
                             </option>
                         ))}
                     </select>
-                </div>
+                </div> */}  
+            <FormControl 
+              fullWidth  
+              sx={{paddingRight:"10px"}}
+                required>
+                <InputLabel>Patient</InputLabel>
+                <Select
+                  name="patient"
+                   id="patient"
+                   value={selectedPatient}
+                   onChange={handlePatientChange}
+                   disabled={loading} 
+                  >
+                  <MenuItem value="" disabled>Select a patient</MenuItem>
+                  {patients.map((patient) => (
+                            <MenuItem key={patient._id} value={patient._id}>
+                                {patient.user.name}
+                            </MenuItem>
+                            ))}
+                </Select>
+              </FormControl>
+
+              <FormControl 
+              fullWidth 
+               required
+             
+              sx={{paddingRight:"10px"}}
+                >
+                <InputLabel>Select Available Session</InputLabel>
+                <Select
+                  name="Session"
+                  id="session"
+                  value={selectedSession}
+                  onChange={handleSessionChange}
+                  disabled={loading || !selectedPatient}
+                  >
+                  <MenuItem value="" disabled>Select a session</MenuItem>
+                  {commonSessions.map((session) => (
+                            <MenuItem
+                                key={`${session.professional._id}|${session.patient._id}`}
+                                value={`${session.professional._id}|${session.patient._id}`}
+                            >
+                                {new Date(session.professional.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })} - {session.professional.sessionNumber}
+                                {/* {console.log(session.professional.date)} */}
+                            </MenuItem>
+                            ))}
+                </Select>
+              </FormControl>
+
+             
                 <button type="submit" disabled={loading || !selectedPatient || !selectedSession}>
                     Add Appointment
                 </button>

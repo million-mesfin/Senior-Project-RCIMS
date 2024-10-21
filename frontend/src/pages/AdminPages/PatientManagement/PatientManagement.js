@@ -3,6 +3,7 @@ import "../../Styling/AdminPageStyles/PatientManagement.css";
 import ListOfPatients from "./ListOfPatients"; 
 import AddPatient from "./AddPatient";
 import PatientsToDischarge from "./PatientsToDischarge";
+
 import axios from "axios";
 
 const PatientManagement = () => {

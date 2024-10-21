@@ -9,7 +9,7 @@ import AttachPatient from "./AttachPatient";
 import PatientManagement from "./PatientManagement"; 
 import Report from "./Report"; 
 import Help from "./Help"; 
-import InfoCard from "../../MuiComponents/overviewCard";
+import InfoCard from "../../MuiComponents/InfoCard";
 //import Predictions from "./Predictions"; // Import Predictions Component
 
 // Icons
@@ -37,28 +37,6 @@ const ProfessionalDashboard = ({ user }) => {
         setSelectedComponent(component);
     };
 
-    const getWelcomeMessage = () => {
-        switch (selectedComponent) {
-            case "Overview":
-                return `Welcome back, Dr. ${user.name} 👋`;
-            case "MySchedule":
-                return "Here is your schedule for the upcoming days!";
-            case "AttachPatient":
-                return "Attach a patient to your care.";
-            case "PatientManagement":
-                return "Manage your patients efficiently.";
-            case "DetachPatient":
-                return "Detach patients who completed their treatment.";
-            case "Report":
-                return "Check your performance and statistics.";
-            case "Help":
-                return "How can we assist you today?";
-            case "Predictions":
-                return "View relapse risk predictions.";
-            default:
-                return `Welcome back, Dr. ${user.name} 👋`;
-        }
-    };
 
     return (
         <div className="dashboard-container">
@@ -76,13 +54,13 @@ const ProfessionalDashboard = ({ user }) => {
                         <EditCalendarOutlinedIcon /><span className="menu-title">My Schedule</span>
                     </li>
                     <li className={`menu-item ${selectedComponent === "Appointment" ? "active" : ""}`} onClick={() => handleNavClick("Appointment")}>
-                        <EditCalendarOutlinedIcon /><span className="menu-title">Appointment Management</span>
+                        <EditCalendarOutlinedIcon /><span className="menu-title">Appointments</span>
                     </li>
                     <li className={`menu-item ${selectedComponent === "AttachPatient" ? "active" : ""}`} onClick={() => handleNavClick("AttachPatient")}>
                         <PersonAddIcon /> <span className="menu-title">Attach Patient</span>
                     </li>
                     <li className={`menu-item ${selectedComponent === "PatientManagement" ? "active" : ""}`} onClick={() => handleNavClick("PatientManagement")}>
-                        <ManageAccountsIcon /> <span className="menu-title">Patient Management</span> 
+                        <ManageAccountsIcon /> <span className="menu-title">Patients</span> 
                     </li>
                     <li className={`menu-item ${selectedComponent === "Report" ? "active" : ""}`} onClick={() => handleNavClick("Report")}>
                         <AssessmentSharpIcon /><span className="menu-title">Reports</span>
