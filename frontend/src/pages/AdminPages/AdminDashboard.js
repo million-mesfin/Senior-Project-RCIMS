@@ -190,8 +190,6 @@ import "../Styling/AdminPageStyles/adminDashboard.css";
 import React, { useState , useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import "../AdminPages/AdminPageStyles/adminDashboard.css";
-import Appointments from "./Appointment/Appointments";
 import PatientManagement from "./PatientManagement/PatientManagement";
 import ProfessionalManagement from "./ProfessionalManagement/ProfessionalManagement";
 import Report from "./Report";
@@ -218,11 +216,12 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
+import CommentIcon from '@mui/icons-material/Comment';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import Feedback from "../PatientPages/Feedback";
 import PatientStat from "../../MuiComponents/GraphComponent";
 import InfoCard from "../../MuiComponents/InfoCard";
 import Calendar from "../../MuiComponents/calander";
+import Feedbacks from "./FeedbackManagement/Feedbacks";
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -315,6 +314,9 @@ const AdminDashboard = ({ user }) => {
                     </li>
                     <li className={`menu-item ${selectedComponent === "Report" ? "active" : ""}`} onClick={() => handleNavClick("Report")}>
                         <SummarizeIcon /> <span className="menu-title">Report</span>
+                    </li>
+                    <li className={`menu-item ${selectedComponent === "Feedback" ? "active" : ""}`} onClick={() => handleNavClick("Feedback")}>
+                        <CommentIcon /> <span className="menu-title">Feedback</span>
                     </li>
                     <li className={`menu-item ${selectedComponent === "Help" ? "active" : ""}`} onClick={() => handleNavClick("Help")}>
                         <LiveHelpIcon /> <span className="menu-title">Help & Center</span>
@@ -452,6 +454,7 @@ const AdminDashboard = ({ user }) => {
                     {selectedComponent === "PatientManagement" && <PatientManagement />}
                     {selectedComponent === "ProfessionalManagement" && <ProfessionalManagement />}
                     {selectedComponent === "Report" && <Report />}
+                    {selectedComponent === "Feedback" && <Feedbacks />}
                     {selectedComponent === "Contact" && <Contact />}
                     {selectedComponent === "Help" && <Help />}
                 </div>
