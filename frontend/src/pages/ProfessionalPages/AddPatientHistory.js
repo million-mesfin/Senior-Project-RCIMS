@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/AddPatientHistory.css";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { TextField } from "@mui/material";
 
 const AddPatientHistory = ({ patientId, onGoBack }) => {
   const [formData, setFormData] = useState({
@@ -80,19 +82,31 @@ const AddPatientHistory = ({ patientId, onGoBack }) => {
 
   return (
     <div className="add-patient-history">
-      <button className="btn btn-back" onClick={onGoBack}>
-        Back
-      </button>
+            <div class="header">
+            <ArrowBackIcon className=".back-button" onClick={onGoBack}/>
+            <h3 className="patient-name">Medical Histroy Chart</h3>
+        </div>
 
-      <h2>Medical History Chart</h2>
+      
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <div className="wide-textarea-container">
-          <textarea
+        {/* <TextField
+          id="history"
+          name="history"
+          value={formData.history}
+          onChange={handleChange}
+          required
+          placeholder="Enter patient history here..."
+          multiline
+          rows={2}
+          fullWidth
+        /> */}
+          <textarea 
             id="history"
             name="history"
-            className="wide-textarea"
+            className="wide-textarea "
             value={formData.history}
             onChange={handleChange}
             required

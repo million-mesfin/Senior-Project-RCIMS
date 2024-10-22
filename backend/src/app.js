@@ -19,6 +19,8 @@ const {
 } = require("./controller/AppointmentController");
 const appointmentManagementRoute = require("./routes/AppointmentManagement");
 const feedbackRoute = require("./routes/Feedback");
+const progressManagementRoute = require("./routes/ProgressManagement");
+const reportRoute = require("./routes/ReportManagement");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -78,6 +80,8 @@ app.use("/api/patient-history", patientHistoryManagementRoute);
 app.use("/api/schedule", scheduleRoute);
 app.use("/api/appointment", appointmentManagementRoute);
 app.use("/api/feedback", feedbackRoute);
+app.use("/api/progress", progressManagementRoute);
+app.use("/api/report", reportRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

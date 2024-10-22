@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/AttachPatient.css";
+import { Paper,TextField, Button, FormControl, InputLabel, Select, MenuItem, Box, OutlinedInput } from '@mui/material';
 
 const AttachPatient = () => {
     const [currentDepartment, setCurrentDepartment] = useState("");
@@ -72,28 +73,64 @@ const AttachPatient = () => {
     };
 
     return (
-        <div className="attach-detach-container">
-            <h2>Attach Patient to Professional</h2>
+        <div className="attach-detach-container"> 
+         <h3 className="patient-name">Attach Patient to Professional</h3>
+           
 
             {message && <p>{message}</p>}
 
             <form onSubmit={handleAttachPatient}>
-                <label>Select Patient:</label>
-                <select
-                    value={selectedPatient}
-                    onChange={(e) => setSelectedPatient(e.target.value)}
-                    required
-                >
-                    <option value="">-- Select Patient --</option>
-                    {patients && patients.map((patient) => (
-                        <option key={patient._id} value={patient._id}>
-                            {patient.user.name}
-                        </option>
-                    ))}
-                </select>
+             <Paper elevation={0} sx={{ paddingTop:"30px", minWidth:"400px", minHeight:"500px"}} >
+    <label>Select Patient:</label> 
 
+            <FormControl 
+              fullWidth  
+              required
+              variant="outlined"
+              color="warming"
+              label="patient"
+                >
+               <Select
+                   name="patient"
+                   id="patient"
+                   value={selectedPatient}
+                   onChange={(e) => setSelectedPatient(e.target.value)}
+                   
+                  >
+                  <MenuItem value="" >Select a patient</MenuItem>
+                  {patients.map((patient) => (
+                            <MenuItem key={patient._id} value={patient._id}>
+                                {patient.user.name}
+                            </MenuItem>
+                            ))}
+                </Select>
+               
+            </FormControl>
+            
                 <label>Department:</label>
-                <select
+
+                <FormControl 
+                variant="outlined"
+                fullWidth  
+                required
+                >
+                <Select
+                   name="Department"
+                   id="Department"
+                   value={department}
+                   onChange={(e) => setDepartment(e.target.value)}
+                   
+                  >
+                  <MenuItem value="">Select a department</MenuItem>
+                  <MenuItem value="MD" disabled={currentDepartment === "MD"}>MD</MenuItem>
+                  <MenuItem value="Psychiatry" disabled={currentDepartment === "Psychiatry"}>Psychiatry</MenuItem>
+                  <MenuItem value="Physical" disabled={currentDepartment === "Physical"}>Physical</MenuItem>
+                  <MenuItem value="Addiction Counseling" disabled={currentDepartment === "Addiction Counseling"}>Addiction Counseling</MenuItem>
+
+                </Select>
+            </FormControl>
+
+                {/* <select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                 >
@@ -102,11 +139,13 @@ const AttachPatient = () => {
                     <option value="Psychiatry" disabled={currentDepartment === "Psychiatry"}>Psychiatry</option>
                     <option value="Physical" disabled={currentDepartment === "Physical"}>Physical</option>
                     <option value="Addiction Counseling" disabled={currentDepartment === "Addiction Counseling"}>Addiction Counseling</option>
-                </select>
-
+                </select> */}
+              </Paper>
                 <button type="submit">Attach Patient</button>
             </form>
+             
         </div>
+        
     );
 };
 

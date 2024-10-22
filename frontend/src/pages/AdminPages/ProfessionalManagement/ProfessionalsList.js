@@ -609,3 +609,228 @@ const styles = {
 };
 
 export default ProfessionalsList;
+
+
+
+
+
+
+
+// <div className="professional-edit-form">
+// <div className="header">
+// <ArrowBackIcon onClick={handleBackToDetails(selectedProfessional)} />
+// <h2>Edit Professional</h2>
+// </div>
+//        {/* <div className="professional-edit-form"> */}
+//            <form onSubmit={handleEditSubmit}>
+//                        {/* Name */}
+//        <div className="container">
+//            <TextField 
+//            label="Name"
+//            name="name"
+//            value={editFormData.name}
+//            onChange={handleEditFormChange}
+//            required
+//            fullWidth
+//            sx={{paddingRight:"5px"}}
+//            />
+
+//            {/* Father's Name */}
+//            <TextField
+//            label="Father's Name"
+//            name="fatherName"
+//            value={
+//                editFormData.fatherName || ""
+//            }
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            required
+//            />          
+//        </div>
+//        <div className="container">
+
+//            {/* Grandfather's Name */}
+//            <TextField
+//            label="Grandfather's Name"
+//            name="grandfatherName"
+//            value={
+//                editFormData.grandfatherName ||
+//                ""
+//            }
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            sx={{paddingRight:"25px"}}
+
+//            required
+//            />
+
+//            {/* Phone Number */}
+//            <TextField
+//            label="Phone Number"
+//            name="phoneNumber"
+//            value={
+//                editFormData.phoneNumber || ""
+//            }
+//            onChange={handleEditFormChange}
+//            required
+//            fullWidth
+//            />
+//         </div>  
+
+        
+//            <div className="container">
+
+//                {/* Date of Birth */}
+//                <TextField
+//                label="Date of Birth"
+//                type="date"
+//                name="dateOfBirth"
+//                value={
+//                    editFormData.dateOfBirth || ""
+//                }
+//                onChange={handleEditFormChange}
+//                InputLabelProps={{ shrink: true }}
+//                required
+//                fullWidth
+//                sx={{paddingRight:"10px"}}
+
+//                />
+
+            //    {/* Gender */}
+            //    <FormControl 
+            //    fullWidth  
+            //    sx={{paddingRight:"10px"}}
+            //    required>
+            //    <InputLabel>Gender</InputLabel>
+            //    <Select
+            //        name="gender"
+            //        value={editFormData.gender || ""}
+            //        onChange={handleEditFormChange}
+            //    >
+            //        <MenuItem value="male">Male</MenuItem>
+            //        <MenuItem value="female">Female</MenuItem>
+            //    </Select>
+            //    </FormControl>
+
+//                {/* Address */}
+//                <TextField
+//                label="Address"
+//                name="address"
+//                value={editFormData.address || ""}
+//                onChange={handleEditFormChange}
+//                fullWidth
+//                required
+//                />
+//        </div>
+
+//        <div className="container" sx={{shadows: 'none'}}>
+
+//            {/* Qualification */}
+//            <TextField
+//            label="Qualification"
+//            name="qualification"
+//            value={ editFormData.qualification || ""}
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            sx={{paddingRight:"25px"}}
+//            required
+//            />
+
+//            {/* Speciality */}
+//            <TextField
+//            label="Speciality"
+//            name="speciality"
+//            value={
+//                editFormData.speciality || ""
+//            }
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            required
+//            />
+//            </div>                              
+
+//        <div className="container">
+
+    //    {/* Status */}
+    //      <FormControl 
+    //            fullWidth  
+    //            sx={{paddingRight:"10px"}}
+    //            required>
+    //            <InputLabel>Status</InputLabel>
+    //            <Select
+             
+    //                 name="status"
+    //                 value={editFormData.status || ""}
+    //                 onChange={handleEditFormChange}
+    //            >
+    //                <MenuItem value="active">Active</MenuItem>
+    //                <MenuItem value="suspended">Suspended</MenuItem>
+    //                <MenuItem value="terminated">Terminated</MenuItem>
+
+    //            </Select>
+    //            </FormControl>
+
+//        {/* Years of Experience */}
+//        <TextField
+//        label="Years of Experience"
+//        name="yearsOfExperience"
+//        type="number"
+//        value={
+//            editFormData.yearsOfExperience ||
+//            ""
+//        }
+//        onChange={handleEditFormChange}
+//        fullWidth
+//        required
+//        />
+//        </div>                     
+            
+              
+//        <div className="container">
+//            {/* Languages Spoken */}
+//            <TextField
+//            label="Languages Spoken (comma-separated)"
+//            name="languagesSpoken"
+//            value={
+//                editFormData.languagesSpoken ||
+//                ""
+//            }
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            sx={{paddingRight:"10px"}}
+
+//            required
+//            />
+
+//            {/* Working Hours */}
+//            <TextField
+//            label="Working Hours"
+//            name="workingHours"
+//            value={
+//                editFormData.workingHours || ""
+//            }
+//            onChange={handleEditFormChange}
+//            fullWidth
+//            required
+//            />
+//            </div>  
+
+//               <div className="container">
+//                   {/* Bio */}
+//                    <TextField
+//                    label="Bio"
+//                    name="bio"
+//                    value={editFormData.bio || ""}
+//                    onChange={handleEditFormChange}
+//                    multiline
+//                    rows={1}
+//                    fullWidth
+//                    />
+//               </div>
+
+//                <button type="submit">
+//                    Update Professional
+//                </button>
+//            </form>
+//        </div>
+// //    </div>

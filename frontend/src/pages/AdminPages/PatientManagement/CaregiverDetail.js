@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../Styling/AdminPageStyles/CareGiverDetails.css";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+} from "@mui/material";
 
 function CaregiverDetail({ patientId, onBack }) {
   const [caregiver, setCaregiver] = useState(null);
@@ -96,57 +105,80 @@ function CaregiverDetail({ patientId, onBack }) {
   return (
     <div>
       <ArrowBackIcon onClick={onBack}/>
-      <h2 class="patient-name">{`${patientId.user?.name} Caregiver Details `}</h2>
+      <h2 class="patient-name"> Caregiver Details</h2>
 
-      {/* <h2>Caregiver Details</h2> */}
       <form>
-        
-        <div className="form-group">
-          <label>Full Name:</label>
-          <input type="text" value={formData.fullName} onChange={handleChange("fullName")} />
-          {errors.fullName && <span className="error">{errors.fullName}</span>}
-        </div>
-      <div className="column">
-                <div className="form-group">
-          <label>Phone Number:</label>
-          <input type="text" value={formData.phoneNumber} onChange={handleChange("phoneNumber")} />
-          {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
-        </div>
+          <div className="container">
+            {/* Caregiver Full Name */}
+             <TextField
+                label="Caregiver Full Name"
+                name="caregiverFullName"
+                value={formData.fullName}
+                onChange={handleChange("fullName")} 
+                required
+                fullWidth
+            />
+          </div>
+          <div className="container">
+               
+          {/* Phone Number */}
+          <TextField
+                label="Phone Number"
+                name="phoneNumber"
+                value={formData.phoneNumber} onChange={handleChange("phoneNumber")} 
+                required
+                fullWidth
+            />
+           {/* Relationship to Patient */}
+              <TextField
+                  label="Relationship to Patient"
+                  name="relationshipToPatient"
+                  value={formData.relationshipToPatient}
+                  onChange={handleChange("relationshipToPatient")} 
+                  required
+                  fullWidth
+              />                         
+                </div>
 
-        <div className="form-group">
-          <label>Relationship to Patient:</label>
-          <input type="text" value={formData.relationshipToPatient} onChange={handleChange("relationshipToPatient")} />
-          {errors.relationshipToPatient && <span className="error">{errors.relationshipToPatient}</span>}
-        </div>
-      </div>
+      <div className="container">
+            {/* Gender */}
+            <FormControl fullWidth required>
+                <InputLabel>Gender</InputLabel>
+                <Select name="gender" label="Gender"
+                value={formData.gender}
+                 onChange={handleChange("gender")}
+                >
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                </Select>
+            </FormControl>
 
-      <div className="column">
-
-        <div className="form-group">
-          <label>Gender:</label>
-          <select value={formData.gender} onChange={handleChange("gender")}>
-            <option value="" disabled>Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          {errors.gender && <span className="error">{errors.gender}</span>}
-        </div>
-
-        <div className="form-group">
-          <label>Address:</label>
-          <input type="text" value={formData.address} onChange={handleChange("address")} />
-          {errors.address && <span className="error">{errors.address}</span>}
-        </div>
+                {/* Address */}
+                <TextField
+                    label="Address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange("address")} 
+                    required
+                    fullWidth
+                />       
     </div>
-        <div className="form-group">
-          <label>Official ID Number:</label>
-          <input type="text" value={formData.officialIdNumber} onChange={handleChange("officialIdNumber")} />
-          {errors.officialIdNumber && <span className="error">{errors.officialIdNumber}</span>}
+        <div className="container">
+            {/* Official ID Number */}
+            <TextField
+                label="Official ID Number"
+                name="officialIdNumber"
+                value={formData.officialIdNumber}
+                 onChange={handleChange("officialIdNumber")} 
+                required
+                fullWidth
+            />
+        
         </div>
 
-        <div className="action-buttons">
-          <button className="edit-button" type="button" onClick={handleUpdate}>Update Caregiver</button>
-          <button className="CareGiver-button" type="button" onClick={handleDelete}>Delete Caregiver</button>
+        <div className="flex w-full">
+          <button fullWidth className="edit-button" type="button" onClick={handleUpdate}>Update Caregiver</button>
+          <button fullWidth className="CareGiver-button" type="button" onClick={handleDelete}>Delete Caregiver</button>
         </div>
 
       </form>

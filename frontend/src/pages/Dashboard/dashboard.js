@@ -10,6 +10,12 @@ const Dashboard = () => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
+    // const handleLogout = () => {
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("user");
+    //     navigate("/login");
+    // };
+
     React.useEffect(() => {
         const fetchUserData = async () => {
             try {

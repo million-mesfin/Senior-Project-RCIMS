@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 //import "./PatientProgress.css"; // Optional: Add your styles here
+import { Paper,TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
 const PatientProgressForm = ({ patientId, onSubmitSuccess, onGoBack }) => {
   const [formData, setFormData] = useState({
@@ -80,187 +81,257 @@ const PatientProgressForm = ({ patientId, onSubmitSuccess, onGoBack }) => {
 
   // Render the first step of the form
   const renderStep1 = () => (
+    <><Paper> 
     <div className="form-step-1">
-      <label>Height (cm):</label>
-      <input
-        type="number"
-        name="height"
-        value={formData.height}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Weight (kg):</label>
-      <input
-        type="number"
-        name="weight"
-        value={formData.weight}
-        onChange={handleInputChange}
-        required
-      />
-      <label>BMI:</label>
-      <input
-        type="number"
-        name="bmi"
-        value={formData.bmi}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Blood Pressure (mmHg):</label>
-      <input
-        type="number"
-        name="bloodPressure"
-        value={formData.bloodPressure}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Heart Rate (bpm):</label>
-      <input
-        type="number"
-        name="heartRate"
-        value={formData.heartRate}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Respiratory Rate (breaths/min):</label>
-      <input
-        type="number"
-        name="respiratoryRate"
-        value={formData.respiratoryRate}
-        onChange={handleInputChange}
-        required
-      />
-      <label>SpO2 (%):</label>
-      <input
-        type="number"
-        name="spo2"
-        value={formData.spo2}
-        onChange={handleInputChange}
-        required
-      />
+               
+        {/* Name */}
+     <div className="container">
+        <TextField 
+          label="Height"
+          name="height"
+          value={formData.height}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        {/* Father's Name */}
+        <TextField
+        sx={{height:"50px"}}
+          label="Weight (kg)"
+          name="weight"
+          value={formData.weight}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     
+        <div className="container">
+        <TextField 
+          label="BMI"
+          name="bmi"
+          value={formData.bmi}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="Blood Pressure (mmHg)"
+          name="bloodPressure"
+          value={formData.bloodPressure}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="Heart Rate (bpm)"
+          name="heartRate"
+          value={formData.heartRate}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="Respiratory Rate (breaths/min)"
+          name="respiratoryRate"
+          value={formData.respiratoryRate}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="SpO2 (%)"
+          name="spo2"
+          value={formData.spo2}
+          onChange={handleInputChange}
+          requireddi
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />    
+     </div>
+ 
       {/* Back button to navigate back to the details page */}
-      <button type="button" onClick={onGoBack}>
-        Back to Details
-      </button>
-      <button type="button" onClick={() => setCurrentStep(2)}>
-        Next
-      </button>
+      <div className="flex "> 
+      <button  type="button" className="w-1/2" onClick={onGoBack}>Back to Details</button>
+      <button  type="button" className="w-1/2" onClick={() => setCurrentStep(2)}>Next</button>
+      </div>
     </div>
+    </Paper>
+    </>
   );
 
   // Render the second step of the form
   const renderStep2 = () => (
+    
     <div className="form-step-2">
-      <label>Blood Glucose (mg/dL):</label>
-      <input
-        type="number"
-        name="bloodglucose"
+      <div className="container">
+        <TextField 
+          label="Blood Glucose (mg/dL)"
+          name="bloodglucose"
         value={formData.bloodglucose}
         onChange={handleInputChange}
         required
-      />
-      <label>CBC (Complete Blood Count):</label>
-      <input
-        type="text"
-        name="CBC"
-        value={formData.CBC}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Frequency of Use (times/week):</label>
-      <input
-        type="text"
-        name="frequencyOfUse"
-        value={formData.frequencyOfUse}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Quantity of Use (grams):</label>
-      <input
-        type="number"
-        name="quantityOfUse"
-        value={formData.quantityOfUse}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Number of Cravings (per week):</label>
-      <input
-        type="number"
-        name="numberOfCravings"
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="CBC (Complete Blood Count)"
+          name="CBC"
+          value={formData.CBC}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="Frequency of Use (times/week)"
+          name="frequencyOfUse"
+          value={formData.frequencyOfUse}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="Quantity of Use (grams)"
+          name="quantityOfUse"
+          value={formData.quantityOfUse}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="Number of Cravings (per week)"
+          name="numberOfCravings"
         value={formData.numberOfCravings}
         onChange={handleInputChange}
         required
-      />
-      <label>ASI Score:</label>
-      <input
-        type="number"
-        name="asiScore"
-        value={formData.asiScore}
-        onChange={handleInputChange}
-        required
-      />
-      <label>ASI Category:</label>
-      <input
-        type="text"
-        name="asiCategory"
-        value={formData.asiCategory}
-        onChange={handleInputChange}
-        required
-      />
-      <label>ALT (U/L):</label>
-      <input
-        type="number"
-        name="ALT"
-        value={formData.ALT}
-        onChange={handleInputChange}
-        required
-      />
-      <label>AST (U/L):</label>
-      <input
-        type="number"
-        name="AST"
-        value={formData.AST}
-        onChange={handleInputChange}
-        required
-      />
-      <label>ALP (U/L):</label>
-      <input
-        type="number"
-        name="ALP"
-        value={formData.ALP}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Serum Creatinine (mg/dL):</label>
-      <input
-        type="number"
-        name="serumCreatinine"
-        value={formData.serumCreatinine}
-        onChange={handleInputChange}
-        required
-      />
-      <label>Urinalysis Results:</label>
-      <input
-        type="text"
-        name="urinalysis"
-        value={formData.urinalysis}
-        onChange={handleInputChange}
-        required
-      />
-      <button type="button" onClick={() => setCurrentStep(1)}>
-        Back
-      </button>
-      <button type="submit">Submit Report</button>
-    </div>
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="ASI Score"
+          name="asiScore"
+          value={formData.asiScore}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     
+     <div className="container">
+        <TextField 
+          label="ASI Category"
+          name="asiCategory"
+          value={formData.asiCategory}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="ALT (U/L)"
+          name="ALT"
+          value={formData.ALT}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="AST (U/L)"
+          name="AST"
+          value={formData.AST}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="ALP (U/L)"
+          name="ALP"
+          value={formData.ALP}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+
+     <div className="container">
+        <TextField 
+          label="Serum Creatinine (mg/dL)"
+          name="serumCreatinine"
+          value={formData.serumCreatinine}
+          onChange={handleInputChange}
+          required
+          fullWidth
+          sx={{paddingRight:"5px"}}
+        />
+
+        
+        <TextField
+          label="Urinalysis Results"
+          name="urinalysis"
+          value={formData.urinalysis}
+          onChange={handleInputChange}
+          required
+          fullWidth
+        />          
+     </div>
+     
+      <div className="flex .action-buttons ">
+          <button type="submit" className="w-1/2" onClick={() => setCurrentStep(1)}>Back</button>
+          <button type="submit" className="w-1/2">Submit Report</button>
+       </div>
+      </div>
+   
   );
 
   return (
-    <div className="patient-progress-form">
-      <h2>Submit Patient Progress Report</h2>
+    // <div className="patient-progress-form">
+      <Paper elevation={0}>
+
+       <h2 className="patient-name">Submit Patient Progress Report</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         {currentStep === 1 ? renderStep1() : renderStep2()}
       </form>
-    </div>
+      </Paper>
+   
+    // </div>
   );
 };
 

@@ -1,6 +1,8 @@
 const  PatientHistory = require ("../models/PatientHistory");
 const  Patient = require ("../models/Patient");
 const User = require ("../models/User");
+const pdfService = require("../service/pdf-service");
+const Appointment = require("../models/Appointment");
 const Professional = require ("../models/Professional");
 
 // API - Add a new patient history
@@ -122,8 +124,51 @@ const getLatestPatientHistory = async (req, res) => {
     }
 };
 
+// Local function - generate complete history data
+const generateCompleteHistoryData = async (patientId) => {
+    try{
+        const patient = await Patient.findById(patientId).populate("user", "name fatherName grandfatherName phoneNumber");
+        // Total number of appointments
+        const appointments = await Appointment.countDocuments({ patientId: patientId });
+        // Total number of appointments remaining
+        const remainingAppointments = await Appointment.countDocuments({ patientId: patientId, status: "active" });
+        // Number of professionals assigned
+        const numberOfProfessionals = patient.assignedProfessionals.length;
+        // Details of professionals assigned
+        const professionals = await Professional.find({ _id: { $in: patient.assignedProfessionals } }).populate("user", "name fatherName grandfatherName phoneNumber");
+        // Get the patient history
+        const patientHistory = await PatientHistory.find({ patient: patientId })
+    .populate({
+        path: 'professional',
+        populate: {
+            path: 'user',
+            select: 'name fatherName grandfatherName'
+        }
+    });
+        return { appointments, remainingAppointments, numberOfProfessionals, professionals, patientHistory, patient };
+
+    }catch(error){
+        console.log(error);
+    }
+};
+
+// API - Generate PDF for patient history
+const exportPdf = async (req, res) => {
+    const { patientId } = req.params;
+    const data = await generateCompleteHistoryData(patientId);
+    const stream = res.writeHead(200, {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": "attachment; filename=patient-history.pdf",
+    });
+    pdfService.buildPdf(
+        (chunk) => stream.write(chunk),
+        () => stream.end(), data
+    );
+};
+
 module.exports = {
     addPatientHistory,
     getPatientHistoryByPatientId,
     getLatestPatientHistory,
+    exportPdf,
 };

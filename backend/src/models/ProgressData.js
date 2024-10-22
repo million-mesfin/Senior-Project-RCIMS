@@ -40,11 +40,11 @@ const patientProgressDataSchema = new mongoose.Schema({
         required: true,
     },
     CBC: {
-        type: String,
+        type: Number,
         required: true,
     },
     frequencyOfUse: {
-        type: String,
+        type: Number,
         required: true,
     },
     quantityOfUse: {
@@ -61,8 +61,15 @@ const patientProgressDataSchema = new mongoose.Schema({
         required: true,
     },
     asiCategory: {
-        // Addiction Severity Index Category
         type: String,
+        enum: [
+            "none",
+            "slight",
+            "moderate",
+            "considerable",
+            "extreme",
+            "invalid",
+        ],
         required: true,
     },
     ALT: {
@@ -82,8 +89,12 @@ const patientProgressDataSchema = new mongoose.Schema({
         required: true,
     },
     urinalysis: {
-        type: String,
+        type: Number,
         required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 });
 

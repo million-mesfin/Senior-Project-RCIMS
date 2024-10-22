@@ -93,7 +93,7 @@ const Login = () => {
                         <h2 className="mt-6 text-3xl font-bold text-gray-900">Welcome Back!</h2>
                         <p className="mt-2 text-sm text-gray-500">Please sign in to your account</p>
                     </div>
-                    <form className="mt-8 space-y-6" >
+                    <form className="mt-8 space-y-6 bg-white border-none shadow-none" >
                         <div className="relative">
                             <label className="ml-3 text-sm font-bold text-gray-700 tracking-wide">Phone Number</label>
                             <input

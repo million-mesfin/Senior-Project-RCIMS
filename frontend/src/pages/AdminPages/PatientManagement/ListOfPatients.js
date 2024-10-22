@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
     TextField,
@@ -255,162 +256,288 @@ const ListOfPatients = () => {
                         <div className="header">
                             <ArrowBackIcon onClick={handleBackToList} />
                             <h2 className="patient-name">Edit Patient</h2>
-                        </div>
-
+                        </div>                        
                         <form onSubmit={handleEditSubmit} noValidate>
-                            <div className="container">
-                                <TextField
-                                    label="Name"
-                                    name="name"
-                                    value={editFormData.name}
-                                    onChange={handleEditFormChange}
-                                    required
-                                    fullWidth
-                                    sx={{ paddingRight: "5px" }}
-                                />
+  <div className="container">
+    <TextField 
+      label="Name"
+      name="name"
+      value={editFormData.name || ''}
+      onChange={handleEditFormChange}
+      required
+      fullWidth
+      sx={{paddingRight:"5px"}}
+    />
 
-                                {/* Father's Name */}
-                                <TextField
-                                    label="Father's Name"
-                                    name="fatherName"
-                                    value={editFormData.fatherName}
-                                    onChange={handleEditFormChange}
-                                    fullWidth
-                                    required
-                                />
-                            </div>
-                            <div className="container">
-                                {/* Grandfather's Name */}
-                                <TextField
-                                    label="Grandfather's Name"
-                                    name="grandfatherName"
-                                    value={editFormData.grandfatherName}
-                                    onChange={handleEditFormChange}
-                                    fullWidth
-                                    sx={{ paddingRight: "25px" }}
-                                    required
-                                />
+    {/* Father's Name */}
+    <TextField
+      label="Father's Name"
+      name="fatherName"
+      value={editFormData.fatherName || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      required
+    />  
+  </div>
 
-                                {/* Phone Number */}
-                                <TextField
-                                    label="Phone Number"
-                                    name="phoneNumber"
-                                    value={editFormData.phoneNumber}
-                                    onChange={handleEditFormChange}
-                                    // error={Boolean(error.phoneNumber)}
-                                    // helperText={error.phoneNumber}
-                                    required
-                                    fullWidth
-                                />
-                            </div>
+  <div className="container">
+    {/* Grandfather's Name */}
+    <TextField
+      label="Grandfather's Name"
+      name="grandfatherName"
+      value={editFormData.grandfatherName || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      sx={{paddingRight:"25px"}}
+      required
+    />
 
-                            <div className="container">
-                                {/* Address */}
-                                <TextField
-                                    label="Address"
-                                    name="address"
-                                    value={editFormData.address}
-                                    onChange={handleEditFormChange}
-                                    fullWidth
-                                    required
-                                />
+    {/* Phone Number */}
+    <TextField
+      label="Phone Number"
+      name="phoneNumber"
+      value={editFormData.phoneNumber || ''}
+      onChange={handleEditFormChange}
+      required
+      fullWidth
+    />
+  </div>
 
-                                {/* Date of Birth */}
-                                <TextField
-                                    label="Date of Birth"
-                                    type="date"
-                                    name="dateOfBirth"
-                                    value={editFormData.dateOfBirth}
-                                    onChange={handleEditFormChange}
-                                    InputLabelProps={{ shrink: true }}
-                                    required
-                                    fullWidth
-                                    sx={{ paddingLeft: "10px" }}
-                                />
-                            </div>
+  <div className="container">
+    {/* Address */}
+    <TextField
+      label="Address"
+      name="address"
+      value={editFormData.address || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      required
+    />
 
-                            <div className="container">
-                                {/* Gender */}
-                                <FormControl
-                                    fullWidth
-                                    sx={{ paddingRight: "10px" }}
-                                    required
-                                >
-                                    <InputLabel>Gender</InputLabel>
-                                    <Select
-                                        name="gender"
-                                        value={editFormData.gender}
-                                        onChange={handleEditFormChange}
-                                    >
-                                        <MenuItem value="male">Male</MenuItem>
-                                        <MenuItem value="female">
-                                            Female
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
+    {/* Date of Birth */}
+    <TextField
+      label="Date of Birth"
+      type="date"
+      name="dateOfBirth"
+      value={editFormData.dateOfBirth || ''}
+      onChange={handleEditFormChange}
+      InputLabelProps={{ shrink: true }}
+      required
+      fullWidth
+      sx={{paddingLeft:"10px"}}
+    />
+  </div>
 
-                                {/* Patient Type */}
-                                <FormControl
-                                    fullWidth
-                                    sx={{ paddingLeft: "10px" }}
-                                    required
-                                >
-                                    <InputLabel>Patient Type</InputLabel>
-                                    <Select
-                                        name="patientType"
-                                        value={editFormData.patientType}
-                                        onChange={handleEditFormChange}
-                                    >
-                                        <MenuItem value="In-patient">
-                                            In-patient
-                                        </MenuItem>
-                                        <MenuItem value="Out-patient">
-                                            Out-patient
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
+  <div className="container">
+    {/* Gender */}
+    <FormControl 
+      fullWidth  
+      sx={{paddingRight:"10px"}}
+      required
+    >
+      <InputLabel>Gender</InputLabel>
+      <Select
+        name="gender"
+        value={editFormData.gender || ''}
+        onChange={handleEditFormChange}
+      >
+        <MenuItem value="male">Male</MenuItem>
+        <MenuItem value="female">Female</MenuItem>
+      </Select>
+    </FormControl>
 
-                            <div className="container">
-                                {/* Allergies */}
-                                <TextField
-                                    label="Allergies"
-                                    name="allergies"
-                                    value={editFormData.allergies}
-                                    onChange={handleEditFormChange}
-                                    fullWidth
-                                    required
-                                />
-                            </div>
-                            <Box
-                                sx={{
-                                    width: "100%",
-                                    display: "flex",
-                                    gap: "20px",
-                                    justifyContent: "space-between",
-                                }}
-                            >
-                                <Button
-                                    type="submit"
-                                    onClick={() => handleEditSubmit}
-                                    variant="contained"
-                                    color="primary"
-                                    className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
-                                >
-                                    {" "}
-                                    Save
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    onClick={() => setIsEditing(false)}
-                                    variant="contained"
-                                    color="primary"
-                                    className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800  text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
-                                >
-                                    Cancel
-                                </Button>
-                            </Box>
-                        </form>
+    {/* Patient Type */}
+    <FormControl 
+      fullWidth  
+      sx={{paddingLeft:"10px"}}
+      required
+    >
+      <InputLabel>Patient Type</InputLabel>
+      <Select
+        name="patientType"
+        value={editFormData.patientType || ''}
+        onChange={handleEditFormChange}
+      >
+        <MenuItem value="In-patient">In-patient</MenuItem>
+        <MenuItem value="Out-patient">Out-patient</MenuItem>
+      </Select>
+    </FormControl>                         
+  </div>
+
+  {editFormData.patientType === "In-patient" && (
+    <div className="container">
+      {/* Room Number */}
+      <TextField
+        label="Room Number"
+        name="roomNumber"
+        value={editFormData.roomNumber || ''}
+        onChange={handleEditFormChange}
+        fullWidth
+        required
+      />
+
+      {/* Bed Number */}
+      <TextField
+        label="Bed Number"
+        name="bedNumber"
+        value={editFormData.bedNumber || ''}
+        onChange={handleEditFormChange}
+        fullWidth
+        required
+      />
+    </div>
+  )}
+
+  <div className="container">
+    {/* Allergies */}
+    <TextField
+      label="Allergies"
+      name="allergies"
+      value={editFormData.allergies || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      required
+    />
+ 
+    {/* Employment Status */}
+    <TextField
+      label="Employment Status"
+      name="employmentStatus"
+      value={editFormData.employmentStatus || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      required
+    />
+  </div>
+
+  <div className="container">
+    {/* Educational Level */}
+    <TextField
+      label="Educational Level"
+      name="educationalLevel"
+      value={editFormData.educationalLevel || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+      required
+    />
+
+    {/* Living Situation */}
+    <FormControl fullWidth required>
+      <InputLabel>Living Situation</InputLabel>
+      <Select
+        name="livingSituation"
+        value={editFormData.livingSituation || ''}
+        onChange={handleEditFormChange}
+      >
+        <MenuItem value="Alone">Alone</MenuItem>
+        <MenuItem value="Family">Family</MenuItem>
+        <MenuItem value="Shelter">Shelter</MenuItem>
+        <MenuItem value="Other">Other</MenuItem>
+      </Select>
+    </FormControl>
+  </div>
+
+  <div className="container">
+    {/* Current Medical Conditions */}
+    <TextField
+      label="Current Medical Conditions"
+      name="currentMedicalConditions"
+      value={editFormData.currentMedicalConditions || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+
+    {/* Primary Substance */}
+    <TextField
+      label="Primary Substance"
+      name="primarySubstance"
+      value={editFormData.primarySubstance || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  </div>
+
+  <div className="container">
+    {/* Primary Substance Method Of Use */}
+    <TextField
+      label="Primary Substance Method Of Use"
+      name="primarySubstanceMethodOfUse"
+      value={editFormData.primarySubstanceMethodOfUse || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  
+    {/* Secondary Substances */}
+    <TextField
+      label="Secondary Substances"
+      name="secondarySubstances"
+      value={editFormData.secondarySubstances || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  </div>
+
+  <div className="container">
+    {/* Past Addiction Treatment */}
+    <TextField
+      label="Past Addiction Treatment"
+      name="pastAddictionTreatment"
+      value={editFormData.pastAddictionTreatment || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+ 
+    {/* Withdrawal Symptoms */}
+    <TextField
+      label="Withdrawal Symptoms"
+      name="withdrawalSymptoms"
+      value={editFormData.withdrawalSymptoms || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  </div>
+
+  <div className="container">
+    {/* Social Support Network */}
+    <TextField
+      label="Social Support Network"
+      name="socialSupportNetwork"
+      value={editFormData.socialSupportNetwork || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  
+    {/* History Of Trauma Or Abuse */}
+    <TextField
+      label="History Of Trauma Or Abuse"
+      name="historyOfTraumaOrAbuse"
+      value={editFormData.historyOfTraumaOrAbuse || ''}
+      onChange={handleEditFormChange}
+      fullWidth
+    />
+  </div>
+
+  <Box sx={{width: "100%", display: "flex", gap: '20px', justifyContent: 'space-between'}}>
+    <Button
+      type="submit"
+      onClick={() => handleEditSubmit}
+      variant="contained"
+      color="primary"
+      className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800 text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+    >
+      Save
+    </Button>
+    <Button
+      type="submit"
+      variant="contained"
+      color="primary"
+      onClick={() => setIsEditing(false)}
+      className="w-full flex justify-center bg-gradient-to-r from-cyan-300 to-blue-800 text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+    >
+      Cancel
+    </Button>
+  </Box>
+</form>
                     </div>
                 ) : isViewingCaregiver ? (
                     <CaregiverDetail
@@ -419,8 +546,10 @@ const ListOfPatients = () => {
                     />
                 ) : isAddingCaregiver ? (
                     <div className="add-caregiver-form">
-                        <h2>Add Caregiver</h2>
+                        <h2 className="patient-name">Add Caregiver</h2>
                         <form onSubmit={handleCaregiverFormSubmit} noValidate>
+
+                          <div className="container">
                             {/* Caregiver Full Name */}
                             <TextField
                                 label="Caregiver Full Name"
@@ -428,9 +557,11 @@ const ListOfPatients = () => {
                                 required
                                 fullWidth
                             />
-
+                          </div>
+                            
+                          <div className="container">
                             {/* Phone Number */}
-                            <TextField
+                            <TextField sx={{paddingRight:"25px"}}
                                 label="Phone Number"
                                 name="phoneNumber"
                                 required
@@ -444,8 +575,10 @@ const ListOfPatients = () => {
                                 required
                                 fullWidth
                             />
-
-                            {/* Gender */}
+                        </div>
+                           
+                        <div className="container">
+                           {/* Gender */}
                             <FormControl fullWidth required>
                                 <InputLabel>Gender</InputLabel>
                                 <Select name="gender" label="Gender">
@@ -461,7 +594,8 @@ const ListOfPatients = () => {
                                 required
                                 fullWidth
                             />
-
+                        </div>
+                           <div className="container">
                             {/* Official ID Number */}
                             <TextField
                                 label="Official ID Number"
@@ -469,30 +603,13 @@ const ListOfPatients = () => {
                                 required
                                 fullWidth
                             />
+                           </div> 
 
-                            {/* Buttons */}
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    mt: 2,
-                                }}
-                            >
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Submit
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="outlined"
-                                    onClick={() => setIsAddingCaregiver(false)}
-                                >
-                                    Cancel
-                                </Button>
-                            </Box>
+                        {/* Buttons */}
+                        <div className="flex w-full">
+                            <button type="submit">Submit</button>
+                            <button type="submit" onClick={() => setIsAddingCaregiver(false)}>Cancel</button>
+                        </div>
                         </form>
                     </div>
                 ) : (
@@ -533,7 +650,7 @@ const ListOfPatients = () => {
                                         {selectedPatient.user?.phoneNumber}
                                     </strong>
                                 </div>
-                                <div className="icons-section">
+                                {/* <div className="icons-section">
                                     <div className="icon-item">
                                         <SupervisorAccountIcon
                                             onClick={
@@ -543,7 +660,7 @@ const ListOfPatients = () => {
                                         />
                                         <p>CareGiver </p>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="column2">
@@ -568,9 +685,13 @@ const ListOfPatients = () => {
                                         {selectedPatient.user?.address}
                                     </strong>
                                 </div>
-                                <div className="action-buttons">
+                               
+                            </div>
+                            
+                        </div>
+                        <div className="flex">
                                     <button
-                                        className="edit-button"
+                                        type="submit"
                                         onClick={() =>
                                             handleEdit(selectedPatient)
                                         }
@@ -580,17 +701,16 @@ const ListOfPatients = () => {
                                     {/* Conditionally render based on caregiver existence */}
                                     {hasCaregiver ? (
                                         <button
-                                            className="CareGiver-button"
+                                        type="submit"
                                             onClick={
-                                                handleNavigateToCaregiverDetail
+                                            handleNavigateToCaregiverDetail
                                             }
                                         >
                                             Caregiver Details
                                         </button>
                                     ) : (
                                         <button
-                                            className="CareGiver-button"
-                                            onClick={() =>
+                                        type="submit"                                            onClick={() =>
                                                 setIsAddingCaregiver(true)
                                             }
                                         >
@@ -598,8 +718,6 @@ const ListOfPatients = () => {
                                         </button>
                                     )}
                                 </div>
-                            </div>
-                        </div>
                     </div>
                 )
             ) : (
