@@ -154,7 +154,9 @@ const generateCompleteHistoryData = async (patientId) => {
 
 // API - Generate PDF for patient history
 const exportPdf = async (req, res) => {
-    const { patientId } = req.params;
+    const { userId } = req.params;
+    const patient = await Patient.findOne({ user: userId });
+    const patientId = patient._id;
     const data = await generateCompleteHistoryData(patientId);
     const stream = res.writeHead(200, {
         "Content-Type": "application/pdf",
