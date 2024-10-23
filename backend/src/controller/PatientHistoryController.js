@@ -154,18 +154,32 @@ const generateCompleteHistoryData = async (patientId) => {
 
 // API - Generate PDF for patient history
 const exportPdf = async (req, res) => {
-    const { userId } = req.params;
-    const patient = await Patient.findOne({ user: userId });
-    const patientId = patient._id;
-    const data = await generateCompleteHistoryData(patientId);
-    const stream = res.writeHead(200, {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=patient-history.pdf",
-    });
-    pdfService.buildPdf(
-        (chunk) => stream.write(chunk),
-        () => stream.end(), data
-    );
+    try {
+        const { userId } = req.params;
+        const patient = await Patient.findOne({ user: userId });
+        if (!patient) {
+            return res.status(404).json({ message: "Patient not found" });
+        }
+        const patientId = patient._id;
+        const data = await generateCompleteHistoryData(patientId);
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=patient-history.pdf');
+
+        const pdfBuffer = await new Promise((resolve, reject) => {
+            let buffers = [];
+            pdfService.buildPdf(
+                (chunk) => buffers.push(chunk),
+                () => resolve(Buffer.concat(buffers)),
+                data
+            );
+        });
+
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+        res.status(500).json({ message: "Error generating PDF", error: error.message });
+    }
 };
 
 module.exports = {
