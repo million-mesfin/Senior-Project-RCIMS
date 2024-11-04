@@ -41,8 +41,6 @@ const ProfessionalManagement = () => {
         return <ProfessionalsList professionals={filteredProfessionals} />;
       case "AddProfessional":
         return <AddProfessional />;
-      case "ProfessionalReports":
-        return <ProfessionalReports />;
       default:
         return <ProfessionalsList professionals={filteredProfessionals} />;
     }
@@ -63,12 +61,6 @@ const ProfessionalManagement = () => {
           onClick={() => setActiveTab("AddProfessional")}
         >
           Add Professional
-        </button>
-        <button
-          className={`tab-button ${activeTab === "ProfessionalReports" ? "active" : ""}`}
-          onClick={() => setActiveTab("ProfessionalReports")}
-        >
-          Reports
         </button>
       </div>
 

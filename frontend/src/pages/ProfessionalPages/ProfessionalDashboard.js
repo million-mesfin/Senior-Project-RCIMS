@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from './RCMIS-1-01.svg';
 
 import "./ProfessionalStyles/professionalDashboard.css";
 import MySchedule from "./MySchedule";
 import AppointmentManagement from "./AppointmentManagement/AppointmentManagement";
-import AttachPatient from "./AttachPatient"; 
-import PatientManagement from "./PatientManagement"; 
-import Report from "./Report"; 
-import Help from "./Help"; 
+import AttachPatient from "./AttachPatient";
+import PatientManagement from "./PatientManagement";
+
+import Help from "./Help";
 import InfoCard from "../../MuiComponents/InfoCard";
-//import Predictions from "./Predictions"; // Import Predictions Component
+import ProfessionalLineChart from "./ProfessionalChart";
+import Messaging from "./Messaging"; // Import Messaging component
 
 // Icons
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -21,11 +23,22 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import HelpIcon from '@mui/icons-material/Help';
-import PredictionsIcon from '@mui/icons-material/BarChart'; // New icon for Predictions
+import ChatIcon from '@mui/icons-material/Chat'; 
+import EventIcon from '@mui/icons-material/Event';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import NumbersIcon from '@mui/icons-material/Numbers';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonIcon from '@mui/icons-material/Person';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Ensure the semicolon here
 
 const ProfessionalDashboard = ({ user }) => {
     const navigate = useNavigate();
     const [selectedComponent, setSelectedComponent] = useState("Overview");
+
+    // State for dashboard metrics
+    const [dashboardData, setDashboardData] = useState(null);
+    const [upcomingAppointment, setUpcomingAppointment] = useState(null); // State for upcoming appointment
+    const [error, setError] = useState(null);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -37,6 +50,77 @@ const ProfessionalDashboard = ({ user }) => {
         setSelectedComponent(component);
     };
 
+    // Fetch dashboard data
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                // Get the user ID from the logged-in user
+                const userId = JSON.parse(localStorage.getItem("user"))._id;
+
+                // Fetch professional stats
+                const response = await axios.get(`http://localhost:5000/api/report/stats-for-professional/${userId}`);
+                console.log("Dashboard Data Response:", response.data);
+
+                setDashboardData({
+                    numberOfPatients: response.data.numberOfPatients || 0,
+                    numberOfAppointments: response.data.numberOfAppointments || 0,
+                    todayAppointments: response.data.todayAppointments || 0,
+                    numberOfInpatients: response.data.numberOfInpatients || 0,
+                    numberOfOutpatients: response.data.numberOfOutpatients || 0
+                });
+
+                // Fetch the upcoming appointment using the provided API
+                const appointmentResponse = await axios.get(`http://localhost:5000/api/appointment/user-appointments/${userId}`);
+                if (appointmentResponse.data && appointmentResponse.data.appointments.length > 0) {
+                    setUpcomingAppointment(appointmentResponse.data.appointments[0]); // Take the first upcoming appointment
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+                setError("Failed to fetch dashboard data");
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
+    const renderUpcomingAppointment = () => {
+        if (!upcomingAppointment) {
+            return (
+                <div className="upcoming-appointment-container">
+                    <p className="no-appointment-text">No upcoming appointments found.</p>
+                </div>
+            );
+        }
+    
+        return (
+            <div className="upcoming-appointment-container">
+                <h3 className="appointment-header">Upcoming Appointment</h3>
+                <div className="appointment-details">
+                    <p>
+                        <EventIcon className="appointment-icon" />
+                        <strong>Date:</strong> {new Date(upcomingAppointment.date).toLocaleDateString()}
+                    </p>
+                    <p>
+                        <NumbersIcon className="appointment-icon" />
+                        <strong>Session Number:</strong> {upcomingAppointment.sessionNumber || 'N/A'}
+                    </p>
+                    
+                    <p>
+                        <AccessTimeIcon className="appointment-icon" />
+                        <strong>Duration:</strong> {upcomingAppointment.duration || 'N/A'} Hr
+                    </p>
+                   
+                    <p>
+                        <CheckCircleIcon className="appointment-icon" />
+                        <strong>Status:</strong> 
+                        <span className={`status-badge ${upcomingAppointment.status.toLowerCase()}`}>
+                            {upcomingAppointment.status || 'N/A'}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="dashboard-container">
@@ -60,19 +144,18 @@ const ProfessionalDashboard = ({ user }) => {
                         <PersonAddIcon /> <span className="menu-title">Attach Patient</span>
                     </li>
                     <li className={`menu-item ${selectedComponent === "PatientManagement" ? "active" : ""}`} onClick={() => handleNavClick("PatientManagement")}>
-                        <ManageAccountsIcon /> <span className="menu-title">Patients</span> 
+                        <ManageAccountsIcon /> <span className="menu-title">Patients</span>
                     </li>
-                    <li className={`menu-item ${selectedComponent === "Report" ? "active" : ""}`} onClick={() => handleNavClick("Report")}>
-                        <AssessmentSharpIcon /><span className="menu-title">Reports</span>
-                        </li>   
-                    {/*
                     
-                    <li className={`menu-item ${selectedComponent === "Predictions" ? "active" : ""}`} onClick={() => handleNavClick("Predictions")}>
-                        <PredictionsIcon /><span className="menu-title">Predictions</span>
-                    </li>*/}
                     <li className={`menu-item ${selectedComponent === "Help" ? "active" : ""}`} onClick={() => handleNavClick("Help")}>
                         <HelpIcon /> <span className="menu-title">Help Center</span>
                     </li>
+
+                    {/* Messaging Menu Item */}
+                    <li className={`menu-item ${selectedComponent === "Messaging" ? "active" : ""}`} onClick={() => handleNavClick("Messaging")}>
+                        <ChatIcon /> <span className="menu-title">Messaging</span>
+                    </li>
+
                     <li className="menu-item" onClick={handleLogout}>
                         <LogoutIcon /><span className="menu-title">Logout</span>
                     </li>
@@ -88,8 +171,8 @@ const ProfessionalDashboard = ({ user }) => {
                                 <img className="h-10 w-10 self-center" src="https://image.emojipng.com/511/267511-small.png" alt="Icon" />
                             </div>
                             <div>
-                                <a href="#" className="text-2xl no-underline text-grey-darkest hover:text-blue-dark font-sans font-bold">{`Hello ${user.name} `}</a><br/>
-                                <span className="text-xs text-grey-dark">Beautiful New Tagline</span>
+                                <a href="#" className="text-2xl no-underline text-grey-darkest hover:text-blue-dark font-sans font-bold">{`Hello ${user?.name} `}</a><br />
+                                <span className="text-xs text-grey-dark">Logged in As Professional</span>
                             </div>
                         </div>
                         <div className="sm:mb-0 self-center">
@@ -105,26 +188,35 @@ const ProfessionalDashboard = ({ user }) => {
                     {selectedComponent === "Overview" && (
                         <>
                             <div className="cards">
-                                <InfoCard title="Total Appointment" total={50} increase={5} percentage={15} conditions="Appointments in the Last 7 days" />
-                                <InfoCard title="Patients under care" total={250} increase={7} percentage={15} conditions="Appointments in the Last 7 days" />
+                                <InfoCard title="Total Active Patients" total={dashboardData?.numberOfPatients} increase={10} percentage={15} conditions="Active Patients" />
+                                <InfoCard title="In-Patients" total={dashboardData?.numberOfInpatients} increase={5} percentage={10} conditions="In-Patients" />
+                                <InfoCard title="Out-Patients" total={dashboardData?.numberOfOutpatients} increase={7} percentage={8} conditions="Out-Patients" />
+                                <InfoCard title="Total Appointments" total={dashboardData?.numberOfAppointments} increase={12} percentage={5} conditions="Appointments" />
+                                <InfoCard title="Today's Appointments" total={dashboardData?.todayAppointments} increase={7} percentage={3} conditions="Today's Appointments" />
                             </div>
-                            <div className="statistics">
-                                <h2>Patient Statistics</h2>
-                                <div className="chart-placeholder">[Chart Placeholder]</div>
-                            </div>
-                            <div className="calendar">
-                                <h2>Upcoming Appointments</h2>
-                                <div className="calendar-placeholder">[Calendar Placeholder]</div>
-                            </div>
+
+                            {/* Render Line Chart */}
+                            {dashboardData ? (
+                                <div className="chart-and-appointment">
+                                    <div className="chart-container">
+                                        <ProfessionalLineChart dashboardData={dashboardData} />
+                                    </div>
+                                    <div className="appointment-container">
+                                        {renderUpcomingAppointment()} {/* Render the upcoming appointment */}
+                                    </div>
+                                </div>
+                            ) : (
+                                <p>Loading...</p>  // Show loading if data isn't available
+                            )}
                         </>
                     )}
                     {selectedComponent === "MySchedule" && <MySchedule />}
                     {selectedComponent === "Appointment" && <AppointmentManagement />}
                     {selectedComponent === "AttachPatient" && <AttachPatient />}
                     {selectedComponent === "PatientManagement" && <PatientManagement />}
-                    {selectedComponent === "Report" && <Report />}
+                    
                     {selectedComponent === "Help" && <Help />}
-                    {/* {selectedComponent === "Predictions" && <Predictions />} {/* New Predictions component } */}
+                    {selectedComponent === "Messaging" && <Messaging />} {/* Render Messaging component */}
                 </div>
             </div>
         </div>

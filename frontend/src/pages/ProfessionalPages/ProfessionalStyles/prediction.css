@@ -70,4 +70,48 @@
     margin: 5px 0;
     font-size: 16px;
   }
-  
+  /* Add styles for the dialog */
+.dialog-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.dialog-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #003c1c;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.dialog-content {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.dialog-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.dialog-button:hover {
+  background-color: #0056b3;
+}
