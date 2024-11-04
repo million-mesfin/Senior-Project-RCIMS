@@ -16,6 +16,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.4",
-    "pdfkit": "^0.15.0"
+    "pdfkit": "^0.15.0",
+    "react-toastify": "^10.0.6",
+    "socket.io": "^4.8.0"
   }
 }

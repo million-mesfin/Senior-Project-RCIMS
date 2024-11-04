@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import "./ProfessionalStyles/PatientManagement.css";
 import ShowPatientDetails from "./ShowPatientDetails"; // Use the imported ShowPatientDetails
-import AddPatientHistory from "./AddPatientHistory"; // Import AddPatientHistory component
 import {
   Table,
   TableBody,
@@ -10,15 +10,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Pagination,
   Paper,
 } from "@mui/material";
-
 
 const PatientManagement = () => {
   const [activeTab, setActiveTab] = useState("ListOfPatients");
   const [patients, setPatients] = useState([]);
-  const [selectedPatientId, setSelectedPatientId] = useState(null); // Track selected patient ID for details
+  const [selectedPatientId, setSelectedPatientId] = useState(null); // Track selected patient ID for details or progress
+  const [viewingProgress, setViewingProgress] = useState(false); // Track if viewing progress
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     fetchPatients();
@@ -67,34 +67,39 @@ const PatientManagement = () => {
   const handleViewPatient = (patientId) => {
     setSelectedPatientId(patientId); // Store the selected patient ID
     setActiveTab("ViewPatientDetails"); // Switch to the "ViewPatientDetails" tab
+    setViewingProgress(false); // Ensure progress view is off
   };
 
-  // Handle click for adding patient history
-  const handleAddHistory = (patientId) => {
-    setSelectedPatientId(patientId); // Store the selected patient ID
-    setActiveTab("AddPatientHistory"); // Switch to "AddPatientHistory" tab
+  // Handle click for viewing patient's progress
+  const handleViewProgress = (patientId) => {
+    // Navigate to the ViewProgress page with the selected patient ID
+    navigate(`/progress/${patientId}`);
   };
 
   // Function to go back to the list of patients
   const handleGoBack = () => {
     setActiveTab("ListOfPatients"); // Return to "ListOfPatients"
+    setViewingProgress(false); // Ensure progress view is off
   };
 
-  // Function to render the correct component based on the active tab
+  // Function to render the correct component based on the active tab and progress view
   const renderActiveTab = () => {
-    switch (activeTab) {
-      case "ListOfPatients":
-        return (
-          <ListOfPatients
-            patients={patients}
-            onViewPatient={handleViewPatient}
-          />
-        );
-      case "ViewPatientDetails":
-        return <ShowPatientDetails patientId={selectedPatientId} onGoBack={handleGoBack} fetchPatients={fetchPatients} />; // Pass fetchPatients to update the list after detachment
-      default:
-        return <ListOfPatients patients={patients} />;
+    if (activeTab === "ViewPatientDetails") {
+      if (viewingProgress) {
+        return <ShowPatientDetails patientId={selectedPatientId} onGoBack={handleGoBack} fetchPatients={fetchPatients} />; // Render patient details view
+      } else {
+        return <ShowPatientDetails patientId={selectedPatientId} onGoBack={handleGoBack} fetchPatients={fetchPatients} />; // Render patient details view
+      }
     }
+
+    // Default to showing the patient list
+    return (
+      <ListOfPatients
+        patients={patients}
+        onViewPatient={handleViewPatient}
+        onViewProgress={handleViewProgress} // Pass the progress handler
+      />
+    );
   };
 
   return (
@@ -116,55 +121,61 @@ const PatientManagement = () => {
 };
 
 // ListOfPatients Component
-const ListOfPatients = ({ patients, onViewPatient }) => {
+const ListOfPatients = ({ patients, onViewPatient, onViewProgress }) => {
   return (
-    
-      <Paper  sx={{elevation: 0,}}>
+    <Paper sx={{ elevation: 0 }}>
       <div>
-          <div style={styles.header}>
-            <h2 style={{ margin: 0 }}>Patient List</h2>
-      </div>
-      
-      {/* Table */}
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="patient table">
-          <TableHead>
-            <TableRow sx={{boxShadow: 0}}>
+        <div style={styles.header}>
+          <h2 style={{ margin: 0 }}>Patient List</h2>
+        </div>
 
-              <TableCell>No</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Fathers Name</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell>Patient Type</TableCell>
-             
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {patients.map((patient, index) => (
-              <TableRow key={patient._id} >
-
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{patient.user?.name}</TableCell>
-                <TableCell>{patient.user?.fatherName}</TableCell>
-                <TableCell>{patient.user?.phoneNumber}</TableCell>
-                <TableCell>{patient.patientType}</TableCell>
-
-                <TableCell>
-                <button className="CareGiver-button" onClick={() => onViewPatient(patient._id)}>
-                  View Details
-                </button>                 
-                </TableCell>
+        {/* Table */}
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label="patient table">
+            <TableHead>
+              <TableRow sx={{ boxShadow: 0 }}>
+                <TableCell>No</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Father's Name</TableCell>
+                <TableCell>Phone Number</TableCell>
+                <TableCell>Patient Type</TableCell>
+                <TableCell />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-      </Paper>
+            </TableHead>
+            <TableBody>
+              {patients.map((patient, index) => (
+                <TableRow key={patient._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{patient.user?.name}</TableCell>
+                  <TableCell>{patient.user?.fatherName}</TableCell>
+                  <TableCell>{patient.user?.phoneNumber}</TableCell>
+                  <TableCell>{patient.patientType}</TableCell>
+
+                  <TableCell>
+                    <button
+                      className="CareGiver-button"
+                      onClick={() => onViewPatient(patient._id)}
+                    >
+                      View Details
+                    </button>
+                    {/*
+                    <button
+                      className="Progress-button"
+                      onClick={() => onViewProgress(patient._id)} // View Progress button action
+                    >
+                      View Progress
+                    </button>
+*/}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    </Paper>
   );
 };
-
 
 const styles = {
   header: {
@@ -173,29 +184,6 @@ const styles = {
     alignItems: "center",
     marginBottom: 16,
   },
-  button: {
-    background: "#29f2ff"
-  },
-  actions: {
-    display: "flex",
-    alignItems: "center",
-  },
-  paginationContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 16,
-  },
-  pageSelector: {
-    display: "flex",
-    alignItems: "center",
-  },
-  statusBadge: {
-    display: "inline-block",
-    padding: "4px 8px",
-    borderRadius: "12px",
-    color: "#fff",
-    fontWeight: "bold",
-  },
 };
+
 export default PatientManagement;

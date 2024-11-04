@@ -15,18 +15,16 @@ const InfoCard = ({ icon,title, total, increase, percentage, conditions }) => {
 
       <CardContent sx={{ padding: "10px 0 0 0" }}>
         <Box display="flex" padding= "10px" alignItems="center" mb={1}>
-          {/* <Icon sx={{ fontSize: 40, color: "#9AA0A6" }}>{icon}</Icon> */}
-          {/* <div sx={{width: 100, fontSize: 40, color: "#9AA0A6"}}>{icon}</div> */}
-          {/* <PersonIcon sx={{ fontSize: 40, color: "#9AA0A6" }} /> */}
+          
           <Typography variant="h3" sx={{ fontWeight: "bold", ml: 2 }}>
             {total}
           </Typography>
           <Typography variant="body1" alignItems="center" sx={{ color: "#3A9CED", fontWeight: "bold", ml: 1 }}>
-           <span style={{background: "#e6f7ff", padding: "5px", borderRadius: "5px"}}>+{increase}</span> 
+           <span style={{background: "#e6f7ff", padding: "5px", borderRadius: "5px"}}></span> 
           </Typography>
         </Box>
         <Typography variant="body2" sx={{ fontWeight: "semi-bold", color: "#666" }}>
-          {percentage}% {conditions}
+           
         </Typography>
       </CardContent>
     </Card>

@@ -1,19 +1,88 @@
 import React, { useState } from 'react';
-import { format, startOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
+import { format, startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 // Event Data
 const eventsData = [
-  { date: '2024-10-03', type: 'Appointment', label: 'DR. Rick Appointment', color: 'bg-green-500' },
-  { date: '2024-10-08', type: 'Meeting', label: 'Labratory Test', color: 'bg-blue-500' },
-  { date: '2024-10-05', type: 'Surgery', label: 'Group Session', color: 'bg-orange-500' },
-  { date: '2024-10-03', type: 'Surgery', label: 'Session With psychiatriest', color: 'bg-orange-500' },
+  { date: '2024-10-22', color: 'blue' },
+  { date: '2024-10-25', color: 'red' },
+  { date: '2024-11-01', color: 'green' },
 ];
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const styles = {
+    calendarContainer: {
+      width: '100%',
+      maxWidth: '700px',
+      backgroundColor: '#f9f9f9',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      margin: '0 auto',
+    },
+    header: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+    },
+    title: {
+      fontSize: '24px',
+      color: '#333',
+      display: 'flex',
+      alignItems: 'center',
+    },
+    navButton: {
+      backgroundColor: '#4caf50',
+      color: '#fff',
+      padding: '10px',
+      borderRadius: '50%',
+      cursor: 'pointer',
+      transition: 'background-color 0.3s ease',
+    },
+    navButtonHover: {
+      backgroundColor: '#45a049',
+    },
+    dayHeader: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7, 1fr)',
+      textAlign: 'center',
+      color: '#666',
+      fontWeight: '600',
+      paddingBottom: '10px',
+    },
+    dayBody: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7, 1fr)',
+      gap: '10px',
+    },
+    dayBox: {
+      padding: '15px',
+      borderRadius: '8px',
+      textAlign: 'center',
+      cursor: 'pointer',
+      transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+    },
+    dayBoxHover: {
+      backgroundColor: '#edf7ff',
+    },
+    selectedDay: {
+      backgroundColor: '#3b82f6',
+      color: '#fff',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    },
+    eventDot: {
+      width: '6px',
+      height: '6px',
+      borderRadius: '50%',
+      margin: '0 2px',
+    },
+  };
 
   // Render days in the calendar
   const renderDays = () => {
@@ -22,18 +91,22 @@ const Calendar = () => {
     const days = [];
 
     let day = startDate;
-    let formattedDate = '';
     for (let i = 0; i < 42; i++) {
-      formattedDate = format(day, 'd');
+      const formattedDate = format(day, 'd');
       const cloneDay = day;
 
       days.push(
         <div
           key={day}
-          className={`p-2 cursor-pointer text-center ${
-            !isSameMonth(day, startMonth) ? 'text-gray-400' : ''
-          } ${isSameDay(day, selectedDate) ? 'bg-blue-200 text-black shadow' : ''}`}
+          style={{
+            ...styles.dayBox,
+            backgroundColor: isSameDay(day, selectedDate) ? styles.selectedDay.backgroundColor : '',
+            color: isSameDay(day, selectedDate) ? styles.selectedDay.color : !isSameMonth(day, startMonth) ? 'gray' : 'black',
+            boxShadow: isSameDay(day, selectedDate) ? styles.selectedDay.boxShadow : 'none',
+          }}
           onClick={() => setSelectedDate(cloneDay)}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = styles.dayBoxHover.backgroundColor)}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = isSameDay(day, selectedDate) ? styles.selectedDay.backgroundColor : '')}
         >
           <span>{formattedDate}</span>
           <div className="flex justify-center mt-1">
@@ -53,7 +126,7 @@ const Calendar = () => {
     const events = eventsData.filter(event => event.date === formattedDay);
 
     return events.map((event, index) => (
-      <div key={index} className={`w-2 h-2 rounded-full ${event.color} mx-0.5`}></div>
+      <div key={index} style={{ ...styles.eventDot, backgroundColor: event.color }}></div>
     ));
   };
 
@@ -68,26 +141,34 @@ const Calendar = () => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg  h-full xl:w-1/2 md:w-full mb-50 mx-auto">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-xl text-black font-bold flex items-center">
-          <span className="material-icons mr-2"><CalendarMonthIcon/></span>
-          Calendar
+    <div style={styles.calendarContainer}>
+      <div style={styles.header}>
+        <h2 style={styles.title}>
+          <CalendarMonthIcon style={{ color: '#3b82f6', marginRight: '8px' }} />
+          {format(currentDate, 'MMMM yyyy')}  {/* Display the current month and year */}
         </h2>
-        <div>
-          <ArrowBackIosIcon onClick={prevMonth} />
-          {/* <button className="bg-blue px-2 py-1 border border-gray-300 rounded-md" onClick={prevMonth}>
-            Prev
-          </button> */}
-          <ArrowForwardIosIcon onClick={nextMonth} />
-          {/* <button className="px-2 py-1 border border-gray-300 rounded-md ml-2" onClick={nextMonth}>
-            Next
-          </button> */}
+        <div className="flex space-x-4">
+          <div
+            style={styles.navButton}
+            onClick={prevMonth}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = styles.navButtonHover.backgroundColor)}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = styles.navButton.backgroundColor)}
+          >
+            <ArrowBackIosIcon />
+          </div>
+          <div
+            style={styles.navButton}
+            onClick={nextMonth}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = styles.navButtonHover.backgroundColor)}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = styles.navButton.backgroundColor)}
+          >
+            <ArrowForwardIosIcon />
+          </div>
         </div>
       </div>
 
       {/* Calendar Header */}
-      <div className="grid grid-cols-7 text-center text-gray-500 font-medium">
+      <div style={styles.dayHeader}>
         <div>Sun</div>
         <div>Mon</div>
         <div>Tue</div>
@@ -98,19 +179,8 @@ const Calendar = () => {
       </div>
 
       {/* Calendar Body */}
-      <div className="grid grid-cols-7 mt-2 gap-y-2">
+      <div style={styles.dayBody}>
         {renderDays()}
-      </div>
-
-      {/* Activity Details */}
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-2 text-center">Activity Details</h3>
-        {eventsData.map((event, index) => (
-          <div key={index} className="px-10 flex items-center ">
-            <div className={`w-5 h-5 rounded-full ${event.color} mr-2`}></div>
-            <span>{event.label}</span>
-          </div>
-        ))}
       </div>
     </div>
   );
