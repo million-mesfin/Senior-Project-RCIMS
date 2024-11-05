@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { Button } from "@mui/material";
+
+import "../ProfessionalStyles/visualize.css";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -11,7 +11,6 @@ const ProgressVisualization = ({ patientId }) => {
   const [progressData, setProgressData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProgressData = async () => {
@@ -179,21 +178,27 @@ const ProgressVisualization = ({ patientId }) => {
   };
 
   return (
-    <div>
-      <h1>Patient Progress Visualization</h1>
+    <div className="progress-visualization-container">
+      <h1><strong>Patient Progress Visualization</strong></h1>
 
-      
+      <hr />
 
-      <h2>Basic Information</h2>
+      <h2><strong>Patient's Physical Data</strong></h2>
       <Line data={basicInfoData} />
 
-      <h2>Vital Signs</h2>
+      <hr />
+
+      <h2><strong>Patient's Vital Signs</strong></h2>
       <Line data={vitalSignsData} />
 
-      <h2>Lab Results</h2>
+      <hr />
+
+      <h2><strong>Patient's Blood Work and Urinalysis Results</strong></h2>
       <Line data={labResultsData} />
 
-      <h2>Addiction Data</h2>
+      <hr />
+
+      <h2><strong>Substance Use Indicators</strong></h2>
       <Line data={addictionData} />
     </div>
   );

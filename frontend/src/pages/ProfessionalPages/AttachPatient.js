@@ -80,7 +80,6 @@ const AttachPatient = () => {
             {message && <p>{message}</p>}
 
             <form onSubmit={handleAttachPatient}>
-             <Paper elevation={0} sx={{ paddingTop:"30px", minWidth:"400px", minHeight:"500px"}} >
     <label>Select Patient:</label> 
 
             <FormControl 
@@ -129,18 +128,6 @@ const AttachPatient = () => {
 
                 </Select>
             </FormControl>
-
-                {/* <select
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                >
-                    <option value="">Select a department</option>
-                    <option value="MD" disabled={currentDepartment === "MD"}>MD</option>
-                    <option value="Psychiatry" disabled={currentDepartment === "Psychiatry"}>Psychiatry</option>
-                    <option value="Physical" disabled={currentDepartment === "Physical"}>Physical</option>
-                    <option value="Addiction Counseling" disabled={currentDepartment === "Addiction Counseling"}>Addiction Counseling</option>
-                </select> */}
-              </Paper>
                 <button type="submit">Attach Patient</button>
             </form>
              

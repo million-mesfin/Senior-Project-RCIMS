@@ -1,115 +1,56 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
-import AddProgress from './AddProgress'; // Import the AddProgress component
-import ViewProgress from './viewprogress'; // Import the ViewProgress component
-import Visualize from './Visualize'; // Import the Visualize component
-//import "./progress.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AddProgress from "./AddProgress";
+import ViewProgress from "./viewprogress";
+import Visualize from "./Visualize";
 
-const Progress = ({ patientId }) => {
-  const [activeSection, setActiveSection] = useState('view'); // Default to "view progress"
-  const navigate = useNavigate(); // Initialize the navigate function
+import "../ProfessionalStyles/progress.css";
 
-  // Handlers to switch sections
-  const handleAddProgress = () => {
-    setActiveSection('add'); // Switch to "Add Progress"
-  };
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-  const handleViewProgress = () => {
-    setActiveSection('viewProgress'); // Switch to "View Progress"
-  };
+const Progress = ({ patientId, onGoBack }) => {
+    const [activeSection, setActiveSection] = useState("viewProgress");
+    const navigate = useNavigate();
 
-  const handleVisualizeProgress = () => {
-    setActiveSection('visualize'); // Switch to "Visualize Progress"
-  };
+    const handleAddProgress = () => {
+        setActiveSection("add");
+    };
 
-  // Back button handler
-  const handleGoBack = () => {
-    navigate(-1); // Navigate back to the previous page in the browser history
-  };
+    const handleViewProgress = () => {
+        setActiveSection("viewProgress");
+    };
 
-  // Conditionally render the section based on what button is clicked
-  return (
-    <div style={pageStyle}>
-      <h1>Patient Progress Management</h1>
+    const handleVisualizeProgress = () => {
+        setActiveSection("visualize");
+    };
 
-      
+    const handleGoBack = () => {
+        navigate(-1); // Navigate back to the previous page in the browser history
+    };
 
-      {/* Conditionally show buttons only if no specific section is active */}
-      {activeSection === 'view' && (
-        <div style={buttonContainerStyle}>
-          {/* Button to Add Progress */}
-          <button style={buttonStyle} onClick={handleAddProgress}>
-            Add Progress
-          </button>
+    return (
+        <div>
+            <div className="navContainer">
+                <ArrowBackIcon className=".back-button back-to-details" onClick={onGoBack} />
+                <button onClick={handleAddProgress} className={activeSection==="add"? 'active': 'inactive'}>Add Progress</button>
 
-          {/* Button to View Progress */}
-          <button style={buttonStyle} onClick={handleViewProgress}>
-            View Progress
-          </button>
+                <button onClick={handleViewProgress} className={activeSection==="viewProgress"? 'active': 'inactive'}>View Progress</button>
 
-          {/* Button to Visualize Progress */}
-          <button style={buttonStyle} onClick={handleVisualizeProgress}>
-            Visualize
-          </button>
+                <button onClick={handleVisualizeProgress} className={activeSection==="visualize"? 'active': 'inactive'}>Visualize</button>
+            </div>
+            <div>
+                {activeSection === "add" && (
+                    <AddProgress patientId={patientId} />
+                )}
+                {activeSection === "viewProgress" && (
+                    <ViewProgress patientId={patientId} />
+                )}
+                {activeSection === "visualize" && (
+                    <Visualize patientId={patientId} />
+                )}
+            </div>
         </div>
-      )}
-
-      {/* Render the appropriate section based on the active state */}
-      <div style={sectionContainerStyle}>
-        {activeSection === 'add' && <AddProgress patientId={patientId} />} {/* Render AddProgress */}
-        {activeSection === 'viewProgress' && <ViewProgress patientId={patientId} />} {/* Render ViewProgress */}
-        {activeSection === 'visualize' && <Visualize patientId={patientId} />} {/* Render Visualize */}
-      </div>
-    </div>
-  );
-};
-
-// Styles
-const pageStyle = {
-  textAlign: 'center',
-  margin: '20px',
-};
-
-const backButtonStyle = {
-  padding: '10px 20px',
-  backgroundColor: '#666',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '16px',
-  position: 'absolute', // Position it relative to the top left
-  top: '20px',
-  left: '20px',
-};
-
-const buttonContainerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '20px',
-  flexWrap: 'wrap',
-  marginTop: '20px',
-};
-
-const buttonStyle = {
-  padding: '15px 25px',
-  backgroundColor: '#003366',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '16px',
-};
-
-const sectionContainerStyle = {
-  marginTop: '20px',
-  padding: '20px',
-  border: '1px solid #ccc',
-  borderRadius: '5px',
-  backgroundColor: '#f9f9f9',
-  textAlign: 'left',
-  width: '60%',
-  margin: '0 auto',
+    );
 };
 
 export default Progress;

@@ -141,13 +141,15 @@ const AdminDashboard = ({ user }) => {
 
     // Data for the graph component
     const graphData = {
-        labels: ['Total Patients', 'Active Patients', 'Discharged Patients', 'In-Patients', 'Out-Patients'],
+        labels: ['Total Patients', 'Professionals', 'Male Patients', 'Female Patients', 'Discharged Patients', 'In-Patients', 'Out-Patients'],
         datasets: [
             {
                 label: 'Patient Stats',
                 data: [
                     userStats.totalPatients,
-                    userStats.totalActivePatients,
+                    userStats.totalProfessionals,
+                    userStats.malePatientCount,
+                    userStats.femalePatientCount,
                     userStats.totalDischargedPatients,
                     userStats.totalInpatients,
                     userStats.totalOutpatients,
@@ -209,7 +211,6 @@ const AdminDashboard = ({ user }) => {
                         </div>
 
                         <div class="sm:mb-0 self-center">
-                            <NotificationsActiveIcon onClick={() => handleNavClick('Notifications')} />
                             <span className="px-3">|</span>
                             <LogoutIcon onClick={handleLogout} />
                         </div>
@@ -220,43 +221,43 @@ const AdminDashboard = ({ user }) => {
                 <div className="dashboard">
                     {selectedComponent === "Overview" && (
                         <>
-                            <div className="cards">
+                            <div className="cards adminCards">
                                 <InfoCard
-                                    title="Men Patients"
+                                    title="Male Patients"
                                     total={userStats.malePatientCount || 0}  
                                     increase={19}  
                                     percentage={15}  
-                                    conditions="Men Patients over the last 7 days"
+                                    conditions="Number of Male Patients at the center."
                                 />
                                 <InfoCard
-                                    title="Women Patients"
+                                    title="Female Patients"
                                     total={userStats.femalePatientCount || 0}  
                                     increase={25}  
                                     percentage={20}  
-                                    conditions="Women Patients over the last 7 days"
+                                    conditions="Number of female patients at the center."
                                 />
                                 <InfoCard
                                     icon={<PersonIcon />}
                                     title="Total Patients (Active)"
-                                    total={userStats.totalActivePatients || 0}  
+                                    total={userStats.totalPatients || 0}  
                                     increase={25}  
                                     percentage={20}  
-                                    conditions="Active Patients"
+                                    conditions="Total number of active patients at the center."
                                 />
                                 <InfoCard
                                     icon={<PeopleIcon />}
-                                    title="Total Professionals (Active)"
-                                    total={userStats.totalActiveProfessionals || 0}  
+                                    title="Professionals"
+                                    total={userStats.totalProfessionals || 0}  
                                     increase={10}  
                                     percentage={10}  
-                                    conditions="Active Professionals"
+                                    conditions="Total number of professionals at the center."
                                 />
                                 <InfoCard
                                     title="Discharged Patients"
                                     total={userStats.totalDischargedPatients || 0}  
                                     increase={125}  
                                     percentage={10}  
-                                    conditions="Discharged Patients"
+                                    conditions="Number of discharged patients."
                                 />
                                 <InfoCard
                                     title="In-Patients"
@@ -291,8 +292,7 @@ const AdminDashboard = ({ user }) => {
                             {/* Statistics and Calendar */}
                             <div className="StatAndCal">
                                 <div className="statistics">
-                                    <h2>Patient Statistics</h2>
-                                    <PatientStat data={graphData} /> {/* Connected graph */}
+                                    <PatientStat data={graphData} />
                                 </div>
                                 <Calendar />
                             </div>

@@ -1,36 +1,30 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const ProfessionalLineChart = ({ dashboardData }) => {
+const ProfessionalBarChart = ({ dashboardData }) => {
     // Check if dashboardData is available before rendering
     if (!dashboardData) {
         return <p>Loading...</p>; // Show loading state if dashboardData is undefined
     }
 
     const chartData = {
-        labels: ['Total Patients', 'Appointments', 'Today\'s Appointments', 'In-Patients', 'Out-Patients'],
+        labels: ['Total Patients', 'In-Patients', 'Out-Patients', 'Appointments', 'Today\'s Appointments'],
         datasets: [
             {
                 label: 'Professional Dashboard Metrics',
                 data: [
                     dashboardData.numberOfPatients || 0,
+                    dashboardData.numberOfInpatients || 0,
+                    dashboardData.numberOfOutpatients || 0,
                     dashboardData.numberOfAppointments || 0,
                     dashboardData.todayAppointments || 0,
-                    dashboardData.numberOfInpatients || 0,
-                    dashboardData.numberOfOutpatients || 0
                 ],
                 backgroundColor: 'rgba(54, 162, 235, 0.2)', // Slightly transparent fill color
-                borderColor: 'rgba(54, 162, 235, 1)', // Line color
+                borderColor: 'rgba(54, 162, 235, 1)', // Border color
                 borderWidth: 2,
-                fill: true, // Fills area under the line
-                tension: 0.3, // Adds curvature to the line for smoother transitions
-                pointBackgroundColor: 'rgba(255, 99, 132, 1)', // Point color
-                pointBorderColor: '#fff',
-                pointRadius: 5, // Point size
-                pointHoverRadius: 7, // Point size on hover
             },
         ],
     };
@@ -86,7 +80,7 @@ const ProfessionalLineChart = ({ dashboardData }) => {
         maintainAspectRatio: false, // Allows more control over chart size
     };
 
-    return <div style={{ height: '400px', width: '100%' }}><Line data={chartData} options={options} /></div>;
+    return <div style={{ height: '400px', width: '100%' }}><Bar data={chartData} options={options} /></div>;
 };
 
-export default ProfessionalLineChart;
+export default ProfessionalBarChart;
