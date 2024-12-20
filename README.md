@@ -1,7 +1,7 @@
 # Senior Project RCIMS
 
 ## Overview
-Senior Project RCIMS (Remote Clinical Information Management System) is a comprehensive platform designed to manage clinical information remotely. It includes features for patient management, professional management, appointment scheduling, messaging, and more.
+Senior Project RCIMS (Rehabilitation Center Information Management System) is a comprehensive platform designed to manage clinical information remotely. It includes features for patient management, professional management, appointment scheduling, messaging, and more.
 
 ## Features
 - **User Authentication**: Secure login and signup for users.
@@ -72,8 +72,7 @@ Senior Project RCIMS (Remote Clinical Information Management System) is a compre
 
 ## Usage
 1. Open your browser and navigate to `http://localhost:3000` for the frontend.
-2. Use the provided credentials to log in or sign up for a new account.
-3. Explore the various features of the platform.
+2. Explore the various features of the platform.
 
 ## Contributing
 1. Fork the repository.
