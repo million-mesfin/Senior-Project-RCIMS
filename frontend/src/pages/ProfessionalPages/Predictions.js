@@ -291,15 +291,18 @@ const RelapsePredictionForm = ({ onGoBack }) => {
                     </Select>
                 </FormControl>
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="ASI category"
-                    name="partial_leak_feature"
-                    value={formData["partial_leak_feature"]}
-                    onChange={handleChange}
-                    required
-                />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>ASI category</InputLabel>
+                    <Select
+                        name="partial_leak_feature"
+                        value={formData["partial_leak_feature"]}
+                        onChange={handleChange}
+                        required
+                    >
+                        <MenuItem value="0">High</MenuItem>
+                        <MenuItem value="1">Low</MenuItem>
+                    </Select>
+                </FormControl>
 
                 <Button
                     type="submit"
@@ -345,7 +348,7 @@ const RelapsePredictionForm = ({ onGoBack }) => {
                             },
                         }}
                     >
-                        <p>{predictionResult}</p>
+                        <p>The patient has a <strong>{predictionResult===1? "High Risk" : "Low Risk"}</strong> of Relapse</p>
                     </DialogContent>
                     <DialogActions
                         sx={{
