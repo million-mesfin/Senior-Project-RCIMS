@@ -2,24 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/AttachPatient.css";
 import "./ProfessionalStyles/ShowPatientDetails.css";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DescriptionIcon from '@mui/icons-material/Description';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import ShowHistory from "./showhistory"; // Import the ShowHistory component
-import AddPatientHistory from "./AddPatientHistory"; // Import the AddPatientHistory component
-import PatientProgress from "./progress/progress"; // Import the PatientProgress component
-import Prediction from "./Predictions"; // Import the Prediction component
+import ShowHistory from "./showhistory";
+import AddPatientHistory from "./AddPatientHistory";
+import PatientProgress from "./progress/progress";
+import Prediction from "./Predictions";
 
 const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
     const [patient, setPatient] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentProfessionalId, setCurrentProfessionalId] = useState("");
-    const [showHistory, setShowHistory] = useState(false); // Track if we should show the history page
-    const [addHistory, setAddHistory] = useState(false); // Track if we should navigate to AddPatientHistory page
-    const [showProgress, setShowProgress] = useState(false); // Track if we should navigate to PatientProgress page
-    const [showPrediction, setShowPrediction] = useState(false); // Track if we should navigate to Prediction page
+    const [showHistory, setShowHistory] = useState(false);
+    const [addHistory, setAddHistory] = useState(false);
+    const [showProgress, setShowProgress] = useState(false);
+    const [showPrediction, setShowPrediction] = useState(false);
     const [message, setMessage] = useState("");
 
     // Fetch the current professional's ID when the component mounts
@@ -101,12 +98,12 @@ const ShowPatientDetails = ({ patientId, onGoBack, fetchPatients }) => {
 
     // If showProgress is true, display the PatientProgress component
     if (showProgress) {
-        return <PatientProgress patientId={patientId} onGoBack={() => setShowProgress(false)} />; // Pass onGoBack to return to this page
+        return <PatientProgress patientId={patientId} onGoBack={() => setShowProgress(false)} />;
     }
 
     // If showPrediction is true, display the Prediction component
     if (showPrediction) {
-        return <Prediction patientId={patientId} onGoBack={() => setShowPrediction(false)} />; // Pass onGoBack to return to this page
+        return <Prediction patientId={patientId} onGoBack={() => setShowPrediction(false)} />; 
     }
 
     return (

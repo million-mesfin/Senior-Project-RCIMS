@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ProfessionalStyles/showhistory.css";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Table,
   TableBody,
@@ -12,12 +13,15 @@ import {
   Pagination,
   Paper,
   Card,
+  Modal,
+  Box,
 } from "@mui/material";
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 
 const PatientHistoryPage = ({ patientId, onGoBack }) => {
   const [patient, setPatient] = useState(null);
@@ -25,6 +29,8 @@ const PatientHistoryPage = ({ patientId, onGoBack }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expandedHistory, setExpandedHistory] = useState(null); // To track which history is expanded
+  const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
+  const [selectedHistory, setSelectedHistory] = useState(null); // To store selected history details
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -67,22 +73,20 @@ const PatientHistoryPage = ({ patientId, onGoBack }) => {
   }, [patientId]);
 
   const toggleHistoryDetails = (index) => {
-    if (expandedHistory === index) {
-      setExpandedHistory(null); // Collapse if already open
-    } else {
-      setExpandedHistory(index); // Expand the clicked one
-    }
+    setSelectedHistory(patientHistory[index]);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedHistory(null);
   };
 
   return (
     <div className="patient-history-page">
-      {/* <button className="btn btn-back" onClick={onGoBack}>
-        Back
-      </button>
-      <h2>Patient History</h2> */}
-        <div class="header">
+        <div class="header" style={{display: 'flex', alignItems: 'center'}}>
             <ArrowBackIcon className=".back-button" onClick={onGoBack}/>
-            {/* <h3 className="patient-name">{`${patient.name} ${patient.fatherName} History`}</h3> */}
+            <h1 style={{flexGrow: 1, textAlign: 'center', margin: '0'}}>Patient History</h1>
         </div>
       {loading && <p>Loading history...</p>}
       {error && <p className="error">{error}</p>}
@@ -91,44 +95,62 @@ const PatientHistoryPage = ({ patientId, onGoBack }) => {
         <div className="history-list">
           <Paper elevation={0}>
           {patientHistory.map((historyItem, index) => (
-            <div key={index} className="history-card">
-              {/* <p className="history-number">{index + 1}</p> */}
-              <p><strong>Date:</strong> {new Date(historyItem.createdAt).toLocaleDateString()}</p>
-              <p><strong>Details:</strong> {historyItem.historyData.slice(0, 50)}...</p>
-              <div className="button-container">
-                <button
-                  className="btn btn-details"
-                  onClick={() => toggleHistoryDetails(index)}
-                >
-                  {expandedHistory === index ? "Hide Details" : "View Details"}
-                </button>
-              </div>
-
-              {expandedHistory === index && (
-                <div className="expanded-details">
-                  <Card sx={{minHeight:"450px"}}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Full Details
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                       {historyItem.historyData}
-                      </Typography>
-                    </CardContent>
-                    <Paper>
-                        
-                    </Paper>
-                                  
-                  </Card>
-                  
+            <Card key={index} className="history-card" variant="outlined" sx={{ marginBottom: 2 }}>
+              <CardContent>
+                <Typography variant="h6" component="div" style={{color: "#184b9c", fontWeight:"bold"}}>
+                  Date: {new Date(historyItem.createdAt).toLocaleDateString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Details: {historyItem.historyData.slice(0, 50)}...
+                </Typography>
+                <div className="button-container">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => toggleHistoryDetails(index)}
+                  >
+                    View Details
+                  </Button>
                 </div>
-              )}
-            </div>
+              </CardContent>
+            </Card>
           ))}
           </Paper>      
 
         </div>
       )}
+
+      <Modal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-box">
+          <IconButton className="close-icon" onClick={handleCloseModal}>
+            <CloseIcon />
+          </IconButton>
+          <Typography id="modal-modal-title" variant="h6" component="h2" style={{color: "#184b9c", fontWeight:"bold", fontSize:"20px"}}>
+            Full Details
+          </Typography>
+          {selectedHistory && (
+            <>
+              <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                Date: {new Date(selectedHistory.createdAt).toLocaleDateString()}
+              </Typography>
+              <hr />
+              <Typography id="modal-modal-description" sx={{ mt: 2 }} style={{
+                background:"#fff",
+                padding:"10px",
+                border: "1px solid #eee"
+              }}>
+                {selectedHistory.historyData}
+              </Typography>
+              <hr />
+            </>
+          )}
+        </Box>
+      </Modal>
     </div>
   );
 };

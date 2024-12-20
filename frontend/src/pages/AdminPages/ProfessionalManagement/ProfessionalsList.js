@@ -520,16 +520,6 @@ const ProfessionalsList = () => {
                                 <option value="suspended">Suspended</option>
                                 <option value="terminated">Terminated</option>
                             </select>
-                            <select
-                                value={filterSpeciality}
-                                onChange={(e) => setFilterSpeciality(e.target.value)}
-                                className="filter-select"
-                            >
-                                <option value="">All Specialties</option>
-                                <option value="MD">MD</option>
-                                <option value="Psychiatry">Psychiatry</option>
-                                <option value="Pediatrics">Pediatrics</option>
-                            </select>
                         </div>
                     </div>
 

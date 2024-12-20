@@ -11,13 +11,13 @@ const PatientStat = () => {
     const [chartData, setChartData] = useState({
         totalPatients: 0,
         totalProfessionals: 0,
-        malePatients: 0,
+        malePatientCount: 0,
         femalePatients: 0,
         dischargedPatients: 0,
         inPatients: 0,
         outPatients: 0,
         activeAppointments: 0,
-        todayAppointments: 0
+        todayAppointments: 0,
     });
 
     const [loading, setLoading] = useState(true);
@@ -37,13 +37,13 @@ const PatientStat = () => {
                 setChartData({
                     totalPatients: userStatsResponse.data.totalPatients || 0,
                     totalProfessionals: userStatsResponse.data.totalProfessionals || 0,
-                    malePatients: userStatsResponse.data.malePatients || 0,
-                    femalePatients: userStatsResponse.data.femalePatients || 0,
-                    dischargedPatients: userStatsResponse.data.dischargedPatients || 0,
-                    inPatients: userStatsResponse.data.inPatients || 0,
-                    outPatients: userStatsResponse.data.outPatients || 0,
-                    activeAppointments: appointmentStatsResponse.data.activeAppointments || 0,
-                    todayAppointments: appointmentStatsResponse.data.todayAppointments || 0,
+                    malePatientCount: userStatsResponse.data.malePatientCount || 0,
+                    femalePatients: userStatsResponse.data.femalePatientCount || 0,
+                    dischargedPatients: userStatsResponse.data.totalDischargedPatients || 0,
+                    inPatients: userStatsResponse.data.totalInpatients || 0,
+                    outPatients: userStatsResponse.data.totalOutpatients || 0,
+                    activeAppointments: appointmentStatsResponse.data.totalAppointments || 0,
+                    todayAppointments: appointmentStatsResponse.data.todayAppointments || 0
                 });
 
                 setLoading(false); // Data has been fetched
@@ -61,14 +61,13 @@ const PatientStat = () => {
     const data = {
         labels: [
             "Total Patients", 
-            "Total Professionals", 
+            "Professionals", 
             "Male Patients", 
             "Female Patients", 
             "Discharged Patients", 
             "In-Patients", 
             "Out-Patients", 
-            "Active Appointments", 
-            "Today's Appointments"
+            "Active Appointments"
         ],
         datasets: [
             {
@@ -79,13 +78,13 @@ const PatientStat = () => {
                 data: [
                     chartData.totalPatients,
                     chartData.totalProfessionals,
-                    chartData.malePatients,
+                    chartData.malePatientCount,
                     chartData.femalePatients,
                     chartData.dischargedPatients,
                     chartData.inPatients,
                     chartData.outPatients,
                     chartData.activeAppointments,
-                    chartData.todayAppointments
+                    chartData.todayAppointments,
                 ],
             },
         ],

@@ -219,12 +219,10 @@ const Messaging = () => {
                 {view === "chatDetail" && selectedChat && (
                     <div className="chat-detail">
                         <div className="chat-header">
-                            <button
+                            <FaArrowLeft
                                 onClick={handleBackToChats}
                                 className="backbtn"
-                            >
-                                <FaArrowLeft />
-                            </button>
+                            />
                             <div className="chat-user-info">
                                 <div className="chat-avatar">
                                     <FaUser />
@@ -279,14 +277,21 @@ const Messaging = () => {
                 {view === "newChat" && (
                     <div className="new-chat-page">
                         <div className="chat-header">
-                            <button
+                            <FaArrowLeft
                                 onClick={handleBackToChats}
-                                className="back-button"
+                                className="backbtn"
+                            />
+                            <h2
+                                style={{
+                                    fontWeight: "bold",
+                                    fontSize: "1.5rem",
+                                    margin: "0"
+                                }}
                             >
-                                <FaArrowLeft />
-                            </button>
-                            <h2>Create New Chat</h2>
+                                Create New Chat
+                            </h2>
                         </div>
+                        <hr style={{ marginBottom: "20px" }}/>
                         <div className="new-chat-form">
                             <select
                                 value={newChatRecipient}

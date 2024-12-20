@@ -122,13 +122,12 @@ const ViewProgress = ({ patientId }) => {
                     <Table sx={{ minWidth: 650 }} aria-label="progress table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Date</TableCell>
-                                <TableCell>Height (m)</TableCell>
-                                <TableCell>Weight (kg)</TableCell>
-                                <TableCell>BMI</TableCell>
-                                <TableCell>ASI Score</TableCell>
-                                <TableCell>ASI Category</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell><strong>Date</strong></TableCell>
+                                <TableCell><strong>Height (m)</strong></TableCell>
+                                <TableCell><strong>Weight (kg)</strong></TableCell>
+                                <TableCell><strong>BMI</strong></TableCell>
+                                <TableCell><strong>ASI Score</strong></TableCell>
+                                <TableCell><strong>ASI Category</strong></TableCell>                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -170,12 +169,12 @@ const ViewProgress = ({ patientId }) => {
                             </Typography>
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" onClick={() => handleOpenRangeDialog("height")} style={clickableStyle}>
+                                    <Typography variant="body1" style={clickableStyle}>
                                         <strong>Height: </strong>{selectedProgress.height} m
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" onClick={() => handleOpenRangeDialog("weight")} style={clickableStyle}>
+                                    <Typography variant="body1" style={clickableStyle}>
                                         <strong>Weight: </strong>{selectedProgress.weight} kg
                                     </Typography>
                                 </Grid>
@@ -261,17 +260,17 @@ const ViewProgress = ({ patientId }) => {
                             </Typography>
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" onClick={() => handleOpenRangeDialog("frequencyOfUse")} style={clickableStyle}>
+                                    <Typography variant="body1" style={clickableStyle}>
                                         <strong>Frequency of Use: </strong>{selectedProgress.frequencyOfUse} times
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" onClick={() => handleOpenRangeDialog("quantityOfUse")} style={clickableStyle}>
+                                    <Typography variant="body1" style={clickableStyle}>
                                         <strong>Quantity of Use: </strong>{selectedProgress.quantityOfUse} units
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" onClick={() => handleOpenRangeDialog("numberOfCravings")} style={clickableStyle}>
+                                    <Typography variant="body1" style={clickableStyle}>
                                         <strong>Number of Cravings: </strong>{selectedProgress.numberOfCravings}
                                     </Typography>
                                 </Grid>
